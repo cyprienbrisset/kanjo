@@ -68,6 +68,11 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   `kanjo embed --verify-pdfa`. Verdict réel quand veraPDF est installé ; **jamais de conformité
   déclarée sans validation** (§17.7) — en l'absence de l'outil, le rapport l'indique explicitement.
 
+### Conformité — remises/charges par catégorie (parité 52 %)
+- **24 règles TVA de niveau document** (remises BG-20 / charges BG-21) : identifiants requis
+  `BR-S/Z/E/G-03/04` (vendeur), `BR-AE/IC-03/04` (vendeur + acheteur), et contraintes de taux
+  `BR-S-06/07` (>0), `BR-Z/E/AE/G/IC-06/07` (=0). Parité EN 16931 **93 → 117/223 (52 %)**.
+
 ### Conformité — mesure de parité EN 16931
 - **Liste canonique vendorée** (`testdata/en16931/canonical-rule-ids.txt`, **223 règles**) extraite
   du **Schematron officiel CEN** (préprocessé UBL+CII), régénérable par
