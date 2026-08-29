@@ -18,10 +18,13 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   d'aller-retour lossless dédiés (`TestCIILineAllowanceRoundTrip`, `TestUBLLineAllowanceRoundTrip`).
 
 ### Conformité
-- **10 nouvelles règles EN 16931** sur les remises/charges (jeu de règles → **67 règles**) :
-  - Niveau document : **BR-31/32/33** (remise : montant, catégorie de TVA, motif) et
-    **BR-36/37/38** (charge : montant, catégorie de TVA, motif).
-  - Niveau ligne : **BR-41/42** (remise : montant, motif) et **BR-43/44** (charge : montant, motif).
+- **12 nouvelles règles EN 16931** (jeu de règles → **69 règles**) :
+  - Remises/charges — niveau document : **BR-31/32/33** (remise : montant, catégorie de TVA,
+    motif) et **BR-36/37/38** (charge : montant, catégorie de TVA, motif).
+  - Remises/charges — niveau ligne : **BR-41/42** (remise : montant, motif) et **BR-43/44**
+    (charge : montant, motif).
+  - Ventilation de TVA (BG-23) : **BR-45** (montant imposable BT-116) et **BR-46** (montant de
+    TVA BT-117) obligatoires par ventilation.
   - Chaque règle est couverte par un test passant et un test échouant. Conformité du corpus
     officiel CEN inchangée (seul le cas hors-norme catégorie « B » reste correctement rejeté).
 
