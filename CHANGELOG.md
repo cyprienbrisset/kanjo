@@ -12,6 +12,16 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Assurance qualité (confiance)
+- **Corpus de test publiable** ([`testdata/corpus/published`](testdata/corpus/published)) : 34 factures
+  100 % synthétiques et déterministes (24 cas de succès sur 6 scénarios × CII/UBL, 10 cas d'erreur),
+  versionnées et librement redistribuables. Régénérables via `testdata/corpus/generer-corpus.sh`.
+- **Test d'intégration vivant** (`test/corpus_test.go`) : la CI échoue si un cas valide devient non
+  conforme ou si un cas erroné passe (24/24 conformes, 10/10 rejetés).
+- **Rapport de qualité et de conformité** ([`docs/RAPPORT-QUALITE.md`](docs/RAPPORT-QUALITE.md)) :
+  méthodologie de test, résultats, sécurité/RGPD, portée et limites — chiffres reproductibles via
+  `scripts/rapport-qualite.sh`. Liens depuis le README et la page GitHub.
+
 ### Tests
 - **`pkg/read`** : test table-driven de `Detect` (CII, ZUGFeRD 1.0, UBL Invoice/CreditNote, PDF,
   JSON pivot, inconnu, gestion BOM + blancs) et rejet d'un format non reconnu par `ReadBytes`
