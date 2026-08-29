@@ -12,6 +12,12 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Tests
+- **`pkg/convert`** : suite dédiée (aller-retour CII→UBL/JSON, cible inconnue, calcul des pertes
+  W-EXT-002 et politiques `none`/`minor`/`any`/`allow-loss`) → couverture 0 % → **95 %**.
+- **`cmd/kanjo/cli`** : tests de bout en bout (capture stdout/stderr + codes de sortie) pour
+  `version`, `help`, commande inconnue, `convert`, `validate`, `inspect`, entrée illisible.
+
 ### Ajouté (complétude)
 - **Remises et charges de ligne (BG-27/28)** : lecture et écriture complètes pour CII et UBL
   (montant BT-136/141, base, pourcentage, motif BT-139/144 et code motif BT-140/145). Tests
