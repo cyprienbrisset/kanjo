@@ -98,7 +98,8 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 | Peppol BIS Billing 3.0 | 🔜 | ✅ | ✅ |
 | JSON pivot · CSV | ✅ / — | ✅ / ✅ | ✅ |
 | ZUGFeRD 1.0 (CII D14B, hérité) | ✅ | 🗺️ | ✅ |
-| Order-X · EDIFACT · FatturaPA | 🗺️ roadmap | 🗺️ | 🗺️ |
+| FatturaPA (FatturaElettronica v1.2) | ✅ *(lecture)* | 🗺️ | ✅ |
+| Order-X · EDIFACT | 🗺️ roadmap | 🗺️ | 🗺️ |
 
 ## Conformité
 

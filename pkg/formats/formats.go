@@ -10,6 +10,7 @@ import (
 	// Lecteurs
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/cii"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/facturx"
+	_ "github.com/cyprienbrisset/kanjo/pkg/read/fatturapa"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/ubl"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/zugferd1"
 	// Écrivains
