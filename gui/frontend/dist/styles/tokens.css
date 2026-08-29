@@ -1,0 +1,105 @@
+/* 大福帳 Daifukuchō — système de design de Kanjō Studio (§12).
+   Écrit à la main, sans framework CSS tiers, sans ressource réseau (§17.3).
+   Aucune ombre, aucun rayon (hors sceau et pastilles), asymétrie assumée. */
+
+/* ---- 昼 Hiru — thème clair (défaut) ---- */
+:root, :root[data-theme="hiru"] {
+  --ink-900:#14243D; --ink-700:#24405E; --ink-500:#5A6B7D; --ink-300:#8E9AA6;
+  --paper-0:#FBFAF6; --paper-1:#F3F1EA; --paper-2:#E8E5DB;
+  --rule-hair:#D5D0C4; --rule-firm:#B9B2A2;
+  --seal:#C8402E; --seal-deep:#A8321F; --seal-wash:#F0DBD5;
+  --asagi:#3F8A8B; --koke:#5E7A4A; --kohaku:#B8862F; --beni:#9E2B32;
+  --focus-ring:var(--asagi);
+  --veil:rgba(20,36,61,0.42);
+}
+/* ---- 夜 Yoru — thème sombre ---- */
+:root[data-theme="yoru"] {
+  --ink-900:#ECE7DA; --ink-700:#C9C2B2; --ink-500:#9FAEC0; --ink-300:#6B7A8C;
+  --paper-0:#0F1826; --paper-1:#16233A; --paper-2:#1D2C45;
+  --rule-hair:#2A3A54; --rule-firm:#3D5070;
+  --seal:#E05A44; --seal-deep:#C8402E; --seal-wash:#3A2320;
+  --asagi:#5FB3B4; --koke:#8FA96F; --kohaku:#D9A94A; --beni:#C4525A;
+  --veil:rgba(0,0,0,0.55);
+}
+
+/* ---- Échelle typographique (ratio 1,25) ---- */
+:root{
+  --text-2xs:11px; --text-xs:12px; --text-sm:13px; --text-base:15px;
+  --text-lg:19px; --text-xl:24px; --text-2xl:30px; --text-3xl:38px;
+  --leading-tight:1.25; --leading-normal:1.55; --leading-loose:1.8;
+  --ease:cubic-bezier(0.2,0,0,1); --dur-fast:120ms; --dur-base:240ms; --dur-slow:380ms;
+  /* Polices : noms japonais préférés, repli système. Aucun chargement réseau. */
+  --font-title:"Shippori Mincho B1","Hiragino Mincho ProN",Georgia,serif;
+  --font-ui:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--paper-0); color:var(--ink-900);
+  font-family:var(--font-ui); font-size:var(--text-base); line-height:var(--leading-normal);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--font-title); font-weight:400; color:var(--ink-700); margin:0}
+.mono,code,.num{font-family:var(--font-mono); font-variant-numeric:tabular-nums}
+a{color:var(--asagi); text-decoration:none}
+button{font-family:var(--font-ui); font-size:var(--text-sm); cursor:pointer}
+
+/* Casse phrase partout ; intitulés de colonne en petit gris espacé, jamais en majuscules. */
+.k{font-size:var(--text-2xs); letter-spacing:.08em; color:var(--ink-500)}
+
+/* Focus visible, jamais supprimé sans remplacement (§12.10). */
+:focus-visible{outline:2px solid var(--focus-ring); outline-offset:2px}
+
+/* ---- Filet de reliure : dos du registre à gauche du panneau actif (§12.6) ---- */
+.reliure{border-left:3px solid var(--ink-700); padding-left:48px; padding-right:32px}
+.reliure.blocking{border-left-color:var(--seal)}
+
+/* ---- Icônes (style Lucide : trait 1,5 px, terminaisons carrées, sans remplissage, §12.8) ---- */
+.icon{width:20px; height:20px; flex:none; stroke:currentColor; fill:none;
+  stroke-width:1.5; stroke-linecap:square; stroke-linejoin:miter}
+.icon.lg{width:24px; height:24px}
+
+/* ---- Badge de statut : cercle à icône colorée ---- */
+.seal{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:40px; height:40px; border-radius:50%; border:2px solid var(--koke);
+  color:var(--koke); flex:none;
+}
+.seal .icon{width:22px; height:22px}
+.seal.sm{width:26px; height:26px; border-width:1.5px}
+.seal.sm .icon{width:15px; height:15px}
+.seal.warn{border-color:var(--kohaku); color:var(--kohaku)}
+.seal.err{border-color:var(--beni); color:var(--beni)}
+.seal.none{border-color:var(--ink-300); color:var(--ink-300); border-style:dashed; border-width:1.5px}
+.seal.exam{border-color:var(--asagi); color:var(--asagi)}
+@keyframes appose{
+  0%{transform:scale(1.5); opacity:0}
+  55%{transform:scale(.92); opacity:1}
+  100%{transform:scale(1); opacity:1}
+}
+.seal.stamping{animation:appose 220ms var(--ease)}
+@media (prefers-reduced-motion:reduce){ .seal.stamping{animation:none} }
+
+/* ---- Pastilles de statut inline ---- */
+.chip{border-radius:2px; padding:1px 6px; font-size:var(--text-2xs); background:var(--paper-2); color:var(--ink-500)}
+
+/* ---- Tables ---- */
+table{width:100%; border-collapse:collapse}
+th{font-size:var(--text-2xs); letter-spacing:.08em; color:var(--ink-500); text-align:left;
+  font-weight:400; border-bottom:1px solid var(--rule-firm); padding:6px 8px}
+td{padding:6px 8px; border-bottom:1px solid var(--rule-hair)}
+td.num,th.num{text-align:right; font-family:var(--font-mono); font-variant-numeric:tabular-nums}
+tr.sel td{background:var(--paper-2)}
+
+/* ---- Boutons ---- */
+.btn{background:var(--paper-2); color:var(--ink-900); border:1px solid var(--rule-firm);
+  padding:6px 14px; border-radius:0; transition:background var(--dur-fast) var(--ease)}
+.btn:hover{background:var(--paper-1)}
+.btn.primary{background:var(--ink-700); color:var(--paper-0); border-color:var(--ink-700)}
+
+/* ---- Voile de modale (pas d'ombre, filet 1px) ---- */
+.veil{position:fixed; inset:0; background:var(--veil); display:flex; align-items:flex-start;
+  justify-content:center; padding-top:12vh; z-index:50}
+.modal{background:var(--paper-1); border:1px solid var(--rule-firm); width:min(640px,90vw)}

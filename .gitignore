@@ -1,0 +1,22 @@
+# Binaires et artefacts de build
+/dist/
+/kanjo
+/Kanjō Studio
+*.exe
+*.test
+*.out
+
+# Corpus de test téléchargé (non vendoré — récupéré par testdata/corpus/fetch.sh)
+/testdata/corpus/official/
+
+# Divers
+.DS_Store
+*.bak
+
+# Documents internes (non publiés)
+/docs/CAHIER-DES-CHARGES.md
+/CLAUDE.md
+
+# État de plugins éditeur
+/.claude/
+/.idea/
