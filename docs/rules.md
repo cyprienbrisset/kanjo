@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (74 règles)
+## en16931 (78 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -65,6 +65,8 @@ Version du jeu de règles : **2026.3**
 | BR-CO-20 | error | BT-134, BT-135 | Une période de ligne doit indiquer une date de début ou de fin. |
 | BR-CO-25 | error | BT-9, BT-20, BT-115 | Si un montant reste dû, une date d'échéance ou des conditions de paiement sont requises. |
 | BR-CO-26 | error | BT-29 | Le vendeur doit être identifiable (identifiant, SIREN/SIRET ou n° de TVA). |
+| BR-DEC-01 | error | BT-92 | Un montant de remise/charge ne doit pas avoir plus de deux décimales. |
+| BR-DEC-05 | error | BT-99 | Un montant de remise/charge ne doit pas avoir plus de deux décimales. |
 | BR-DEC-12 | error | BT-106 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
 | BR-DEC-13 | error | BT-110 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
 | BR-DEC-14 | error | BT-109 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
@@ -72,6 +74,8 @@ Version du jeu de règles : **2026.3**
 | BR-DEC-19 | error | BT-115 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
 | BR-DEC-23 | error | BT-116, BT-117 | Les montants de TVA (base et montant) ont au maximum deux décimales. |
 | BR-DEC-24 | error | BT-131 | Le montant net d'une ligne ne doit pas avoir plus de deux décimales. |
+| BR-DEC-27 | error | BT-136 | Un montant de remise/charge de ligne ne doit pas avoir plus de deux décimales. |
+| BR-DEC-28 | error | BT-141 | Un montant de remise/charge de ligne ne doit pas avoir plus de deux décimales. |
 | BR-E-05 | error | BT-119, BT-152 | Une TVA exonérée doit avoir un taux de zéro. |
 | BR-E-10 | error | BT-120, BT-121 | Une TVA exonérée doit indiquer un motif d'exonération. |
 | BR-G-05 | error | BT-119, BT-152 | Une TVA à l'export doit avoir un taux de zéro. |

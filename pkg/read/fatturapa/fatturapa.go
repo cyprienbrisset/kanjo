@@ -48,6 +48,14 @@ type fattura struct {
 			Linee     []dettaglioLinea `xml:"DettaglioLinee"`
 			Riepilogo []datiRiepilogo  `xml:"DatiRiepilogo"`
 		} `xml:"DatiBeniServizi"`
+		DatiPagamento []struct {
+			Dettaglio []struct {
+				ModalitaPagamento string `xml:"ModalitaPagamento"`
+				DataScadenza      string `xml:"DataScadenzaPagamento"`
+				Importo           string `xml:"ImportoPagamento"`
+				IBAN              string `xml:"IBAN"`
+			} `xml:"DettaglioPagamento"`
+		} `xml:"DatiPagamento"`
 	} `xml:"FatturaElettronicaBody"`
 }
 

@@ -19,7 +19,11 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   commentaires de code documentant le système de design (大福帳) sont conservés.
 
 ### Assurance qualité (confiance)
-- **Corpus de test publiable** ([`testdata/corpus/published`](testdata/corpus/published)) : 34 factures
+- **Corpus élargi** : le corpus publiable passe à **50 factures** (38 succès dont 2 FatturaPA,
+  12 erreurs) ; `fetch.sh` récupère désormais aussi les **exemples officiels Peppol BIS 3.0**
+  (OpenPeppol) et les cas unitaires CII du CEN. Résultats mesurés : **Peppol BIS 9/9 conformes**,
+  CEN 31/32. Corpus officiel total récupérable ≈ 318 fichiers.
+- **Corpus de test publiable** ([`testdata/corpus/published`](testdata/corpus/published)) : factures
   100 % synthétiques et déterministes (24 cas de succès sur 6 scénarios × CII/UBL, 10 cas d'erreur),
   versionnées et librement redistribuables. Régénérables via `testdata/corpus/generer-corpus.sh`.
 - **Test d'intégration vivant** (`test/corpus_test.go`) : la CI échoue si un cas valide devient non
@@ -57,6 +61,9 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   déclarée sans validation** (§17.7) — en l'absence de l'outil, le rapport l'indique explicitement.
 
 ### Conformité
+- **Décimales des remises/charges (4 règles, jeu → 82)** : **BR-DEC-01/05** (montant de remise
+  BT-92 / charge BT-99 au niveau document ≤ 2 décimales) et **BR-DEC-27/28** (remise BT-136 /
+  charge BT-141 au niveau ligne). Tests passant/échouant.
 - **Périodes et facture antérieure (5 règles, jeu → 78)** : **BR-CO-19/20** (une période de
   facturation ou de ligne doit porter une date de début ou de fin), **BR-29/30** (la date de fin
   ne doit pas précéder le début) et **BR-55** (chaque référence de facture antérieure BG-3 doit

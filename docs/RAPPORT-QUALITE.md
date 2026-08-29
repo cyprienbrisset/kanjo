@@ -12,12 +12,13 @@
 
 | Indicateur | Valeur |
 |---|---|
-| Fonctions de test automatisées | **146** (43 fichiers) |
-| Paquets couverts par des tests | **30** |
-| Règles de validation EN 16931 | **78** (74 EN 16931 · 2 CIUS FR · 2 Kanjō) |
-| Corpus publiable — cas de succès | **24 / 24** déclarés conformes |
-| Corpus publiable — cas d'erreur | **10 / 10** correctement rejetés |
+| Fonctions de test automatisées | **155** (46 fichiers) |
+| Paquets couverts par des tests | **31** |
+| Règles de validation EN 16931 | **82** (78 EN 16931 · 2 CIUS FR · 2 Kanjō) |
+| Corpus publiable — cas de succès | **38 / 38** déclarés conformes |
+| Corpus publiable — cas d'erreur | **12 / 12** correctement rejetés |
 | Corpus **officiel CEN** (EN 16931) | **31 / 32** conformes (le 32ᵉ est hors-norme, voir §4) |
+| Corpus **officiel Peppol** BIS 3.0 | **9 / 9** conformes |
 | Cibles de compilation vérifiées | **6** (Linux/macOS/Windows × amd64/arm64), `CGO_ENABLED=0` |
 | Appels réseau / télémétrie | **0** — 100 % hors-ligne |
 
@@ -43,7 +44,7 @@ La justesse ne s'ajoute pas après coup ; elle est **inscrite dans les types** :
 
 ## 3. Comment nous testons
 
-### 3.1 Tests unitaires (146 fonctions)
+### 3.1 Tests unitaires (155 fonctions)
 Chaque paquet du cœur — modèle, arithmétique, lecteurs, écrivains, moteur de règles — possède ses
 tests. Le calcul monétaire, les arrondis et les conversions de devises sont testés au centime près.
 
@@ -53,22 +54,25 @@ Pour CII et UBL, on écrit un document puis on le relit : le modèle obtenu doit
 y compris les cas fins (remises/charges de **ligne** BG-27/28, identifiants de partie, multi-TVA).
 
 ### 3.3 Corpus publiable synthétique — *test vivant*
-`testdata/corpus/published/` contient **34 factures 100 % synthétiques** (aucune donnée réelle,
-donc librement redistribuables), générées de façon **déterministe** par `kanjo generate` :
+`testdata/corpus/published/` contient **50 factures 100 % synthétiques** (aucune donnée réelle,
+donc librement redistribuables), produites de façon **déterministe** :
 
-- **24 cas de succès** : 6 scénarios (simple, multi-TVA, avoir, autoliquidation,
-  intracommunautaire, acompte) × 2 formats (CII, UBL) × 2 exemplaires ;
-- **10 cas d'erreur** : factures volontairement non conformes.
+- **38 cas de succès** : 6 scénarios (simple, multi-TVA, avoir, autoliquidation,
+  intracommunautaire, acompte) × 2 formats (CII, UBL) × 3 exemplaires, plus 2 gabarits **FatturaPA** ;
+- **12 cas d'erreur** : factures volontairement non conformes.
 
 Le test d'intégration `test/corpus_test.go` **échoue la CI** si une facture valide devient
 non conforme ou si une facture erronée passe à travers les mailles. Régénérable via
 `testdata/corpus/generer-corpus.sh`.
 
-### 3.4 Corpus officiel CEN
-En complément, `testdata/corpus/fetch.sh` télécharge le corpus **officiel** du CEN (non vendoré
-pour raisons de licence). Kanjō y obtient **31/32** ; l'unique écart est une facture italienne
-utilisant une catégorie de TVA « B » **hors du référentiel EN 16931** — elle est donc
-**correctement rejetée** (le comportement attendu est bien le rejet).
+### 3.4 Corpus officiels (CEN et Peppol)
+En complément, `testdata/corpus/fetch.sh` télécharge des corpus **officiels** (non vendorés pour
+raisons de licence) : les exemples du CEN (EN 16931) et ceux de **Peppol BIS Billing 3.0**
+(OpenPeppol). Résultats :
+
+- **CEN EN 16931 : 31/32** — l'unique écart est une facture italienne utilisant une catégorie de
+  TVA « B » **hors du référentiel EN 16931**, donc **correctement rejetée**.
+- **Peppol BIS 3.0 : 9/9** exemples officiels validés conformes.
 
 ### 3.5 Corpus d'attaque (sécurité)
 `testdata/fuzz/xxe/` contient des charges malveillantes (entités externes XXE, DTD distante,
@@ -80,7 +84,7 @@ par cette couche — aucun `encoding/xml` direct n'est autorisé dans les lecteu
 ## 4. Conformité EN 16931 — « jamais de verdict non calculé »
 
 Kanjō applique un **moteur de règles natif en Go** (pas de Schematron, pas de JVM). Le catalogue
-complet des **78 règles** est publié et généré depuis le code dans [`rules.md`](rules.md) ; il
+complet des **82 règles** est publié et généré depuis le code dans [`rules.md`](rules.md) ; il
 couvre les familles `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, la CIUS française et
 des règles maison (IBAN mod-97, cohérence des dates).
 
@@ -136,8 +140,8 @@ Nous préférons annoncer ce qui **n'est pas** encore garanti plutôt que de le 
   l'outil est présent, le verdict est réel ; en son absence, Kanjō ne déclare **pas** la conformité
   (il ne la simule jamais). La génération d'un PDF/A-3b pleinement conforme reste en cours de
   durcissement (OutputIntent, XMP fx:).
-- Les formats **EDIFACT** et **FatturaPA** en lecture ne sont pas encore couverts (feuille de
-  route L4).
+- Le format **EDIFACT** en lecture n'est pas encore couvert (feuille de route). **FatturaPA**
+  (v1.2) est lu ; son **écriture** n'est pas encore fournie.
 - La couverture de tests moyenne (~62 %) progresse lot par lot ; les chemins critiques (modèle,
   règles, conversion, lecture Factur-X) sont les mieux couverts.
 
