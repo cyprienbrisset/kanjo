@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (53 règles)
+## en16931 (63 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -26,6 +26,16 @@ Version du jeu de règles : **2026.3**
 | BR-25 | error | BT-153 | Chaque ligne doit désigner un article (nom). |
 | BR-26 | error | BT-151 | Chaque ligne doit porter une catégorie de TVA. |
 | BR-27 | error | BT-146 | Le prix net d'une ligne ne doit pas être négatif. |
+| BR-31 | error | BT-92 | Une remise de niveau document doit porter un montant. |
+| BR-32 | error | BT-95 | Une remise de niveau document doit porter une catégorie de TVA. |
+| BR-33 | error | BT-97 | Une remise de niveau document doit porter un motif ou un code motif. |
+| BR-36 | error | BT-99 | Une charge de niveau document doit porter un montant. |
+| BR-37 | error | BT-102 | Une charge de niveau document doit porter une catégorie de TVA. |
+| BR-38 | error | BT-104 | Une charge de niveau document doit porter un motif ou un code motif. |
+| BR-41 | error | BT-136 | Une remise de ligne doit porter un montant. |
+| BR-42 | error | BT-139 | Une remise de ligne doit porter un motif ou un code motif. |
+| BR-43 | error | BT-141 | Une charge de ligne doit porter un montant. |
+| BR-44 | error | BT-144 | Une charge de ligne doit porter un motif ou un code motif. |
 | BR-47 | error | BT-118 | Chaque ventilation de TVA doit indiquer une catégorie. |
 | BR-AE-05 | error | BT-119, BT-152 | Une TVA en autoliquidation doit avoir un taux de zéro. |
 | BR-AE-10 | error | BT-120, BT-121 | Une TVA en autoliquidation doit indiquer un motif d'exonération. |

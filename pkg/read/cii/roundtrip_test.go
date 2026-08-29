@@ -111,6 +111,43 @@ func TestCIIRoundTripLossless(t *testing.T) {
 	}
 }
 
+func amtPtr(a model.Amount) *model.Amount { return &a }
+
+// TestCIILineAllowanceRoundTrip vérifie que les remises et charges de ligne (BG-27/28)
+// survivent à un aller-retour écriture → relecture CII.
+func TestCIILineAllowanceRoundTrip(t *testing.T) {
+	doc := buildSample()
+	pct := model.MustParseDecimal("10")
+	doc.Lines[0].AllowanceCharges = []model.AllowanceCharge{
+		{
+			IsCharge: false, Amount: model.MustParseAmount("100.00", "EUR"),
+			BaseAmount: amtPtr(model.MustParseAmount("1000.00", "EUR")), Percent: &pct,
+			ReasonCode: "95", Reason: "Remise commerciale",
+		},
+		{
+			IsCharge: true, Amount: model.MustParseAmount("15.00", "EUR"),
+			ReasonCode: "FC", Reason: "Frais de service",
+		},
+	}
+
+	xml, err := wcii.Write(doc, write.Options{Profile: write.ProfileEN16931})
+	if err != nil {
+		t.Fatalf("écriture CII: %v", err)
+	}
+	reparsed, err := rcii.Read(xml, "rt-line-ac.xml")
+	if err != nil {
+		t.Fatalf("relecture CII: %v\n%s", err, xml)
+	}
+	if n := len(reparsed.Lines[0].AllowanceCharges); n != 2 {
+		t.Fatalf("remises/charges de ligne relues = %d, veut 2\n%s", n, xml)
+	}
+	want := jsonOf(t, doc)
+	got := jsonOf(t, reparsed)
+	if !bytes.Equal(want, got) {
+		t.Errorf("remises de ligne non préservées.\n=== attendu ===\n%s\n=== obtenu ===\n%s\n=== XML ===\n%s", want, got, xml)
+	}
+}
+
 func TestCIIDetectedAsCII(t *testing.T) {
 	xml, _ := wcii.Write(buildSample(), write.Options{Profile: write.ProfileEN16931})
 	if f := read.Detect(xml); f != read.FormatCII {

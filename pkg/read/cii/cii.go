@@ -102,7 +102,8 @@ type ciiLine struct {
 			CategoryCode string `xml:"CategoryCode"`
 			Rate         string `xml:"RateApplicablePercent"`
 		} `xml:"ApplicableTradeTax"`
-		Sum struct {
+		Allowances []ciiAllowance `xml:"SpecifiedTradeAllowanceCharge"` // BG-27/28
+		Sum        struct {
 			LineTotalAmount string `xml:"LineTotalAmount"`
 		} `xml:"SpecifiedTradeSettlementLineMonetarySummation"`
 	} `xml:"SpecifiedLineTradeSettlement"`

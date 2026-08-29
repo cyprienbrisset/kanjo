@@ -313,6 +313,9 @@ func buildLine(doc *model.Document, l *model.Line, creditNote bool) *node {
 		leafA(qtyTag, l.Quantity.String(), attr{"unitCode", string(l.UnitCode)}),
 		leafA("cbc:LineExtensionAmount", l.NetAmount.String(), attr{"currencyID", cur}),
 	)
+	for i := range l.AllowanceCharges { // BG-27/28 remises/charges de ligne
+		line.with(buildAllowanceCharge(&l.AllowanceCharges[i]))
+	}
 
 	item := el("cac:Item",
 		leaf("cbc:Description", l.Description),

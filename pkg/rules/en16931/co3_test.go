@@ -12,9 +12,12 @@ func TestBRCO11And12(t *testing.T) {
 	// Document avec une remise de 10 et une charge de 4, totaux cohérents.
 	mk := func() *model.Document {
 		d := validDoc()
+		rate := model.MustParseDecimal("20")
 		d.AllowanceCharges = []model.AllowanceCharge{
-			{IsCharge: false, Amount: model.MustParseAmount("10.00", "EUR")},
-			{IsCharge: true, Amount: model.MustParseAmount("4.00", "EUR")},
+			{IsCharge: false, Amount: model.MustParseAmount("10.00", "EUR"),
+				TaxCategory: model.TaxStandard, TaxRate: &rate, ReasonCode: "95", Reason: "Remise"},
+			{IsCharge: true, Amount: model.MustParseAmount("4.00", "EUR"),
+				TaxCategory: model.TaxStandard, TaxRate: &rate, ReasonCode: "FC", Reason: "Frais"},
 		}
 		al := model.MustParseAmount("10.00", "EUR")
 		ch := model.MustParseAmount("4.00", "EUR")

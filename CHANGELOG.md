@@ -12,6 +12,19 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (complétude)
+- **Remises et charges de ligne (BG-27/28)** : lecture et écriture complètes pour CII et UBL
+  (montant BT-136/141, base, pourcentage, motif BT-139/144 et code motif BT-140/145). Tests
+  d'aller-retour lossless dédiés (`TestCIILineAllowanceRoundTrip`, `TestUBLLineAllowanceRoundTrip`).
+
+### Conformité
+- **10 nouvelles règles EN 16931** sur les remises/charges (jeu de règles → **67 règles**) :
+  - Niveau document : **BR-31/32/33** (remise : montant, catégorie de TVA, motif) et
+    **BR-36/37/38** (charge : montant, catégorie de TVA, motif).
+  - Niveau ligne : **BR-41/42** (remise : montant, motif) et **BR-43/44** (charge : montant, motif).
+  - Chaque règle est couverte par un test passant et un test échouant. Conformité du corpus
+    officiel CEN inchangée (seul le cas hors-norme catégorie « B » reste correctement rejeté).
+
 ### Corrigé
 - **Client lourd — bouton « Choisir un fichier »** : WKWebView ne fournit pas de sélecteur
   de fichiers pour `<input type=file>`. Ajout d'un pont natif `window.kanjoOpenFiles`
