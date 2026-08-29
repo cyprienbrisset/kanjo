@@ -17,8 +17,10 @@ func TestLineRulesFail(t *testing.T) {
 		{"BR-21", func(d *model.Document) { d.Lines[0].ID = "" }},
 		{"BR-23", func(d *model.Document) { d.Lines[0].UnitCode = "" }},
 		{"BR-25", func(d *model.Document) { d.Lines[0].Name = "" }},
-		{"BR-26", func(d *model.Document) { d.Lines[0].TaxCategory = "" }},
+		{"BR-26", func(d *model.Document) { d.Lines[0].NetPrice = model.Amount{} }},
 		{"BR-27", func(d *model.Document) { d.Lines[0].NetPrice = neg }},
+		{"BR-28", func(d *model.Document) { g := neg; d.Lines[0].GrossPrice = &g }},
+		{"BR-CO-04", func(d *model.Document) { d.Lines[0].TaxCategory = "" }},
 	}
 	for _, c := range cases {
 		d := validDoc()

@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (92 règles)
+## en16931 (94 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -28,8 +28,9 @@ Version du jeu de règles : **2026.3**
 | BR-23 | error | BT-130 | Chaque ligne doit indiquer une unité de mesure. |
 | BR-24 | error | BT-131 | Chaque ligne doit porter un montant net. |
 | BR-25 | error | BT-153 | Chaque ligne doit désigner un article (nom). |
-| BR-26 | error | BT-151 | Chaque ligne doit porter une catégorie de TVA. |
+| BR-26 | error | BT-146 | Chaque ligne doit porter un prix net d'article. |
 | BR-27 | error | BT-146 | Le prix net d'une ligne ne doit pas être négatif. |
+| BR-28 | error | BT-148 | Le prix brut d'une ligne ne doit pas être négatif. |
 | BR-29 | error | BT-73, BT-74 | La fin de période ne doit pas précéder son début. |
 | BR-30 | error | BT-134, BT-135 | La fin de période de ligne ne doit pas précéder son début. |
 | BR-31 | error | BT-92 | Une remise de niveau document doit porter un montant. |
@@ -53,6 +54,7 @@ Version du jeu de règles : **2026.3**
 | BR-CL-01 | error | BT-5 | Le code devise doit être un code ISO 4217 valide. |
 | BR-CL-03 | error | BT-3 | Le code type de facture doit appartenir à la liste UNTDID 1001. |
 | BR-CL-17 | error | BT-118, BT-151 | Le code catégorie de TVA doit appartenir à la liste UNTDID 5305. |
+| BR-CO-04 | error | BT-151 | Chaque ligne doit porter une catégorie de TVA. |
 | BR-CO-09 | error | BT-31 | Le n° de TVA du vendeur doit commencer par un préfixe pays à deux lettres. |
 | BR-CO-10 | error | BT-106, BT-131 | La somme des montants nets de ligne doit être égale au total des lignes (BT-106). |
 | BR-CO-11 | error | BT-107, BT-92 | Le total des remises (BT-107) doit être égal à la somme des remises de niveau document. |

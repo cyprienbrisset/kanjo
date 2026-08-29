@@ -7,7 +7,8 @@ import (
 	"github.com/cyprienbrisset/kanjo/pkg/rules"
 )
 
-// Règles de présence au niveau ligne (BR-21 à BR-27).
+// Règles de présence et de validité au niveau ligne (BR-21 à BR-28, BR-CO-04).
+// Les identifiants suivent la sémantique EXACTE du Schematron officiel EN 16931.
 
 func init() {
 	rules.Register(lineRule("BR-21", "BT-126", "Chaque ligne doit avoir un identifiant.",
@@ -18,10 +19,15 @@ func init() {
 		func(l model.Line) bool { return l.NetAmount.Currency != "" }))
 	rules.Register(lineRule("BR-25", "BT-153", "Chaque ligne doit désigner un article (nom).",
 		func(l model.Line) bool { return l.Name != "" }))
-	rules.Register(lineRule("BR-26", "BT-151", "Chaque ligne doit porter une catégorie de TVA.",
-		func(l model.Line) bool { return l.TaxCategory != "" }))
+	rules.Register(lineRule("BR-26", "BT-146", "Chaque ligne doit porter un prix net d'article.",
+		func(l model.Line) bool { return l.NetPrice.Currency != "" }))
 	rules.Register(lineRule("BR-27", "BT-146", "Le prix net d'une ligne ne doit pas être négatif.",
 		func(l model.Line) bool { return l.NetPrice.Value >= 0 }))
+	rules.Register(lineRule("BR-28", "BT-148", "Le prix brut d'une ligne ne doit pas être négatif.",
+		func(l model.Line) bool { return l.GrossPrice == nil || l.GrossPrice.Value >= 0 }))
+	// BR-CO-04 : chaque ligne doit être catégorisée par un code de catégorie de TVA (BT-151).
+	rules.Register(lineRule("BR-CO-04", "BT-151", "Chaque ligne doit porter une catégorie de TVA.",
+		func(l model.Line) bool { return l.TaxCategory != "" }))
 }
 
 // lineRule construit une règle appliquée à chaque ligne : elle émet une anomalie pour toute
