@@ -275,14 +275,14 @@ func renderConvert(env *api.Envelope, format string) {
 	for _, r := range env.Results {
 		switch r.Status {
 		case api.StatusOK:
-			fmt.Fprintf(os.Stdout, "適 %s → %s\n", r.Input, r.Output)
+			fmt.Fprintf(os.Stdout, "✓ %s → %s\n", r.Input, r.Output)
 		case api.StatusWarning:
-			fmt.Fprintf(os.Stdout, "保 %s → %s (%d perte(s))\n", r.Input, r.Output, len(r.Losses))
+			fmt.Fprintf(os.Stdout, "⚠ %s → %s (%d perte(s))\n", r.Input, r.Output, len(r.Losses))
 			for _, l := range r.Losses {
 				fmt.Fprintf(os.Stdout, "    %s %s\n", l.Code, l.Message)
 			}
 		case api.StatusError:
-			fmt.Fprintf(os.Stdout, "否 %s : %s\n", r.Input, r.Error)
+			fmt.Fprintf(os.Stdout, "✗ %s : %s\n", r.Input, r.Error)
 		}
 	}
 	s := env.Summary

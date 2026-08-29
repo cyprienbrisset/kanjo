@@ -54,7 +54,7 @@ func runInspect(args []string) int {
 
 func printSummary(doc *model.Document, format read.Format, profile string) {
 	w := os.Stdout
-	fmt.Fprintf(w, "検 %s  (%s / %s)\n", doc.ID, format, profile)
+	fmt.Fprintf(w, "▸ %s  (%s / %s)\n", doc.ID, format, profile)
 	fmt.Fprintf(w, "  Type          %s (%s)\n", doc.TypeCode, doc.TypeCode.Label(model.LangFR))
 	fmt.Fprintf(w, "  Émission      %s\n", doc.IssueDate.ISO())
 	if doc.DueDate != nil {

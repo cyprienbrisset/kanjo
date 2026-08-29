@@ -45,17 +45,17 @@ var reportTmpl = template.Must(template.New("report").Parse(`<!doctype html>
  <h1>Rapport de validation</h1>
  <div class="meta">{{.Summary.Total}} documents · {{.StartedAt}} · jeu de règles {{.RulesVersion}}</div>
  <div class="summary">
-  <div><div class="n" style="color:var(--koke)">適 {{.Summary.OK}}</div>conformes</div>
-  <div><div class="n" style="color:var(--kohaku)">保 {{.Summary.Warning}}</div>réserve</div>
-  <div><div class="n" style="color:var(--beni)">否 {{.Summary.Error}}</div>non conformes</div>
+  <div><div class="n" style="color:var(--koke)">✓ {{.Summary.OK}}</div>conformes</div>
+  <div><div class="n" style="color:var(--kohaku)">▲ {{.Summary.Warning}}</div>réserve</div>
+  <div><div class="n" style="color:var(--beni)">✕ {{.Summary.Error}}</div>non conformes</div>
  </div>
  {{if .Groups}}<h2 style="font-family:'Shippori Mincho B1',serif;font-weight:400;color:var(--ink-700)">Par règle</h2>
  {{range .Groups}}<div class="rule{{if .IsError}} err{{else if .IsWarn}} warn{{end}}">
-  <span class="id">{{.ID}}</span> <span class="count">総 {{len .Docs}} document(s) · {{.Severity}}</span>
+  <span class="id">{{.ID}}</span> <span class="count">{{len .Docs}} document(s) · {{.Severity}}</span>
   <div class="msg">{{.Message}}</div>
   <div class="docs">{{range .Docs}}{{.}} {{end}}</div>
  </div>{{end}}
- {{else}}<p style="color:var(--koke)">Aucune anomalie. 適</p>{{end}}
+ {{else}}<p style="color:var(--koke)">Aucune anomalie. ✓</p>{{end}}
  <div class="foot">Rapport généré par Kanjō. Empreinte des règles : {{.RulesVersion}}.</div>
 </div></body></html>`))
 

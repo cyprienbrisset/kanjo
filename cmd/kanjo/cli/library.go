@@ -103,7 +103,7 @@ func libraryIndex(args []string) int {
 		}
 		indexed++
 	}
-	fmt.Fprintf(os.Stdout, "蔵 %d documents indexés\n", indexed)
+	fmt.Fprintf(os.Stdout, "▸ %d documents indexés\n", indexed)
 	return ExitOK
 }
 
@@ -137,7 +137,7 @@ func libraryList(args []string) int {
 		return ExitOK
 	}
 	if len(recs) == 0 {
-		fmt.Fprintln(os.Stdout, "蔵 bibliothèque vide (ou aucun résultat).")
+		fmt.Fprintln(os.Stdout, "▸ bibliothèque vide (ou aucun résultat).")
 		return ExitOK
 	}
 	for _, r := range recs {
@@ -190,12 +190,12 @@ func libraryPurge(args []string) int {
 func sealForVerdict(v string) string {
 	switch v {
 	case "error":
-		return "否"
+		return "✗"
 	case "warning":
-		return "保"
+		return "⚠"
 	case "ok":
-		return "適"
+		return "✓"
 	default:
-		return "未"
+		return "·"
 	}
 }

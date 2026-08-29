@@ -153,7 +153,7 @@ func writeReport(path string, env *api.Envelope) error {
 }
 
 func renderValidate(env *api.Envelope, explain bool) {
-	seal := map[api.Status]string{api.StatusOK: "適", api.StatusWarning: "保", api.StatusError: "否"}
+	seal := map[api.Status]string{api.StatusOK: "✓", api.StatusWarning: "⚠", api.StatusError: "✗"}
 	for _, r := range env.Results {
 		fmt.Fprintf(os.Stdout, "%s %s", seal[r.Status], r.Input)
 		if r.Format != "" {
@@ -171,15 +171,15 @@ func renderValidate(env *api.Envelope, explain bool) {
 		}
 	}
 	s := env.Summary
-	fmt.Fprintf(os.Stdout, "\n適 %d   保 %d   否 %d\n", s.OK, s.Warning, s.Error)
+	fmt.Fprintf(os.Stdout, "\n✓ %d   ⚠ %d   ✗ %d\n", s.OK, s.Warning, s.Error)
 }
 
 func severityMark(sev string) string {
 	switch sev {
 	case "error", "fatal":
-		return "否"
+		return "✗"
 	case "warning":
-		return "保"
+		return "⚠"
 	default:
 		return "·"
 	}

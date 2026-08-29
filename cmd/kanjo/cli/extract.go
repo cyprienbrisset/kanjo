@@ -47,7 +47,7 @@ func runExtract(args []string) int {
 					errf("%s : %v", in, e)
 					worst = maxExit(worst, ExitInternal)
 				} else {
-					fmt.Fprintf(os.Stdout, "適 %s → %s\n", in, f.Name)
+					fmt.Fprintf(os.Stdout, "✓ %s → %s\n", in, f.Name)
 				}
 			}
 			continue
@@ -71,7 +71,7 @@ func runExtract(args []string) int {
 			worst = maxExit(worst, ExitInternal)
 			continue
 		}
-		fmt.Fprintf(os.Stdout, "適 %s → %s\n", in, filename)
+		fmt.Fprintf(os.Stdout, "✓ %s → %s\n", in, filename)
 	}
 	return worst
 }

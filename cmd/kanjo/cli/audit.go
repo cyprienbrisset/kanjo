@@ -52,7 +52,7 @@ func auditList(args []string) int {
 		return ExitOK
 	}
 	if len(entries) == 0 {
-		fmt.Fprintln(os.Stdout, "記録 aucune entrée d'audit.")
+		fmt.Fprintln(os.Stdout, "▸ aucune entrée d'audit.")
 		return ExitOK
 	}
 	for _, e := range entries {

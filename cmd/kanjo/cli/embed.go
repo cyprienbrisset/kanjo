@@ -71,7 +71,7 @@ func runEmbed(args []string) int {
 		})
 		return ExitOK
 	}
-	fmt.Fprintf(os.Stdout, "適 %s ← %s embarqué (%s)\n", outPath, res.AttachedAs, filepath.Base(*xmlPath))
+	fmt.Fprintf(os.Stdout, "✓ %s ← %s embarqué (%s)\n", outPath, res.AttachedAs, filepath.Base(*xmlPath))
 	for _, w := range res.Warnings {
 		fmt.Fprintf(os.Stdout, "   %s\n", w)
 	}

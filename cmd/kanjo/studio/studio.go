@@ -67,7 +67,7 @@ func Run(opts Options) int {
 	url := fmt.Sprintf("http://%s/?token=%s", ln.Addr().String(), opts.Token)
 
 	srv := &http.Server{Handler: NewHandler(opts.Token), ReadHeaderTimeout: 10 * time.Second}
-	fmt.Fprintf(os.Stdout, "勘定 Kanjō Studio — %s\n", url)
+	fmt.Fprintf(os.Stdout, "Kanjō Studio — %s\n", url)
 	if !isLoopback(bind) {
 		fmt.Fprintln(os.Stderr, "⚠ Kanjō Studio est exposé hors de la boucle locale.")
 	}

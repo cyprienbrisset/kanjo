@@ -50,7 +50,7 @@ type invoiceView struct {
 	Doc       *model.Document
 	Lang      Lang
 	Title     string
-	Seal      string // 適/保/否/未 (décoratif)
+	Seal      string // ✓/▲/✕ (décoratif)
 	SealLabel string // libellé français du sceau (§12.10)
 	SealErr   bool
 	SealWarn  bool
