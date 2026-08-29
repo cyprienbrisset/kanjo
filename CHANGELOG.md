@@ -12,9 +12,16 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Corrigé
+- **Client lourd — bouton « Choisir un fichier »** : WKWebView ne fournit pas de sélecteur
+  de fichiers pour `<input type=file>`. Ajout d'un pont natif `window.kanjoOpenFiles`
+  (`osascript` sur macOS, `zenity` sur Linux, `OpenFileDialog` PowerShell sur Windows) qui
+  ouvre le dialogue système et transmet nom + contenu (base64) au frontend. Le mode navigateur
+  (`kanjo studio`) reste inchangé. Aucune dépendance supplémentaire.
+
 ### Ajouté
-- Bootstrap du dépôt : `go.mod`, arborescence du §6, `CLAUDE.md`, `README.md`, cahier des
-  charges sous `docs/CAHIER-DES-CHARGES.md`. ADR-011 (Q7) : Kanjō est un outil autonome.
+- Bootstrap du dépôt : `go.mod`, arborescence du §6, `README.md`.
+  ADR-011 (Q7) : Kanjō est un outil autonome.
 - **Modèle pivot** (`pkg/model`) : types exacts `Amount` (unités mineures, arrondi EN 16931
   half-away-from-zero via `math/big`), `Decimal`, `Date` (sans fuseau), codes nommés
   (`TypeCode`, `TaxCategoryCode`, `PaymentMeansCode`, `UnitCode`) avec `Valid()`/`Label()`,

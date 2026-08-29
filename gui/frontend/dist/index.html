@@ -73,7 +73,10 @@ footer .spacer{flex:1}
  <section class="screen active reliure" id="screen-genkan">
   <h1>Accueil</h1><div class="sub">Déposez et validez vos factures</div>
   <div class="drop" id="drop">Déposez vos factures ici — PDF, XML, JSON
-   <div style="margin-top:12px"><input type="file" id="file" multiple accept=".xml,.pdf,.json"></div>
+   <div style="margin-top:12px">
+    <input type="file" id="file" multiple accept=".xml,.pdf,.json">
+    <button type="button" id="pick" class="btn" style="display:none">Choisir un fichier…</button>
+   </div>
   </div>
  </section>
 
