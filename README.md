@@ -10,7 +10,7 @@ Factur-X · UBL 2.1 · CII · XRechnung · Peppol — une seule implémentation,
 [![Go](https://img.shields.io/badge/Go-1.25%2B-00ADD8?logo=go&logoColor=white)](https://go.dev)
 [![CGO disabled](https://img.shields.io/badge/CGO-disabled-5E7A4A)](#architecture)
 [![OS](https://img.shields.io/badge/OS-Linux%20·%20macOS%20·%20Windows-24405E)](#démarrer)
-[![Tests](https://img.shields.io/badge/tests-178%20·%20passing-5E7A4A)](docs/RAPPORT-QUALITE.md)
+[![Tests](https://img.shields.io/badge/tests-180%20·%20passing-5E7A4A)](docs/RAPPORT-QUALITE.md)
 [![EN 16931](https://img.shields.io/badge/EN%2016931-95%20règles-24405E)](#conformité)
 [![Qualité](https://img.shields.io/badge/rapport-qualité%20%26%20conformité-B8862F)](docs/RAPPORT-QUALITE.md)
 [![RGPD](https://img.shields.io/badge/RGPD-100%25%20hors--ligne-9E2B32)](#sécurité--rgpd)
@@ -106,7 +106,7 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 - **95 règles** réparties en trois jeux (`en16931`, `cius.fr`, `kanjo`), chacune avec un test passant et un test échouant ; catalogue généré dans [`docs/rules.md`](docs/rules.md).
 - **Corpus publiable synthétique** ([`testdata/corpus/published`](testdata/corpus/published)) : **38/38 cas de succès** conformes et **12/12 cas d'erreur** rejetés — vérifié en continu par [`test/corpus_test.go`](test/corpus_test.go).
 - **Corpus réel open-source** ([`fetch.sh`](testdata/corpus/fetch.sh), non vendoré) : **> 500 documents** (CEN, XRechnung, Peppol) lus **sans panic** ; **40/40** exemples complets conformes (CEN 31/31 + Peppol 9/9).
-- **178 tests automatisés** (aller-retour sans perte, corpus, attaques XXE) ; un test de CI **échoue si un verdict de conformité régresse**.
+- **180 tests automatisés** (aller-retour sans perte, corpus, attaques XXE) ; un test de CI **échoue si un verdict de conformité régresse**.
 - 👉 **[Rapport de qualité et de conformité complet →](docs/RAPPORT-QUALITE.md)** (méthodologie, sécurité, reproductibilité).
 
 ## Architecture
@@ -133,7 +133,7 @@ Sécurité  │ internal/xmlsafe (anti-XXE)  ·  internal/fsatomic (écriture at
 
 ## Qualité
 
-- **178 tests automatisés** : unitaires, aller-retour **lossless**, propriétés (arrondis exacts), corpus de conformité, attaques XXE/bombes XML, intégration CLI de bout en bout.
+- **180 tests automatisés** : unitaires, aller-retour **lossless**, propriétés (arrondis exacts), corpus de conformité, attaques XXE/bombes XML, intégration CLI de bout en bout.
 - **Corpus publiable** ([`testdata/corpus/published`](testdata/corpus/published), 50 factures synthétiques) validé en continu : 38/38 succès conformes, 12/12 erreurs rejetées.
 - `gofmt` + `go vet` propres ; **aucune `panic`** dans un chemin de traitement (converti en erreur de fichier).
 - Tout est reproductible : [`scripts/rapport-qualite.sh`](scripts/rapport-qualite.sh) rejoue compilation, tests, règles, corpus et sécurité.
