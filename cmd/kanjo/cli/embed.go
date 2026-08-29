@@ -18,6 +18,7 @@ func runEmbed(args []string) int {
 	profile := fs.String("profile", "en16931", "profil déclaré (informatif)")
 	name := fs.String("name", "factur-x.xml", "nom de la pièce jointe embarquée")
 	format := fs.String("format", "", "format du rapport : table|json")
+	verifyPDFA := fs.Bool("verify-pdfa", false, "valider la conformité PDF/A-3b avec veraPDF (si installé)")
 	_ = profile
 	positionals, err := parseInterspersed(fs, args)
 	if err != nil {
@@ -60,21 +61,45 @@ func runEmbed(args []string) int {
 		return ExitInternal
 	}
 
+	// Validation PDF/A optionnelle et effective (jamais simulée, §17.7).
+	var pdfaVal *pdfa.PDFAValidation
+	if *verifyPDFA {
+		if v, err := pdfa.ValidatePDFA(res.PDF, "3b"); err == nil {
+			pdfaVal = &v
+		} else {
+			v.Details = "veraPDF absent"
+			pdfaVal = &v
+		}
+	}
+
 	if outputFormat(*format) == "json" {
-		printJSON(map[string]any{
+		payload := map[string]any{
 			"schemaVersion": "github.com/cyprienbrisset/kanjo/1",
 			"command":       "embed",
 			"output":        outPath,
 			"attachedAs":    res.AttachedAs,
 			"pdfaChecked":   res.PDFAChecked, // jamais simulé (§17.7)
 			"warnings":      res.Warnings,
-		})
+		}
+		if pdfaVal != nil {
+			payload["pdfaValidation"] = pdfaVal
+		}
+		printJSON(payload)
 		return ExitOK
 	}
 	fmt.Fprintf(os.Stdout, "✓ %s ← %s embarqué (%s)\n", outPath, res.AttachedAs, filepath.Base(*xmlPath))
 	for _, w := range res.Warnings {
 		fmt.Fprintf(os.Stdout, "   %s\n", w)
 	}
-	fmt.Fprintln(os.Stdout, "   conformité PDF/A-3b : non vérifiée (veraPDF absent)")
+	switch {
+	case pdfaVal == nil:
+		fmt.Fprintln(os.Stdout, "   conformité PDF/A-3b : non vérifiée (utilisez --verify-pdfa)")
+	case !pdfaVal.Checked:
+		fmt.Fprintln(os.Stdout, "   conformité PDF/A-3b : non vérifiable (veraPDF absent)")
+	case pdfaVal.Compliant:
+		fmt.Fprintln(os.Stdout, "   conformité PDF/A-3b : ✓ conforme (veraPDF)")
+	default:
+		fmt.Fprintln(os.Stdout, "   conformité PDF/A-3b : ✗ non conforme (veraPDF)")
+	}
 	return ExitOK
 }

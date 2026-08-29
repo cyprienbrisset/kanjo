@@ -132,8 +132,10 @@ go test ./...
 
 Nous préférons annoncer ce qui **n'est pas** encore garanti plutôt que de le laisser deviner :
 
-- La **validation PDF/A-3b effective** (via veraPDF) est optionnelle : sans l'outil externe, Kanjō
-  ne déclare **pas** la conformité PDF/A (il ne la simule jamais).
+- La **validation PDF/A-3b** est **effective** via veraPDF (`kanjo embed --verify-pdfa`) : quand
+  l'outil est présent, le verdict est réel ; en son absence, Kanjō ne déclare **pas** la conformité
+  (il ne la simule jamais). La génération d'un PDF/A-3b pleinement conforme reste en cours de
+  durcissement (OutputIntent, XMP fx:).
 - Les formats **EDIFACT** et **FatturaPA** en lecture ne sont pas encore couverts (feuille de
   route L4).
 - La couverture de tests moyenne (~62 %) progresse lot par lot ; les chemins critiques (modèle,
