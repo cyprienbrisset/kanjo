@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -55,12 +56,39 @@ func (d Date) Compact() string {
 // String est un alias lisible d'ISO.
 func (d Date) String() string { return d.ISO() }
 
-// ParseISO analyse une date "AAAA-MM-JJ".
+// ParseISO analyse une date "AAAA-MM-JJ", en tolérant un décalage horaire final optionnel
+// (Z, +HH:MM, -HH:MM, +HHMM…) autorisé par xs:date : la partie fuseau est ignorée puisqu'une
+// date de facture n'a pas de fuseau (§5.2).
 func ParseISO(s string) (Date, error) {
-	if len(s) != 10 || s[4] != '-' || s[7] != '-' {
+	s = strings.TrimSpace(s)
+	core := s
+	if len(s) > 10 && s[4] == '-' && s[7] == '-' && isTimezoneSuffix(s[10:]) {
+		core = s[:10]
+	}
+	if len(core) != 10 || core[4] != '-' || core[7] != '-' {
 		return Date{}, fmt.Errorf("%w: format ISO attendu AAAA-MM-JJ, reçu %q", ErrDateParse, s)
 	}
-	return parseYMD(s[0:4], s[5:7], s[8:10], s)
+	return parseYMD(core[0:4], core[5:7], core[8:10], s)
+}
+
+// isTimezoneSuffix indique si s est un décalage horaire valide ("", "Z", "+HH:MM", "-HHMM"…).
+func isTimezoneSuffix(s string) bool {
+	if s == "" || s == "Z" {
+		return true
+	}
+	if s[0] != '+' && s[0] != '-' {
+		return false
+	}
+	digits := strings.Replace(s[1:], ":", "", 1)
+	if len(digits) != 2 && len(digits) != 4 {
+		return false
+	}
+	for _, c := range digits {
+		if c < '0' || c > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 // ParseCompact analyse une date "AAAAMMJJ" (format CII 102).
@@ -74,14 +102,11 @@ func ParseCompact(s string) (Date, error) {
 // ParseDate détecte automatiquement le format (ISO ou compact) et analyse la date.
 // C'est le point d'entrée utilisé par les readers ; il tolère les deux syntaxes du socle.
 func ParseDate(s string) (Date, error) {
-	switch len(s) {
-	case 10:
-		return ParseISO(s)
-	case 8:
+	s = strings.TrimSpace(s)
+	if len(s) == 8 { // format compact CII (102) AAAAMMJJ
 		return ParseCompact(s)
-	default:
-		return Date{}, fmt.Errorf("%w: longueur inattendue pour %q", ErrDateParse, s)
 	}
+	return ParseISO(s) // ISO AAAA-MM-JJ, décalage horaire final toléré
 }
 
 func parseYMD(ys, ms, ds, orig string) (Date, error) {
