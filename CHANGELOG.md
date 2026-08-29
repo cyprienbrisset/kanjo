@@ -13,6 +13,9 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 ## [Non publié]
 
 ### Tests
+- **`pkg/read/facturx`** : fabrication d'un PDF Factur-X (PDF/A-3 + CII embarqué) via `pdfa.EmbedXML`
+  puis relecture ; vérifie l'identifiant extrait, le marquage du format porteur et l'avertissement
+  sur un nom de pièce jointe non conforme → couverture 0 % → **87 %**.
 - **`pkg/convert`** : suite dédiée (aller-retour CII→UBL/JSON, cible inconnue, calcul des pertes
   W-EXT-002 et politiques `none`/`minor`/`any`/`allow-loss`) → couverture 0 % → **95 %**.
 - **`cmd/kanjo/cli`** : tests de bout en bout (capture stdout/stderr + codes de sortie) pour
