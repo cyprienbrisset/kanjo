@@ -53,6 +53,10 @@ func mapToPivot(x *fattura, sourceName string) (*model.Document, error) {
 		doc.TaxBreakdown = append(doc.TaxBreakdown, ts)
 	}
 
+	if err := mapPayment(doc, x); err != nil {
+		return nil, fmt.Errorf("lecture FatturaPA %s: paiement: %w", sourceName, err)
+	}
+
 	if err := mapTotals(doc, x, currency); err != nil {
 		return nil, fmt.Errorf("lecture FatturaPA %s: totaux: %w", sourceName, err)
 	}
@@ -179,6 +183,29 @@ func mapTotals(doc *model.Document, x *fattura, currency string) error {
 		doc.Totals.TaxInclusiveAmount = sum.Rescale(2)
 	}
 	doc.Totals.DuePayableAmount = doc.Totals.TaxInclusiveAmount
+	return nil
+}
+
+// mapPayment remonte l'échéance (DataScadenzaPagamento → BT-9) et l'IBAN de règlement.
+func mapPayment(doc *model.Document, x *fattura) error {
+	for _, dp := range x.Body.DatiPagamento {
+		for _, det := range dp.Dettaglio {
+			if v := trimmed(det.DataScadenza); v != "" && doc.DueDate == nil {
+				d, err := model.ParseISO(v)
+				if err != nil {
+					return fmt.Errorf("échéance (DataScadenzaPagamento): %w", err)
+				}
+				doc.DueDate = &d
+			}
+			if iban := trimmed(det.IBAN); iban != "" {
+				if doc.PaymentInstructions == nil {
+					doc.PaymentInstructions = &model.PaymentInstructions{MeansCode: model.PayCredit}
+				}
+				doc.PaymentInstructions.CreditTransfers = append(
+					doc.PaymentInstructions.CreditTransfers, model.CreditTransfer{IBAN: iban})
+			}
+		}
+	}
 	return nil
 }
 

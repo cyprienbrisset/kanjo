@@ -167,11 +167,11 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
  <p class="intro">Le socle réglementaire français (Factur-X / UBL 2.1 / CII) est au cœur. La validation
   est réellement calculée — jamais un verdict de complaisance.</p>
  <div class="metrics">
-  <div class="metric"><div class="n">78</div><div class="l">règles de validation (EN 16931 + CIUS FR + Kanjō)</div></div>
+  <div class="metric"><div class="n">82</div><div class="l">règles de validation (EN 16931 + CIUS FR + Kanjō)</div></div>
   <div class="metric"><div class="n">6/6</div><div class="l">cibles cross-compilées (Linux, macOS, Windows)</div></div>
   <div class="metric"><div class="n">0</div><div class="l">appel réseau · 0 télémétrie · traitement local</div></div>
  </div>
- <p class="intro" style="margin-top:32px"><strong>Corpus publiable synthétique : 24/24 cas de succès validés conformes et 10/10 cas d'erreur correctement rejetés</strong> — vérifié en continu par la CI. Sur le corpus <em>officiel</em> CEN : 31/32 conformes, l'unique écart étant un fichier utilisant une catégorie de TVA hors EN 16931 (correctement rejeté).
+ <p class="intro" style="margin-top:32px"><strong>Corpus publiable synthétique : 38/38 cas de succès validés conformes et 12/12 cas d'erreur correctement rejetés</strong> — vérifié en continu par la CI. Sur les corpus <em>officiels</em> : CEN 31/32 (l'unique écart, une catégorie de TVA hors EN 16931, est correctement rejeté) et Peppol BIS 3.0 : 9/9 exemples conformes.
   XML durci contre XXE et les bombes de décompression ; aucune donnée personnelle dans les journaux.</p>
  <p style="text-align:center;margin-top:24px">
   <a class="btn" href="https://github.com/cyprienbrisset/kanjo/blob/main/docs/RAPPORT-QUALITE.md">Lire le rapport de qualité &amp; de conformité →</a>
@@ -181,11 +181,12 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   <tr><td>Factur-X (PDF/A-3, tous profils)</td><td class="ok">✓</td><td class="ok">✓ embed</td><td class="ok">✓</td></tr>
   <tr><td>CII D16B</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td></tr>
   <tr><td>UBL 2.1 (Invoice + CreditNote)</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td></tr>
-  <tr><td>XRechnung (UBL &amp; CII)</td><td class="later">bientôt</td><td class="ok">✓</td><td class="ok">✓</td></tr>
-  <tr><td>Peppol BIS Billing 3.0</td><td class="later">bientôt</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+  <tr><td>XRechnung (UBL &amp; CII)</td><td class="ok">✓ via UBL/CII</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+  <tr><td>Peppol BIS Billing 3.0</td><td class="ok">✓ via UBL</td><td class="ok">✓</td><td class="ok">✓</td></tr>
   <tr><td>JSON pivot · CSV</td><td class="ok">✓ / —</td><td class="ok">✓ / ✓</td><td class="ok">✓</td></tr>
   <tr><td>ZUGFeRD 1.0 (hérité, CII D14B)</td><td class="ok">✓</td><td class="later">roadmap</td><td class="ok">✓</td></tr>
-  <tr><td>Order-X · EDIFACT · FatturaPA</td><td class="later">roadmap</td><td class="later">roadmap</td><td class="later">roadmap</td></tr>
+  <tr><td>FatturaPA (FatturaElettronica v1.2)</td><td class="ok">✓ lecture</td><td class="later">roadmap</td><td class="ok">✓</td></tr>
+  <tr><td>Order-X · EDIFACT</td><td class="later">roadmap</td><td class="later">roadmap</td><td class="later">roadmap</td></tr>
  </table>
 </section>
 
