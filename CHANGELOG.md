@@ -45,6 +45,12 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   (montant BT-136/141, base, pourcentage, motif BT-139/144 et code motif BT-140/145). Tests
   d'aller-retour lossless dédiés (`TestCIILineAllowanceRoundTrip`, `TestUBLLineAllowanceRoundTrip`).
 
+### Ajouté (nouveau format)
+- **Lecture FatturaPA** (FatturaElettronica v1.2, format italien) : `pkg/read/fatturapa` — en-tête
+  (cédant/cessionnaire, TVA, adresses), lignes de détail, ventilation de TVA et totaux, mappés
+  vers le pivot EN 16931. Détection par le contenu (`FatturaElettronica`). Une FatturaPA peut
+  ainsi être validée, convertie (UBL/CII/Factur-X) et rendue lisible comme tout autre format.
+
 ### Ajouté (conformité PDF/A)
 - **Validation PDF/A-3b effective** via veraPDF : `pkg/pdfa.ValidatePDFA` + option
   `kanjo embed --verify-pdfa`. Verdict réel quand veraPDF est installé ; **jamais de conformité

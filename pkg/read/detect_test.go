@@ -10,6 +10,7 @@ func TestDetect(t *testing.T) {
 	}{
 		{"CII", `<?xml version="1.0"?><rsm:CrossIndustryInvoice xmlns:rsm="urn:...">`, FormatCII},
 		{"ZUGFeRD 1.0", `<?xml version="1.0"?><rsm:CrossIndustryDocument xmlns:rsm="urn:...">`, FormatZUGFeRD1},
+		{"FatturaPA", `<?xml version="1.0"?><p:FatturaElettronica xmlns:p="http://ivaservizi...">`, FormatFatturaPA},
 		{"UBL Invoice", `<?xml version="1.0"?><Invoice xmlns="urn:oasis:names:...:Invoice-2">`, FormatUBLInvoice},
 		{"UBL CreditNote", `<?xml version="1.0"?><CreditNote xmlns="urn:oasis:names:...:CreditNote-2">`, FormatUBLCreditNote},
 		{"PDF", "%PDF-1.7\n...", FormatFacturX},

@@ -33,6 +33,8 @@ func Detect(data []byte) Format {
 		return FormatCII
 	case "CrossIndustryDocument":
 		return FormatZUGFeRD1 // ZUGFeRD 1.0 (CII D14B)
+	case "FatturaElettronica":
+		return FormatFatturaPA // FatturaPA italienne (v1.2)
 	case "Invoice":
 		if strings.Contains(ns, "Invoice-2") || strings.Contains(ns, "oasis") || ns == "" {
 			return FormatUBLInvoice
