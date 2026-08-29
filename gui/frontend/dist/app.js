@@ -82,29 +82,59 @@ const drop = document.getElementById('drop');
 drop.addEventListener('drop', ev => handleFiles(ev.dataTransfer.files));
 document.getElementById('file').addEventListener('change', ev => handleFiles(ev.target.files));
 
+// Client lourd : WKWebView n'ouvre pas de sélecteur natif pour <input type=file>.
+// Quand le pont natif window.kanjoOpenFiles est présent, on masque l'<input> (inopérant)
+// et on ouvre le dialogue de fichiers du système via le bouton « Choisir un fichier… ».
+function openFilesDialog() {
+  if (!window.kanjoOpenFiles) { document.getElementById('file').click(); return; }
+  return Promise.resolve(window.kanjoOpenFiles())
+    .then(files => {
+      if (!files || !files.length) return;
+      return Promise.all(files.map(f => {
+        const bin = atob(f.data);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return inspectBytes(f.name, bytes.buffer);
+      })).then(() => { show('ken'); renderDocList(); });
+    })
+    .catch(() => {});
+}
+(function wireFilePicker() {
+  const input = document.getElementById('file');
+  const pick = document.getElementById('pick');
+  if (window.kanjoOpenFiles) {
+    input.style.display = 'none';   // sélecteur HTML inopérant en WebView
+    pick.style.display = '';
+  }
+  pick.addEventListener('click', openFilesDialog);
+})();
+
 function handleFiles(files) {
   const list = Array.from(files);
   if (!list.length) return;
   Promise.all(list.map(inspectFile)).then(() => { show('ken'); renderDocList(); });
 }
 
-function inspectFile(file) {
-  return file.arrayBuffer()
-    .then(buf => api('/api/inspect', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/octet-stream', 'X-Kanjo-Filename': file.name },
-      body: buf,
-    }))
+function inspectBytes(name, buf) {
+  return api('/api/inspect', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/octet-stream', 'X-Kanjo-Filename': name },
+    body: buf,
+  })
     .then(r => r.json())
     .then(res => {
       state.docs.push({
-        name: file.name,
+        name: name,
         verdict: res.error ? 'error' : (res.verdict || 'none'),
         format: res.format || '', findings: res.findings || [],
         document: res.document || null, error: res.error || '',
       });
       updateCounters();
     });
+}
+
+function inspectFile(file) {
+  return file.arrayBuffer().then(buf => inspectBytes(file.name, buf));
 }
 
 // ---- Compteurs (barre d'état) ----
@@ -206,7 +236,7 @@ const actions = [
   { label: 'Aller à Inspecteur', run: () => show('ken') },
   { label: 'Aller au Rapport', run: () => show('sho') },
   { label: 'Basculer le thème clair / sombre', run: () => themeBtn.click() },
-  { label: 'Ouvrir un fichier', run: () => document.getElementById('file').click() },
+  { label: 'Ouvrir un fichier', run: () => openFilesDialog() },
 ];
 let palette = null;
 function openPalette() {
