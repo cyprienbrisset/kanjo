@@ -13,6 +13,9 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 ## [Non publié]
 
 ### Tests
+- **`pkg/read`** : test table-driven de `Detect` (CII, ZUGFeRD 1.0, UBL Invoice/CreditNote, PDF,
+  JSON pivot, inconnu, gestion BOM + blancs) et rejet d'un format non reconnu par `ReadBytes`
+  → couverture 0 % → **61 %**.
 - **`pkg/read/facturx`** : fabrication d'un PDF Factur-X (PDF/A-3 + CII embarqué) via `pdfa.EmbedXML`
   puis relecture ; vérifie l'identifiant extrait, le marquage du format porteur et l'avertissement
   sur un nom de pièce jointe non conforme → couverture 0 % → **87 %**.
