@@ -69,6 +69,15 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   déclarée sans validation** (§17.7) — en l'absence de l'outil, le rapport l'indique explicitement.
 
 ### Conformité
+- **Règles par catégorie de TVA (13 règles, jeu → 95)** : existence d'une ventilation par
+  catégorie employée (**BR-Z/E/AE/K/G/O-01**), identifiant TVA/fiscal du vendeur pour les
+  catégories imposables (**BR-S/Z/E/G-02**), identifiants vendeur **et** acheteur pour
+  l'autoliquidation et l'intracommunautaire (**BR-AE-02**, **BR-K-02**), et absence de motif
+  d'exonération au taux normal (**BR-S-10**).
+- **Correctif de conformité du générateur** : les scénarios *autoliquidation* et
+  *intracommunautaire* produisaient des factures **sans identifiant TVA de l'acheteur** (pourtant
+  requis) ; désormais l'acheteur porte une TVA (et un pays d'un autre État membre pour
+  l'intracommunautaire). Défaut mis au jour par les nouvelles règles BR-AE-02/BR-K-02.
 - **Décimales des remises/charges (4 règles, jeu → 82)** : **BR-DEC-01/05** (montant de remise
   BT-92 / charge BT-99 au niveau document ≤ 2 décimales) et **BR-DEC-27/28** (remise BT-136 /
   charge BT-141 au niveau ligne). Tests passant/échouant.

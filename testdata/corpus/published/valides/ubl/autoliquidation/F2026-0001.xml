@@ -38,6 +38,12 @@
           <cbc:IdentificationCode>FR</cbc:IdentificationCode>
         </cac:Country>
       </cac:PostalAddress>
+      <cac:PartyTaxScheme>
+        <cbc:CompanyID>FR87613323238</cbc:CompanyID>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:PartyTaxScheme>
       <cac:PartyLegalEntity>
         <cbc:RegistrationName>EURL Ozero</cbc:RegistrationName>
       </cac:PartyLegalEntity>
@@ -49,7 +55,7 @@
   <cac:TaxTotal>
     <cbc:TaxAmount currencyID="EUR">0.00</cbc:TaxAmount>
     <cac:TaxSubtotal>
-      <cbc:TaxableAmount currencyID="EUR">1513.52</cbc:TaxableAmount>
+      <cbc:TaxableAmount currencyID="EUR">199.72</cbc:TaxableAmount>
       <cbc:TaxAmount currencyID="EUR">0.00</cbc:TaxAmount>
       <cac:TaxCategory>
         <cbc:ID>AE</cbc:ID>
@@ -62,31 +68,13 @@
     </cac:TaxSubtotal>
   </cac:TaxTotal>
   <cac:LegalMonetaryTotal>
-    <cbc:LineExtensionAmount currencyID="EUR">1513.52</cbc:LineExtensionAmount>
-    <cbc:TaxExclusiveAmount currencyID="EUR">1513.52</cbc:TaxExclusiveAmount>
-    <cbc:TaxInclusiveAmount currencyID="EUR">1513.52</cbc:TaxInclusiveAmount>
-    <cbc:PayableAmount currencyID="EUR">1513.52</cbc:PayableAmount>
+    <cbc:LineExtensionAmount currencyID="EUR">199.72</cbc:LineExtensionAmount>
+    <cbc:TaxExclusiveAmount currencyID="EUR">199.72</cbc:TaxExclusiveAmount>
+    <cbc:TaxInclusiveAmount currencyID="EUR">199.72</cbc:TaxInclusiveAmount>
+    <cbc:PayableAmount currencyID="EUR">199.72</cbc:PayableAmount>
   </cac:LegalMonetaryTotal>
   <cac:InvoiceLine>
     <cbc:ID>1</cbc:ID>
-    <cbc:InvoicedQuantity unitCode="C62">5</cbc:InvoicedQuantity>
-    <cbc:LineExtensionAmount currencyID="EUR">1211.85</cbc:LineExtensionAmount>
-    <cac:Item>
-      <cbc:Name>Maintenance</cbc:Name>
-      <cac:ClassifiedTaxCategory>
-        <cbc:ID>AE</cbc:ID>
-        <cbc:Percent>0</cbc:Percent>
-        <cac:TaxScheme>
-          <cbc:ID>VAT</cbc:ID>
-        </cac:TaxScheme>
-      </cac:ClassifiedTaxCategory>
-    </cac:Item>
-    <cac:Price>
-      <cbc:PriceAmount currencyID="EUR">242.37</cbc:PriceAmount>
-    </cac:Price>
-  </cac:InvoiceLine>
-  <cac:InvoiceLine>
-    <cbc:ID>2</cbc:ID>
     <cbc:InvoicedQuantity unitCode="C62">4</cbc:InvoicedQuantity>
     <cbc:LineExtensionAmount currencyID="EUR">199.72</cbc:LineExtensionAmount>
     <cac:Item>
@@ -101,24 +89,6 @@
     </cac:Item>
     <cac:Price>
       <cbc:PriceAmount currencyID="EUR">49.93</cbc:PriceAmount>
-    </cac:Price>
-  </cac:InvoiceLine>
-  <cac:InvoiceLine>
-    <cbc:ID>3</cbc:ID>
-    <cbc:InvoicedQuantity unitCode="C62">5</cbc:InvoicedQuantity>
-    <cbc:LineExtensionAmount currencyID="EUR">101.95</cbc:LineExtensionAmount>
-    <cac:Item>
-      <cbc:Name>Formation</cbc:Name>
-      <cac:ClassifiedTaxCategory>
-        <cbc:ID>AE</cbc:ID>
-        <cbc:Percent>0</cbc:Percent>
-        <cac:TaxScheme>
-          <cbc:ID>VAT</cbc:ID>
-        </cac:TaxScheme>
-      </cac:ClassifiedTaxCategory>
-    </cac:Item>
-    <cac:Price>
-      <cbc:PriceAmount currencyID="EUR">20.39</cbc:PriceAmount>
     </cac:Price>
   </cac:InvoiceLine>
 </Invoice>

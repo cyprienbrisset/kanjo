@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (78 règles)
+## en16931 (91 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -46,6 +46,8 @@ Version du jeu de règles : **2026.3**
 | BR-46 | error | BT-117 | Chaque ventilation de TVA doit porter un montant de TVA. |
 | BR-47 | error | BT-118 | Chaque ventilation de TVA doit indiquer une catégorie. |
 | BR-55 | error | BT-25 | Une référence de facture antérieure doit porter un identifiant. |
+| BR-AE-01 | error | BT-118 | Une catégorie en autoliquidation employée impose une ventilation de TVA correspondante. |
+| BR-AE-02 | error | BT-31, BT-48 | Une catégorie en autoliquidation exige les identifiants TVA du vendeur et de l'acheteur. |
 | BR-AE-05 | error | BT-119, BT-152 | Une TVA en autoliquidation doit avoir un taux de zéro. |
 | BR-AE-10 | error | BT-120, BT-121 | Une TVA en autoliquidation doit indiquer un motif d'exonération. |
 | BR-CL-01 | error | BT-5 | Le code devise doit être un code ISO 4217 valide. |
@@ -76,16 +78,27 @@ Version du jeu de règles : **2026.3**
 | BR-DEC-24 | error | BT-131 | Le montant net d'une ligne ne doit pas avoir plus de deux décimales. |
 | BR-DEC-27 | error | BT-136 | Un montant de remise/charge de ligne ne doit pas avoir plus de deux décimales. |
 | BR-DEC-28 | error | BT-141 | Un montant de remise/charge de ligne ne doit pas avoir plus de deux décimales. |
+| BR-E-01 | error | BT-118 | Une catégorie exonérée employée impose une ventilation de TVA correspondante. |
+| BR-E-02 | error | BT-31, BT-32 | Une catégorie exonérée exige un identifiant TVA ou fiscal du vendeur. |
 | BR-E-05 | error | BT-119, BT-152 | Une TVA exonérée doit avoir un taux de zéro. |
 | BR-E-10 | error | BT-120, BT-121 | Une TVA exonérée doit indiquer un motif d'exonération. |
+| BR-G-01 | error | BT-118 | Une catégorie à l'export employée impose une ventilation de TVA correspondante. |
+| BR-G-02 | error | BT-31, BT-32 | Une catégorie à l'export exige un identifiant TVA ou fiscal du vendeur. |
 | BR-G-05 | error | BT-119, BT-152 | Une TVA à l'export doit avoir un taux de zéro. |
 | BR-G-10 | error | BT-120, BT-121 | Une TVA à l'export doit indiquer un motif d'exonération. |
+| BR-K-01 | error | BT-118 | Une catégorie intracommunautaire employée impose une ventilation de TVA correspondante. |
+| BR-K-02 | error | BT-31, BT-48 | Une catégorie intracommunautaire exige les identifiants TVA du vendeur et de l'acheteur. |
 | BR-K-05 | error | BT-119, BT-152 | Une TVA intracommunautaire doit avoir un taux de zéro. |
 | BR-K-10 | error | BT-120, BT-121 | Une TVA intracommunautaire doit indiquer un motif d'exonération. |
+| BR-O-01 | error | BT-118 | Une catégorie hors champ employée impose une ventilation de TVA correspondante. |
 | BR-O-05 | error | BT-119, BT-152 | Une TVA hors champ doit avoir un taux de zéro. |
 | BR-O-10 | error | BT-120, BT-121 | Une TVA hors champ doit indiquer un motif d'exonération. |
 | BR-S-01 | error | BT-151, BT-118 | Une ligne au taux normal impose une ventilation de TVA de catégorie « S ». |
+| BR-S-02 | error | BT-31, BT-32 | Une catégorie au taux normal exige un identifiant TVA ou fiscal du vendeur. |
 | BR-S-05 | error | BT-152 | Le taux de TVA d'une ligne au taux normal doit être supérieur à zéro. |
+| BR-S-10 | error | BT-120, BT-121 | Une ventilation au taux normal ne doit pas porter de motif d'exonération. |
+| BR-Z-01 | error | BT-118 | Une catégorie à taux zéro employée impose une ventilation de TVA correspondante. |
+| BR-Z-02 | error | BT-31, BT-32 | Une catégorie à taux zéro exige un identifiant TVA ou fiscal du vendeur. |
 | BR-Z-05 | error | BT-119, BT-152 | Une TVA à taux zéro doit avoir un taux de zéro. |
 
 ## cius.fr (2 règles)
