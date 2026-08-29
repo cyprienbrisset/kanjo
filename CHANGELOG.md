@@ -33,6 +33,14 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   `scripts/rapport-qualite.sh`. Liens depuis le README et la page GitHub.
 
 ### Tests
+- **Couverture maximisée** : nouveaux tests pour `pkg/write/cii` (0 → 67 %), `pkg/write/ubl`
+  (0 → 68 %), `pkg/api` (0 → 100 %), `pkg/rules` moteur (47 → 91 %) et davantage de commandes
+  `cmd/kanjo/cli` (19 → 33 %). **174 fonctions de test** sur **34 paquets**, couverture moyenne
+  ~70 %.
+- **Corpus réel > 500 documents** : `fetch.sh` moissonne désormais (API git/trees, récursif)
+  **507 documents** open-source (CEN EN 16931, XRechnung testsuite + validateur, Peppol BIS 3.0).
+  `test/realcorpus_test.go` garantit qu'ils sont tous **lus sans panic** (robustesse) et que les
+  **40 exemples complets** sont validés conformes.
 - **`pkg/read`** : test table-driven de `Detect` (CII, ZUGFeRD 1.0, UBL Invoice/CreditNote, PDF,
   JSON pivot, inconnu, gestion BOM + blancs) et rejet d'un format non reconnu par `ReadBytes`
   → couverture 0 % → **61 %**.
