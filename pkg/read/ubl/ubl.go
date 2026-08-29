@@ -171,7 +171,8 @@ type ublLine struct {
 		Value    string `xml:",chardata"`
 		UnitCode string `xml:"unitCode,attr"`
 	} `xml:"CreditedQuantity"`
-	LineExtensionAmount string `xml:"LineExtensionAmount"`
+	LineExtensionAmount string               `xml:"LineExtensionAmount"`
+	AllowanceCharge     []ublAllowanceCharge `xml:"AllowanceCharge"` // BG-27/28
 	Item                struct {
 		Name           string `xml:"Name"`
 		Description    string `xml:"Description"`

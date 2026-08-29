@@ -264,6 +264,13 @@ func mapLine(l *ciiLine, currency string) (model.Line, error) {
 		}
 		out.PriceBaseQty = &base
 	}
+	for _, a := range l.Settlement.Allowances {
+		mac, err := mapAllowance(a, currency)
+		if err != nil {
+			return model.Line{}, fmt.Errorf("remise/charge de ligne (BG-27/28): %w", err)
+		}
+		out.AllowanceCharges = append(out.AllowanceCharges, mac)
+	}
 	if g := strings.TrimSpace(l.Agreement.Gross.ChargeAmount); g != "" {
 		gross, err := model.ParseAmount(g, currency)
 		if err != nil {

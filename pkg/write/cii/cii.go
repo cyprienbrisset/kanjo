@@ -139,12 +139,13 @@ func buildLine(doc *model.Document, l *model.Line) *node {
 	if l.TaxRate != nil {
 		tax.with(leaf("ram:RateApplicablePercent", l.TaxRate.String()))
 	}
-	settlement := el("ram:SpecifiedLineTradeSettlement",
-		tax,
-		el("ram:SpecifiedTradeSettlementLineMonetarySummation",
-			leaf("ram:LineTotalAmount", l.NetAmount.String()),
-		),
-	)
+	settlement := el("ram:SpecifiedLineTradeSettlement", tax)
+	for i := range l.AllowanceCharges { // BG-27/28 remises/charges de ligne
+		settlement.with(buildAllowanceCharge(&l.AllowanceCharges[i]))
+	}
+	settlement.with(el("ram:SpecifiedTradeSettlementLineMonetarySummation",
+		leaf("ram:LineTotalAmount", l.NetAmount.String()),
+	))
 
 	return el("ram:IncludedSupplyChainTradeLineItem",
 		assoc, product, agreement, delivery, settlement,

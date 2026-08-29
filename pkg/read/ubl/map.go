@@ -305,6 +305,13 @@ func mapLine(l *ublLine, creditNote bool, currency string) (model.Line, error) {
 		}
 		out.PriceBaseQty = &base
 	}
+	for _, ac := range l.AllowanceCharge {
+		mac, err := mapAllowanceCharge(ac, currency)
+		if err != nil {
+			return model.Line{}, fmt.Errorf("remise/charge de ligne (BG-27/28): %w", err)
+		}
+		out.AllowanceCharges = append(out.AllowanceCharges, mac)
+	}
 	return out, nil
 }
 
