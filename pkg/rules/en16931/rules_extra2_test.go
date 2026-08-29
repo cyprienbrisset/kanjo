@@ -48,7 +48,7 @@ func TestVATCategoryRulesFail(t *testing.T) {
 			d.TaxBreakdown[0].Category = model.TaxReverseCharge
 			d.TaxBreakdown[0].Rate = model.MustParseDecimal("0")
 		}},
-		{"BR-K-10", func(d *model.Document) {
+		{"BR-IC-10", func(d *model.Document) {
 			d.TaxBreakdown[0].Category = model.TaxIntraCommunity
 			d.TaxBreakdown[0].Rate = model.MustParseDecimal("0")
 		}},
@@ -68,8 +68,8 @@ func TestVATCategoryRulesFail(t *testing.T) {
 func TestDecimalRulesFail(t *testing.T) {
 	d := validDoc()
 	d.Totals.TaxInclusiveAmount = model.NewAmount(149988, 3, "EUR") // 3 décimales
-	if !findingsByRule(rules.Validate(d, "en16931"))["BR-DEC-16"] {
-		t.Error("BR-DEC-16 attendu pour un montant à 3 décimales")
+	if !findingsByRule(rules.Validate(d, "en16931"))["BR-DEC-14"] {
+		t.Error("BR-DEC-14 attendu pour un montant à 3 décimales")
 	}
 }
 

@@ -15,14 +15,14 @@ func init() {
 	rules.Register(zeroRateRule("BR-Z-05", model.TaxZeroRated, "à taux zéro"))
 	rules.Register(zeroRateRule("BR-E-05", model.TaxExempt, "exonérée"))
 	rules.Register(zeroRateRule("BR-AE-05", model.TaxReverseCharge, "en autoliquidation"))
-	rules.Register(zeroRateRule("BR-K-05", model.TaxIntraCommunity, "intracommunautaire"))
+	rules.Register(zeroRateRule("BR-IC-05", model.TaxIntraCommunity, "intracommunautaire"))
 	rules.Register(zeroRateRule("BR-G-05", model.TaxExport, "à l'export"))
 	rules.Register(zeroRateRule("BR-O-05", model.TaxOutsideScope, "hors champ"))
 
 	// Motif d'exonération obligatoire (sauf taux zéro Z).
 	rules.Register(exemptionReasonRule("BR-E-10", model.TaxExempt, "exonérée"))
 	rules.Register(exemptionReasonRule("BR-AE-10", model.TaxReverseCharge, "en autoliquidation"))
-	rules.Register(exemptionReasonRule("BR-K-10", model.TaxIntraCommunity, "intracommunautaire"))
+	rules.Register(exemptionReasonRule("BR-IC-10", model.TaxIntraCommunity, "intracommunautaire"))
 	rules.Register(exemptionReasonRule("BR-G-10", model.TaxExport, "à l'export"))
 	rules.Register(exemptionReasonRule("BR-O-10", model.TaxOutsideScope, "hors champ"))
 }

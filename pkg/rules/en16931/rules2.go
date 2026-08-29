@@ -45,10 +45,10 @@ func brBreakdownCategory() rules.Rule {
 	}
 }
 
-// brLineNetDecimals (BR-DEC-24) : le montant net de chaque ligne (BT-131) a au plus 2 décimales.
+// brLineNetDecimals (BR-DEC-23) : le montant net de chaque ligne (BT-131) a au plus 2 décimales.
 func brLineNetDecimals() rules.Rule {
 	return rules.Rule{
-		ID: "BR-DEC-24", Set: setEN, Severity: rules.SeverityError,
+		ID: "BR-DEC-23", Set: setEN, Severity: rules.SeverityError,
 		Terms:   []string{"BT-131"},
 		Message: map[string]string{"fr": "Le montant net d'une ligne ne doit pas avoir plus de deux décimales."},
 		Check: func(d *model.Document, _ *rules.Context) []rules.Finding {
@@ -56,7 +56,7 @@ func brLineNetDecimals() rules.Rule {
 			for i, l := range d.Lines {
 				if l.NetAmount.Scale > 2 {
 					out = append(out, rules.Finding{
-						RuleID: "BR-DEC-24", Severity: rules.SeverityError, Term: "BT-131",
+						RuleID: "BR-DEC-23", Severity: rules.SeverityError, Term: "BT-131",
 						Message: fmt.Sprintf("Montant net de la ligne %s à plus de deux décimales.", l.ID),
 						Path:    fmt.Sprintf("lines[%d].netAmount", i), Fixable: true,
 					})

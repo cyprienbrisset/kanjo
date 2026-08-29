@@ -22,18 +22,18 @@ func TestAllowanceChargeDecimalRules(t *testing.T) {
 		t.Error("BR-DEC-05 attendu (charge document à 3 décimales)")
 	}
 
-	// Niveau ligne : remise et charge à 3 décimales → BR-DEC-27 / BR-DEC-28.
+	// Niveau ligne : remise et charge à 3 décimales → BR-DEC-24 / BR-DEC-27.
 	d3 := validDoc()
 	d3.Lines[0].AllowanceCharges = []model.AllowanceCharge{
 		{IsCharge: false, Amount: model.MustParseAmount("5.000", "EUR"), ReasonCode: "95", Reason: "Remise"},
 		{IsCharge: true, Amount: model.MustParseAmount("2.000", "EUR"), ReasonCode: "FC", Reason: "Frais"},
 	}
 	byRule := findingsByRule(rules.Validate(d3, "en16931"))
-	if !byRule["BR-DEC-27"] {
-		t.Error("BR-DEC-27 attendu (remise de ligne à 3 décimales)")
+	if !byRule["BR-DEC-24"] {
+		t.Error("BR-DEC-24 attendu (remise de ligne à 3 décimales)")
 	}
-	if !byRule["BR-DEC-28"] {
-		t.Error("BR-DEC-28 attendu (charge de ligne à 3 décimales)")
+	if !byRule["BR-DEC-27"] {
+		t.Error("BR-DEC-27 attendu (charge de ligne à 3 décimales)")
 	}
 
 	// Montants à 2 décimales → aucune de ces règles.
