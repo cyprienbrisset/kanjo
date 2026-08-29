@@ -12,6 +12,12 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Modifié (cohérence UI)
+- **Suppression des idéogrammes de l'interface CLI** (comme déjà fait dans la GUI) : marqueurs de
+  statut clairs et universels `✓` / `⚠` / `✗` / `·`, en-têtes `▸`, bandeaux sans idéogramme. Le
+  rapport de validation HTML et le message de lancement de Studio sont également nettoyés. Les
+  commentaires de code documentant le système de design (大福帳) sont conservés.
+
 ### Assurance qualité (confiance)
 - **Corpus de test publiable** ([`testdata/corpus/published`](testdata/corpus/published)) : 34 factures
   100 % synthétiques et déterministes (24 cas de succès sur 6 scénarios × CII/UBL, 10 cas d'erreur),

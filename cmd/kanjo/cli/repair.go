@@ -48,10 +48,10 @@ func runRepair(args []string) int {
 		}
 		changes := repair.Repair(rd.Doc, opts)
 		if len(changes) == 0 {
-			fmt.Fprintf(os.Stdout, "適 %s : aucune correction nécessaire\n", in)
+			fmt.Fprintf(os.Stdout, "✓ %s : aucune correction nécessaire\n", in)
 			continue
 		}
-		fmt.Fprintf(os.Stdout, "保 %s : %d correction(s)\n", in, len(changes))
+		fmt.Fprintf(os.Stdout, "⚠ %s : %d correction(s)\n", in, len(changes))
 		for _, c := range changes {
 			fmt.Fprintf(os.Stdout, "    %s : %s → %s (%s)\n", c.Path, c.Before, c.After, c.Fix)
 		}

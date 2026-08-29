@@ -57,7 +57,7 @@ func runGenerate(args []string) int {
 		}
 		produced++
 	}
-	fmt.Fprintf(os.Stdout, "適 %d factures générées (%s, scénario %s) dans %s\n", produced, *format, *scenario, *out)
+	fmt.Fprintf(os.Stdout, "✓ %d factures générées (%s, scénario %s) dans %s\n", produced, *format, *scenario, *out)
 	return ExitOK
 }
 

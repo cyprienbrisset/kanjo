@@ -67,7 +67,7 @@ func runWatch(args []string) int {
 		}
 	}
 
-	fmt.Fprintf(os.Stdout, "番 surveillance de %s (preset %s) — Ctrl+C pour arrêter\n", inbox, p.Name)
+	fmt.Fprintf(os.Stdout, "▸ surveillance de %s (preset %s) — Ctrl+C pour arrêter\n", inbox, p.Name)
 	if !*once {
 		fmt.Fprintln(os.Stdout, "   note : la surveillance s'arrête à la fermeture de cette commande (pas de service).")
 	}
@@ -100,7 +100,7 @@ func runWatch(args []string) int {
 		}
 		select {
 		case <-ctx.Done():
-			fmt.Fprintln(os.Stdout, "\n番 surveillance arrêtée.")
+			fmt.Fprintln(os.Stdout, "\n▸ surveillance arrêtée.")
 			return ExitInterrupted
 		case <-ticker.C:
 		}
@@ -116,7 +116,7 @@ func processWatched(path string, opts convert.Options, out, done, failed string)
 	cr, err := convert.Convert(data, path, opts)
 	if err != nil {
 		moveTo(path, failed, err)
-		fmt.Fprintf(os.Stdout, "否 %s : %v\n", filepath.Base(path), err)
+		fmt.Fprintf(os.Stdout, "✗ %s : %v\n", filepath.Base(path), err)
 		return
 	}
 	outName := deriveName(path, opts.To)
@@ -128,9 +128,9 @@ func processWatched(path string, opts convert.Options, out, done, failed string)
 		// Le fichier de sortie est écrit ; on signale seulement l'échec de rangement.
 		errf("watch : rangement de %s : %v", path, err)
 	}
-	verdict := "適"
+	verdict := "✓"
 	if len(cr.Losses) > 0 {
-		verdict = "保"
+		verdict = "⚠"
 	}
 	fmt.Fprintf(os.Stdout, "%s %s → %s\n", verdict, filepath.Base(path), outName)
 }

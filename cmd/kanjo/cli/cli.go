@@ -12,7 +12,7 @@ import (
 	_ "github.com/cyprienbrisset/kanjo/pkg/formats" // câblage du registre des formats (lecteurs/écrivains)
 )
 
-const usage = `勘定 kanjo — manipulation de factures électroniques (Factur-X, UBL, CII…)
+const usage = `kanjo — manipulation de factures électroniques (Factur-X, UBL, CII…)
 
 Usage :
   kanjo <commande> [options]

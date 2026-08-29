@@ -96,7 +96,7 @@ func ignoreSet(list stringList) map[string]bool {
 
 func renderDiffTable(rep diff.Report, leftName, rightName string, leftFmt, rightFmt read.Format) {
 	w := os.Stdout
-	fmt.Fprintf(w, "差 %s (%s)  ⇔  %s (%s)\n\n", leftName, leftFmt, rightName, rightFmt)
+	fmt.Fprintf(w, "▸ %s (%s)  ⇔  %s (%s)\n\n", leftName, leftFmt, rightName, rightFmt)
 	for _, t := range rep.Terms {
 		mark := diffMark(t.Kind)
 		label := t.Term

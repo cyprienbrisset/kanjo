@@ -76,7 +76,7 @@ func presetList(store *preset.Store) int {
 		return ExitOK
 	}
 	for _, p := range list {
-		fmt.Fprintf(os.Stdout, "型 %-20s → %s", p.Name, p.To)
+		fmt.Fprintf(os.Stdout, "▸ %-20s → %s", p.Name, p.To)
 		if p.Profile != "" {
 			fmt.Fprintf(os.Stdout, " (%s)", p.Profile)
 		}
@@ -127,7 +127,7 @@ func presetSave(store *preset.Store, args []string) int {
 		errf("preset save : %v", err)
 		return ExitUsage
 	}
-	fmt.Fprintf(os.Stdout, "型 preset « %s » enregistré.\n", p.Name)
+	fmt.Fprintf(os.Stdout, "▸ preset « %s » enregistré.\n", p.Name)
 	return ExitOK
 }
 
@@ -188,6 +188,6 @@ func presetImport(store *preset.Store, args []string) int {
 		errf("preset import : %v", err)
 		return ExitUsage
 	}
-	fmt.Fprintf(os.Stdout, "型 preset « %s » importé.\n", p.Name)
+	fmt.Fprintf(os.Stdout, "▸ preset « %s » importé.\n", p.Name)
 	return ExitOK
 }

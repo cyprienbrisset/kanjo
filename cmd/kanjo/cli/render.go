@@ -64,7 +64,7 @@ func runRender(args []string) int {
 			worst = maxExit(worst, ExitInternal)
 			continue
 		}
-		fmt.Fprintf(os.Stdout, "適 %s → %s\n", in, outPath)
+		fmt.Fprintf(os.Stdout, "✓ %s → %s\n", in, outPath)
 	}
 	return worst
 }
