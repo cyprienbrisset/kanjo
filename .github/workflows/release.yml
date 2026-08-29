@@ -1,0 +1,58 @@
+name: Release
+
+# Publie des binaires précompilés (cœur pur Go, CGO_ENABLED=0) pour 6 cibles
+# lorsqu'un tag de version « vX.Y.Z » est poussé.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+env:
+  CGO_ENABLED: "0"
+
+jobs:
+  build:
+    name: Binaires multiplateformes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Construire et archiver les 6 cibles
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME}"
+          COMMIT="$(git rev-parse --short HEAD)"
+          DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          PKG="github.com/cyprienbrisset/kanjo/internal/version"
+          LDFLAGS="-s -w -X ${PKG}.Tool=${VERSION} -X ${PKG}.Commit=${COMMIT} -X ${PKG}.BuildDate=${DATE}"
+          mkdir -p dist
+          for t in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64; do
+            GOOS="${t%/*}"; GOARCH="${t#*/}"
+            echo "→ $GOOS/$GOARCH"
+            BIN="kanjo"; [ "$GOOS" = "windows" ] && BIN="kanjo.exe"
+            GOOS="$GOOS" GOARCH="$GOARCH" go build -trimpath -ldflags "$LDFLAGS" -o "$BIN" ./cmd/kanjo
+            NAME="kanjo_${VERSION}_${GOOS}_${GOARCH}"
+            if [ "$GOOS" = "windows" ]; then
+              zip -q "dist/${NAME}.zip" "$BIN" README.md LICENSE CHANGELOG.md
+            else
+              tar -czf "dist/${NAME}.tar.gz" "$BIN" README.md LICENSE CHANGELOG.md
+            fi
+            rm -f "$BIN"
+          done
+          ( cd dist && sha256sum * > SHA256SUMS.txt )
+          ls -l dist
+
+      - name: Publier la release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          body: |
+            Binaires précompilés de **Kanjō** ${{ github.ref_name }} — cœur pur Go, `CGO_ENABLED=0`.
+
+            Vérifiez l'intégrité avec `SHA256SUMS.txt`. Licence : Business Source License 1.1.
