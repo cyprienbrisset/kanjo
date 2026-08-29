@@ -18,7 +18,9 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   d'aller-retour lossless dédiés (`TestCIILineAllowanceRoundTrip`, `TestUBLLineAllowanceRoundTrip`).
 
 ### Conformité
-- **12 nouvelles règles EN 16931** (jeu de règles → **69 règles**) :
+- **16 nouvelles règles EN 16931** (jeu de règles → **73 règles**) :
+  - Totaux du document (BG-22) : **BR-12** (total des lignes BT-106), **BR-13** (total HT
+    BT-109), **BR-14** (total TTC BT-112) et **BR-15** (net à payer BT-115) obligatoires.
   - Remises/charges — niveau document : **BR-31/32/33** (remise : montant, catégorie de TVA,
     motif) et **BR-36/37/38** (charge : montant, catégorie de TVA, motif).
   - Remises/charges — niveau ligne : **BR-41/42** (remise : montant, motif) et **BR-43/44**
