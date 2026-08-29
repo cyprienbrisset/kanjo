@@ -45,6 +45,11 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   (montant BT-136/141, base, pourcentage, motif BT-139/144 et code motif BT-140/145). Tests
   d'aller-retour lossless dédiés (`TestCIILineAllowanceRoundTrip`, `TestUBLLineAllowanceRoundTrip`).
 
+### Ajouté (conformité PDF/A)
+- **Validation PDF/A-3b effective** via veraPDF : `pkg/pdfa.ValidatePDFA` + option
+  `kanjo embed --verify-pdfa`. Verdict réel quand veraPDF est installé ; **jamais de conformité
+  déclarée sans validation** (§17.7) — en l'absence de l'outil, le rapport l'indique explicitement.
+
 ### Conformité
 - **Périodes et facture antérieure (5 règles, jeu → 78)** : **BR-CO-19/20** (une période de
   facturation ou de ligne doit porter une date de début ou de fin), **BR-29/30** (la date de fin
