@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (65 règles)
+## en16931 (69 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -19,6 +19,10 @@ Version du jeu de règles : **2026.3**
 | BR-09 | error | BT-40 | Le code pays du vendeur est obligatoire. |
 | BR-10 | error | BG-8 | L'adresse postale de l'acheteur est obligatoire. |
 | BR-11 | error | BT-55 | Le code pays de l'acheteur est obligatoire. |
+| BR-12 | error | BT-106 | Le total des montants nets de ligne est obligatoire. |
+| BR-13 | error | BT-109 | Le total hors TVA est obligatoire. |
+| BR-14 | error | BT-112 | Le total TVA comprise est obligatoire. |
+| BR-15 | error | BT-115 | Le net à payer est obligatoire. |
 | BR-16 | error | BG-25 | Une facture doit comporter au moins une ligne. |
 | BR-21 | error | BT-126 | Chaque ligne doit avoir un identifiant. |
 | BR-23 | error | BT-130 | Chaque ligne doit indiquer une unité de mesure. |
