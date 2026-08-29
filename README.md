@@ -53,7 +53,7 @@ jusqu'aux plateformes SaaS.
 ## Fonctionnalités
 
 - **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, JSON pivot. Détection **par le contenu**, jamais par l'extension.
-- **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM) : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.**
+- **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **73 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.**
 - **Convertir** — CII ⇄ UBL, Factur-X, XRechnung (UBL/CII), Peppol BIS 3.0, JSON, CSV — avec **rapport de perte explicite** et politique `--max-loss`.
 - **Traiter en lot** — découverte récursive, pool de workers, **reprise `--resume`**, quarantaine, **surveillance de dossier** (`watch`).
 - **Comparer** — `diff` sémantique entre deux factures quels que soient leurs formats (distingue **pertes** et **divergences**).
@@ -99,6 +99,7 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 - **73 règles** réparties en trois jeux (`en16931`, `cius.fr`, `kanjo`), chacune avec un test passant et un test échouant ; catalogue généré dans [`docs/rules.md`](docs/rules.md).
 - **Corpus publiable synthétique** ([`testdata/corpus/published`](testdata/corpus/published)) : **24/24 cas de succès** conformes et **10/10 cas d'erreur** rejetés — vérifié en continu par [`test/corpus_test.go`](test/corpus_test.go).
 - **Corpus officiel CEN** ([`fetch.sh`](testdata/corpus/fetch.sh), non vendoré) : **31/32 conformes** — l'unique écart est un fichier utilisant une catégorie de TVA hors EN 16931, **correctement rejeté**.
+- **146 tests automatisés** (aller-retour sans perte, corpus, attaques XXE) ; un test de CI **échoue si un verdict de conformité régresse**.
 - 👉 **[Rapport de qualité et de conformité complet →](docs/RAPPORT-QUALITE.md)** (méthodologie, sécurité, reproductibilité).
 
 ## Architecture
@@ -125,8 +126,11 @@ Sécurité  │ internal/xmlsafe (anti-XXE)  ·  internal/fsatomic (écriture at
 
 ## Qualité
 
-- Tests unitaires, golden files, aller-retour **lossless**, propriétés (arrondis), fuzz XML/PDF, intégration CLI, bout-en-bout GUI.
+- **146 tests automatisés** : unitaires, aller-retour **lossless**, propriétés (arrondis exacts), corpus de conformité, attaques XXE/bombes XML, intégration CLI de bout en bout.
+- **Corpus publiable** ([`testdata/corpus/published`](testdata/corpus/published), 34 factures synthétiques) validé en continu : 24/24 succès conformes, 10/10 erreurs rejetées.
 - `gofmt` + `go vet` propres ; **aucune `panic`** dans un chemin de traitement (converti en erreur de fichier).
+- Tout est reproductible : [`scripts/rapport-qualite.sh`](scripts/rapport-qualite.sh) rejoue compilation, tests, règles, corpus et sécurité.
+- 📄 **[Rapport de qualité et de conformité →](docs/RAPPORT-QUALITE.md)**
 
 ## Licence
 
@@ -135,5 +139,5 @@ Sécurité  │ internal/xmlsafe (anti-XXE)  ·  internal/fsatomic (écriture at
 ---
 
 <div align="center">
-Édité par <strong>Société Cliente</strong> · l'identité visuelle s'inspire du <em>大福帳 (daifukuchō)</em>, le grand livre des marchands d'Edo.
+Projet <strong>Kanjō</strong> · l'identité visuelle s'inspire du <em>大福帳 (daifukuchō)</em>, le grand livre des marchands d'Edo.
 </div>
