@@ -9,13 +9,13 @@ import (
 
 // Règles décimales sur les montants de remises et charges (au plus deux décimales) :
 //   - niveau document : BR-DEC-01 (remise BT-92), BR-DEC-05 (charge BT-99) ;
-//   - niveau ligne    : BR-DEC-27 (remise BT-136), BR-DEC-28 (charge BT-141).
+//   - niveau ligne    : BR-DEC-24 (remise BT-136), BR-DEC-27 (charge BT-141).
 
 func init() {
 	rules.Register(decDocACRule("BR-DEC-01", "BT-92", false))
 	rules.Register(decDocACRule("BR-DEC-05", "BT-99", true))
-	rules.Register(decLineACRule("BR-DEC-27", "BT-136", false))
-	rules.Register(decLineACRule("BR-DEC-28", "BT-141", true))
+	rules.Register(decLineACRule("BR-DEC-24", "BT-136", false))
+	rules.Register(decLineACRule("BR-DEC-27", "BT-141", true))
 }
 
 func decDocACRule(id, term string, wantCharge bool) rules.Rule {

@@ -19,7 +19,7 @@ func init() {
 	rules.Register(breakdownExistsRule("BR-Z-01", model.TaxZeroRated, "à taux zéro"))
 	rules.Register(breakdownExistsRule("BR-E-01", model.TaxExempt, "exonérée"))
 	rules.Register(breakdownExistsRule("BR-AE-01", model.TaxReverseCharge, "en autoliquidation"))
-	rules.Register(breakdownExistsRule("BR-K-01", model.TaxIntraCommunity, "intracommunautaire"))
+	rules.Register(breakdownExistsRule("BR-IC-01", model.TaxIntraCommunity, "intracommunautaire"))
 	rules.Register(breakdownExistsRule("BR-G-01", model.TaxExport, "à l'export"))
 	rules.Register(breakdownExistsRule("BR-O-01", model.TaxOutsideScope, "hors champ"))
 
@@ -31,7 +31,7 @@ func init() {
 
 	// -02 : autoliquidation et intracommunautaire exigent aussi l'identifiant TVA de l'acheteur.
 	rules.Register(sellerBuyerVATRule("BR-AE-02", model.TaxReverseCharge, "en autoliquidation"))
-	rules.Register(sellerBuyerVATRule("BR-K-02", model.TaxIntraCommunity, "intracommunautaire"))
+	rules.Register(sellerBuyerVATRule("BR-IC-02", model.TaxIntraCommunity, "intracommunautaire"))
 
 	// BR-S-10 : pas de motif d'exonération sur une ventilation au taux normal.
 	rules.Register(noExemptionReasonRule("BR-S-10", model.TaxStandard, "au taux normal"))

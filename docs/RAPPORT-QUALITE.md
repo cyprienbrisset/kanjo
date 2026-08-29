@@ -14,7 +14,8 @@
 |---|---|
 | Fonctions de test automatisées | **180** (56 fichiers) |
 | Paquets couverts par des tests | **36** |
-| Règles de validation EN 16931 | **95** (91 EN 16931 · 2 CIUS FR · 2 Kanjō) |
+| Règles de validation EN 16931 | **96** (92 EN 16931 · 2 CIUS FR · 2 Kanjō) |
+| Parité vs Schematron officiel CEN | **91 / 223** (41 %) — [détail](CONFORMITE-EN16931.md) |
 | Corpus publiable — cas de succès | **38 / 38** déclarés conformes |
 | Corpus publiable — cas d'erreur | **12 / 12** correctement rejetés |
 | Corpus **réel open-source** (robustesse) | **507 documents** lus sans panic |
@@ -92,12 +93,19 @@ par cette couche — aucun `encoding/xml` direct n'est autorisé dans les lecteu
 ## 4. Conformité EN 16931 — « jamais de verdict non calculé »
 
 Kanjō applique un **moteur de règles natif en Go** (pas de Schematron, pas de JVM). Le catalogue
-complet des **95 règles** est publié et généré depuis le code dans [`rules.md`](rules.md) ; il
+complet des **96 règles** est publié et généré depuis le code dans [`rules.md`](rules.md) ; il
 couvre les familles `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, la CIUS française et
 des règles maison (IBAN mod-97, cohérence des dates).
 
 Chaque règle est accompagnée d'**au moins un test passant et un test échouant**. Un test de CI
 vérifie que `rules.md` reste **synchronisé** avec le code : la documentation ne peut pas mentir.
+
+**Parité mesurée, pas déclarée.** La liste **canonique** des identifiants de règles est extraite du
+**Schematron officiel du CEN** (`testdata/en16931/canonical-rule-ids.txt`, régénérable via
+`scripts/extraire-regles-canoniques.sh`). Le test `test/parity_test.go` calcule notre couverture
+réelle — actuellement **91/223 (41 %)** — avec un **cliquet anti-régression** et régénère le
+rapport détaillé [`CONFORMITE-EN16931.md`](CONFORMITE-EN16931.md). L'objectif de parité complète
+est ainsi un chiffre **suivi et vérifiable**, jamais une affirmation.
 
 Règle d'or (§17.7 du cahier des charges) : **Kanjō ne produit jamais un verdict de conformité
 qui n'a pas été effectivement calculé.** Aucun sceau « conforme » n'est apposé sans exécution du

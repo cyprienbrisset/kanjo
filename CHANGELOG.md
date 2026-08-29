@@ -68,6 +68,18 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   `kanjo embed --verify-pdfa`. Verdict réel quand veraPDF est installé ; **jamais de conformité
   déclarée sans validation** (§17.7) — en l'absence de l'outil, le rapport l'indique explicitement.
 
+### Conformité — mesure de parité EN 16931
+- **Liste canonique vendorée** (`testdata/en16931/canonical-rule-ids.txt`, **223 règles**) extraite
+  du **Schematron officiel CEN** (préprocessé UBL+CII), régénérable par
+  `scripts/extraire-regles-canoniques.sh`.
+- **Test de parité** (`test/parity_test.go`) : mesure la couverture réelle — **91/223 (41 %)** —
+  avec **cliquet anti-régression**, et génère [`docs/CONFORMITE-EN16931.md`](docs/CONFORMITE-EN16931.md)
+  (couvertes/manquantes par famille). La conformité devient un chiffre **mesuré**, pas déclaré.
+- **Réconciliation des identifiants** avec le référentiel officiel : famille **BR-K-\* → BR-IC-\***
+  (intracommunautaire) et **renumérotation BR-DEC** alignée sur les termes BT du Schematron
+  (BT-109→BR-DEC-12, BT-112→BR-DEC-14, BT-115→BR-DEC-18, BT-116/117→BR-DEC-19/20, BT-131→BR-DEC-23,
+  BT-136→BR-DEC-24, BT-141→BR-DEC-27). `BR-CO-25` (hors Schematron CEN) est signalé « au-delà ».
+
 ### Conformité
 - **Règles par catégorie de TVA (13 règles, jeu → 95)** : existence d'une ventilation par
   catégorie employée (**BR-Z/E/AE/K/G/O-01**), identifiant TVA/fiscal du vendeur pour les

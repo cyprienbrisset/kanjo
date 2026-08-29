@@ -68,7 +68,7 @@ func Generate(index int, opts Options) (*model.Document, error) {
 		Address: model.Address{Line1: "2 avenue Client", PostalCode: "75000", City: pick(rng, cities), CountryCode: "FR"},
 	}
 	// Autoliquidation et livraison intracommunautaire exigent l'identifiant TVA de l'acheteur
-	// (BR-AE-02 / BR-K-02) ; l'intracommunautaire place l'acheteur dans un autre État membre.
+	// (BR-AE-02 / BR-IC-02) ; l'intracommunautaire place l'acheteur dans un autre État membre.
 	switch opts.Scenario {
 	case ScenarioAutoliquidation:
 		doc.Buyer.VATID = "FR" + fmt.Sprintf("%02d", rng.Intn(100)) + fmt.Sprintf("%09d", 200000000+rng.Intn(799999999))

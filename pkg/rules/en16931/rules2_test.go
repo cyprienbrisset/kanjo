@@ -17,7 +17,7 @@ func TestRules2Fail(t *testing.T) {
 		{"BR-10", func(d *model.Document) { d.Buyer.Address = model.Address{} }},
 		{"BR-CO-26", func(d *model.Document) { d.Seller.VATID = ""; d.Seller.LegalID = ""; d.Seller.ID = "" }},
 		{"BR-47", func(d *model.Document) { d.TaxBreakdown[0].Category = "" }},
-		{"BR-DEC-24", func(d *model.Document) { d.Lines[0].NetAmount = model.NewAmount(100000, 3, "EUR") }},
+		{"BR-DEC-23", func(d *model.Document) { d.Lines[0].NetAmount = model.NewAmount(100000, 3, "EUR") }},
 	}
 	for _, c := range cases {
 		d := validDoc()
