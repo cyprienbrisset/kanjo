@@ -171,8 +171,11 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   <div class="metric"><div class="n">6/6</div><div class="l">cibles cross-compilées (Linux, macOS, Windows)</div></div>
   <div class="metric"><div class="n">0</div><div class="l">appel réseau · 0 télémétrie · traitement local</div></div>
  </div>
- <p class="intro" style="margin-top:32px"><strong>33/34 cas valides du corpus de test officiel EN 16931 (CEN) sont validés conformes</strong> en EN 16931 pur ; les 2 restants sont un arrondi en devise à 0 décimale et un fichier hors EN 16931 (correctement rejeté). Testé aussi sur de vraies Factur-X (mustangproject) : lecture, validation, conversion sans perte, rendu lisible.
+ <p class="intro" style="margin-top:32px"><strong>Corpus publiable synthétique : 24/24 cas de succès validés conformes et 10/10 cas d'erreur correctement rejetés</strong> — vérifié en continu par la CI. Sur le corpus <em>officiel</em> CEN : 31/32 conformes, l'unique écart étant un fichier utilisant une catégorie de TVA hors EN 16931 (correctement rejeté).
   XML durci contre XXE et les bombes de décompression ; aucune donnée personnelle dans les journaux.</p>
+ <p style="text-align:center;margin-top:24px">
+  <a class="btn" href="https://github.com/cyprienbrisset/kanjo/blob/main/docs/RAPPORT-QUALITE.md">Lire le rapport de qualité &amp; de conformité →</a>
+ </p>
  <table class="matrix">
   <tr><th>Format</th><th>Lecture</th><th>Écriture</th><th>Validation</th></tr>
   <tr><td>Factur-X (PDF/A-3, tous profils)</td><td class="ok">✓</td><td class="ok">✓ embed</td><td class="ok">✓</td></tr>
