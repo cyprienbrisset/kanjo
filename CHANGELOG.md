@@ -32,6 +32,12 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   méthodologie de test, résultats, sécurité/RGPD, portée et limites — chiffres reproductibles via
   `scripts/rapport-qualite.sh`. Liens depuis le README et la page GitHub.
 
+### Corpus réel (au lieu de factures fabriquées)
+- **Corpus de test RÉEL porté à 7 365 documents** open-source (aucune facture générée) : `fetch.sh`
+  moissonne en parallèle (authentifié, robuste aux noms de fichiers) CEN EN 16931, XRechnung,
+  Peppol BIS 3.0, **phive-rules** (~6 400 instances multi-juridictions) et ZUGFeRD/mustangproject.
+  `test/realcorpus_test.go` : **7 365 lus sans panic**, 4 728/7 365 lisibles, exemples CEN 32/32.
+
 ### Tests
 - **Couverture maximisée** : nouveaux tests pour `pkg/write/cii` (0 → 67 %), `pkg/write/ubl`
   (0 → 68 %), `pkg/api` (0 → 100 %), `pkg/rules` moteur (47 → 91 %) et davantage de commandes

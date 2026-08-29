@@ -59,18 +59,19 @@ func TestRealCorpusNoPanic(t *testing.T) {
 	t.Logf("robustesse : %d documents réels lus sans panic", len(files))
 }
 
-// TestRealExamplesParse garantit que les factures COMPLÈTES des corpus d'exemples (par opposition
-// aux fragments unitaires) se lisent sans erreur.
+// TestRealExamplesParse garantit que les factures d'exemple CEN COMPLÈTES (UBL et CII) se lisent
+// sans erreur. Le corpus phive-rules, hétérogène (autres standards, cas volontairement invalides,
+// fragments), n'est PAS soumis à cette exigence : il sert la robustesse (cf. TestRealCorpusNoPanic).
 func TestRealExamplesParse(t *testing.T) {
 	all := officialFiles(t)
 	var examples []string
 	for _, f := range all {
-		if strings.Contains(f, "examples") || strings.Contains(f, "peppol-bis") {
+		if strings.Contains(f, "ubl-examples") || strings.Contains(f, "cii-examples") {
 			examples = append(examples, f)
 		}
 	}
 	if len(examples) == 0 {
-		t.Skip("aucun fichier d'exemple dans le corpus réel")
+		t.Skip("aucun exemple CEN dans le corpus réel")
 	}
 	var failed int
 	for _, f := range examples {
@@ -80,8 +81,33 @@ func TestRealExamplesParse(t *testing.T) {
 		}
 		if _, err := read.ReadBytes(data, f); err != nil {
 			failed++
-			t.Errorf("exemple non lisible %s : %v", filepath.Base(f), err)
+			t.Errorf("exemple CEN non lisible %s : %v", filepath.Base(f), err)
 		}
 	}
-	t.Logf("exemples : %d lus, %d en échec", len(examples)-failed, failed)
+	t.Logf("exemples CEN : %d lus, %d en échec", len(examples)-failed, failed)
+}
+
+// TestRealCorpusReadRate mesure (à titre informatif) la proportion du corpus réel qui se lit comme
+// document pivot. Le reste correspond à des XML d'autres standards ou non-factures présents dans les
+// dépôts de test agrégés. Aucune régression n'est tolérée sous un plancher prudent.
+func TestRealCorpusReadRate(t *testing.T) {
+	files := officialFiles(t)
+	if len(files) == 0 {
+		t.Skip("corpus réel vide")
+	}
+	readable := 0
+	for _, f := range files {
+		data, err := os.ReadFile(f)
+		if err != nil {
+			continue
+		}
+		if _, err := read.ReadBytes(data, f); err == nil {
+			readable++
+		}
+	}
+	pct := 100 * readable / len(files)
+	t.Logf("lisibilité du corpus réel : %d / %d documents lus comme facture (%d %%)", readable, len(files), pct)
+	if readable < 3000 {
+		t.Errorf("régression de lisibilité : %d documents lus (< plancher 3000)", readable)
+	}
 }

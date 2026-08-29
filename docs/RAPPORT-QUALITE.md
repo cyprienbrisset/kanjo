@@ -18,9 +18,9 @@
 | Parité vs Schematron officiel CEN | **132 / 223** (59 %) — [détail](CONFORMITE-EN16931.md) |
 | Corpus publiable — cas de succès | **38 / 38** déclarés conformes |
 | Corpus publiable — cas d'erreur | **12 / 12** correctement rejetés |
-| Corpus **réel open-source** (robustesse) | **507 documents** lus sans panic |
-| Exemples réels complets (CEN + Peppol) | **40 / 40** conformes |
-| Corpus **officiel Peppol** BIS 3.0 | **9 / 9** conformes |
+| Corpus **réel open-source** (robustesse) | **7 365 documents** lus sans panic |
+| Lisibilité du corpus réel | **4 728 / 7 365** (64 %) lus comme facture |
+| Exemples CEN complets | **32 / 32** lus · CEN CII 15/15, UBL 16/17 |
 | Cibles de compilation vérifiées | **6** (Linux/macOS/Windows × amd64/arm64), `CGO_ENABLED=0` |
 | Appels réseau / télémétrie | **0** — 100 % hors-ligne |
 
@@ -67,21 +67,27 @@ Le test d'intégration `test/corpus_test.go` **échoue la CI** si une facture va
 non conforme ou si une facture erronée passe à travers les mailles. Régénérable via
 `testdata/corpus/generer-corpus.sh`.
 
-### 3.4 Corpus réel open-source (> 500 documents)
-`testdata/corpus/fetch.sh` moissonne, à la demande et de façon reproductible, **plus de 500
-documents réels** issus de dépôts publics (non vendorés pour raisons de licence) :
+### 3.4 Corpus réel open-source (7 365 documents)
+`testdata/corpus/fetch.sh` moissonne, à la demande et de façon reproductible, **7 365 documents
+réels** issus de dépôts publics (non vendorés pour raisons de licence) — **aucune facture
+fabriquée** :
 
 - **CEN EN 16931** (ConnectingEurope, EUPL) : exemples UBL/CII + cas unitaires par règle ;
-- **XRechnung** (itplr-kosit, Apache) : jeux d'essai (testsuite + configuration du validateur) ;
-- **Peppol BIS 3.0** (OpenPeppol, Apache) : exemples officiels.
+- **XRechnung** (itplr-kosit, Apache) : testsuite + configuration du validateur ;
+- **Peppol BIS 3.0** (OpenPeppol, Apache) : corpus complet ;
+- **phive-rules** (Apache) : ~6 400 instances de test **multi-juridictions** (Peppol, EN 16931,
+  XRechnung, FatturaPA, A-NZ, SG…) ;
+- **ZUGFeRD / mustangproject** : Factur-X / ZUGFeRD réels.
 
-Deux garanties en découlent, mesurées par `test/realcorpus_test.go` :
+Garanties mesurées par `test/realcorpus_test.go` :
 
-- **Robustesse** : les **507 documents** réels sont lus **sans jamais faire paniquer** un lecteur
+- **Robustesse** : les **7 365 documents** réels sont lus **sans jamais faire paniquer** un lecteur
   (les entrées inattendues deviennent des erreurs de fichier, jamais un crash).
-- **Conformité des exemples complets** : **40/40** factures d'exemple (CEN UBL 16/16, CEN CII
-  15/15, Peppol 9/9) sont validées conformes. Les cas unitaires du CEN sont des fragments par
-  règle, volontairement partiels, et servent la robustesse plutôt que la validation document.
+- **Lisibilité** : **4 728 / 7 365** (64 %) se lisent comme document pivot ; le reste relève de
+  standards non couverts (FatturaPA hors v1.2, A-NZ, SG…) ou de fragments/Schematron du corpus agrégé.
+- **Conformité des exemples CEN** : les **32 exemples** complets UBL/CII se lisent tous ; sur la
+  validation, CEN CII 15/15 et CEN UBL 16/17 (l'unique écart étant la catégorie « B » hors norme,
+  correctement rejetée).
 
 ### 3.5 Corpus d'attaque (sécurité)
 `testdata/fuzz/xxe/` contient des charges malveillantes (entités externes XXE, DTD distante,
@@ -139,7 +145,7 @@ scripts/rapport-qualite.sh
 # Régénérer le corpus publiable :
 testdata/corpus/generer-corpus.sh
 
-# (Optionnel) télécharger le corpus officiel CEN :
+# (Optionnel) télécharger le corpus RÉEL open-source (7 365 documents) :
 testdata/corpus/fetch.sh
 
 # Lancer uniquement les tests :
