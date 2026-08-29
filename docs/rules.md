@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (63 règles)
+## en16931 (65 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -36,6 +36,8 @@ Version du jeu de règles : **2026.3**
 | BR-42 | error | BT-139 | Une remise de ligne doit porter un motif ou un code motif. |
 | BR-43 | error | BT-141 | Une charge de ligne doit porter un montant. |
 | BR-44 | error | BT-144 | Une charge de ligne doit porter un motif ou un code motif. |
+| BR-45 | error | BT-116 | Chaque ventilation de TVA doit porter un montant imposable. |
+| BR-46 | error | BT-117 | Chaque ventilation de TVA doit porter un montant de TVA. |
 | BR-47 | error | BT-118 | Chaque ventilation de TVA doit indiquer une catégorie. |
 | BR-AE-05 | error | BT-119, BT-152 | Une TVA en autoliquidation doit avoir un taux de zéro. |
 | BR-AE-10 | error | BT-120, BT-121 | Une TVA en autoliquidation doit indiquer un motif d'exonération. |

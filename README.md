@@ -9,7 +9,7 @@ Factur-X · UBL 2.1 · CII · XRechnung · Peppol — une seule implémentation,
 [![CGO disabled](https://img.shields.io/badge/CGO-disabled-5E7A4A)](#architecture)
 [![OS](https://img.shields.io/badge/OS-Linux%20·%20macOS%20·%20Windows-24405E)](#démarrer)
 [![Tests](https://img.shields.io/badge/tests-passing-5E7A4A)](#qualité)
-[![EN 16931](https://img.shields.io/badge/EN%2016931-67%20règles-24405E)](#conformité)
+[![EN 16931](https://img.shields.io/badge/EN%2016931-69%20règles-24405E)](#conformité)
 [![RGPD](https://img.shields.io/badge/RGPD-100%25%20hors--ligne-9E2B32)](#sécurité--rgpd)
 [![Façades](https://img.shields.io/badge/interfaces-CLI%20·%20TUI%20·%20Studio-B8862F)](#trois-interfaces-un-seul-cœur)
 [![Licence](https://img.shields.io/badge/licence-à%20arbitrer-8E9AA6)](#licence)
@@ -95,7 +95,7 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 
 ## Conformité
 
-- **67 règles** réparties en trois jeux (`en16931`, `cius.fr`, `kanjo`), chacune avec un test passant et un test échouant ; catalogue généré dans [`docs/rules.md`](docs/rules.md).
+- **69 règles** réparties en trois jeux (`en16931`, `cius.fr`, `kanjo`), chacune avec un test passant et un test échouant ; catalogue généré dans [`docs/rules.md`](docs/rules.md).
 - Testé sur le **corpus de test officiel EN 16931** (CEN) : **33/34 cas valides conformes** en EN 16931 pur — les 2 restants sont un arrondi en devise à 0 décimale (HUF) et un fichier utilisant une catégorie de TVA hors EN 16931 (correctement rejeté).
 - Testé sur de **vraies Factur-X** (mustangproject) : lecture, validation conforme, conversion **sans perte** (`diff` = 0) et rendu lisible.
 - Corpus reproductible : [`testdata/corpus/fetch.sh`](testdata/corpus/fetch.sh) (non vendoré, licences respectées).
