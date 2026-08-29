@@ -36,6 +36,27 @@ func TestParseDateAutoDetect(t *testing.T) {
 	}
 }
 
+func TestParseISOTimezoneSuffix(t *testing.T) {
+	want, _ := ParseISO("2016-06-27")
+	// xs:date autorise un décalage horaire final ; il est ignoré (une date de facture n'a pas de fuseau).
+	for _, s := range []string{"2016-06-27+01:00", "2016-06-27-05:00", "2016-06-27Z", "2016-06-27+0100", " 2016-06-27+01:00 "} {
+		got, err := ParseISO(s)
+		if err != nil {
+			t.Errorf("ParseISO(%q) : erreur inattendue %v", s, err)
+			continue
+		}
+		if got != want {
+			t.Errorf("ParseISO(%q) = %+v, veut %+v", s, got, want)
+		}
+	}
+	// Un suffixe non-fuseau reste rejeté.
+	for _, s := range []string{"2016-06-27X", "2016-06-27+1", "2016-06-27+1:00"} {
+		if _, err := ParseISO(s); err == nil {
+			t.Errorf("ParseISO(%q) devrait échouer", s)
+		}
+	}
+}
+
 func TestDateInvalid(t *testing.T) {
 	for _, s := range []string{"2026-02-30", "2026-13-01", "0000-01-01", "abcd-01-01", "2026-1-1", "20260230"} {
 		if _, err := ParseDate(s); err == nil {
