@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<style>
+body{margin:0;background:#0F1826;font-family:"IBM Plex Mono","SFMono-Regular",Menlo,monospace;font-size:14px;line-height:1.6}
+.term{width:900px;padding:20px 24px;color:#C9C2B2}
+.bar{display:flex;gap:8px;margin-bottom:14px}
+.dot{width:12px;height:12px;border-radius:50%}
+.p{color:#5FB3B4} .c{color:#ECE7DA} .g{color:#8FA96F} .y{color:#D9A94A} .r{color:#C4525A} .d{color:#6B7A8C}
+.line{white-space:pre}
+</style></head>
+<body><div class="term">
+<div class="bar"><span class="dot" style="background:#C4525A"></span><span class="dot" style="background:#D9A94A"></span><span class="dot" style="background:#8FA96F"></span></div>
+<div class="line"><span class="p">~/factures</span> <span class="c">$ kanjo validate ./aout --recursive</span></div>
+<div class="line"><span class="g">✓</span> <span class="c">F2026-0938.pdf</span>  <span class="d">[facturx]</span></div>
+<div class="line"><span class="g">✓</span> <span class="c">F2026-0939.xml</span>  <span class="d">[ubl]</span></div>
+<div class="line"><span class="y">▲</span> <span class="c">F2026-0940.pdf</span>  <span class="d">[facturx]</span>  <span class="y">KANJO-IBAN-01</span></div>
+<div class="line"><span class="r">✕</span> <span class="c">F2026-0941.xml</span>  <span class="d">[cii]</span>  <span class="r">BR-CO-15  le total TTC ne correspond pas au total HT plus la TVA</span></div>
+<div class="line"> </div>
+<div class="line"><span class="g">✓ 1 187</span>   <span class="y">▲ 2</span>   <span class="r">✕ 1</span></div>
+<div class="line"> </div>
+<div class="line"><span class="p">~/factures</span> <span class="c">$ kanjo convert ./aout --to ubl --out ./ubl --workers 8</span></div>
+<div class="line"><span class="g">✓</span> <span class="c">./aout/F2026-0938.pdf</span> <span class="d">→</span> <span class="c">./ubl/F2026-0938.xml</span></div>
+<div class="line"><span class="y">▲</span> <span class="c">./aout/F2026-0940.pdf</span> <span class="d">→</span> <span class="c">./ubl/F2026-0940.xml</span> <span class="d">(1 perte : notes de ligne)</span></div>
+<div class="line"> </div>
+<div class="line"><span class="c">1 499 converties · 1 avec perte · 0 échec</span> <span class="d">— 41,8 s</span></div>
+<div class="line"> </div>
+<div class="line"><span class="p">~/factures</span> <span class="c">$ kanjo diff facture.pdf facture.ubl.xml</span></div>
+<div class="line"><span class="c">0 perte · 0 divergence · 47 termes identiques</span> <span class="g">✓</span></div>
+</div></body></html>

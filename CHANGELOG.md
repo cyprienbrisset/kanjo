@@ -1,0 +1,179 @@
+# Changelog
+
+Toutes les modifications notables de Kanjō sont consignées ici.
+Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/),
+versionnage sémantique ([SemVer](https://semver.org/lang/fr/)).
+
+Trois numéros de version sont suivis (voir §19.3 du cahier des charges) :
+version de l'outil · version du jeu de règles · version du schéma de sortie.
+
+Une modification de règle de validation qui change un verdict apparaît dans une section
+dédiée **« Conformité »** et incrémente la version du jeu de règles.
+
+## [Non publié]
+
+### Ajouté
+- Bootstrap du dépôt : `go.mod`, arborescence du §6, `CLAUDE.md`, `README.md`, cahier des
+  charges sous `docs/CAHIER-DES-CHARGES.md`. ADR-011 (Q7) : Kanjō est un outil autonome.
+- **Modèle pivot** (`pkg/model`) : types exacts `Amount` (unités mineures, arrondi EN 16931
+  half-away-from-zero via `math/big`), `Decimal`, `Date` (sans fuseau), codes nommés
+  (`TypeCode`, `TaxCategoryCode`, `PaymentMeansCode`, `UnitCode`) avec `Valid()`/`Label()`,
+  `Document`/`Party`/`Line`/`TaxSubtotal`/`Totals`, `Extensions` typées, `Provenance`.
+  Tests de propriétés (associativité, absence de dérive sur 10 000 opérations).
+- **XML durci** (`internal/xmlsafe`) : seul point d'entrée XML ; rejet DOCTYPE/DTD, entités
+  externes, bornes de profondeur/nœuds/taille, jeux de caractères sûrs (UTF-8/Latin-1/CP1252).
+  Batterie d'attaques XXE / billion laughs (`testdata/fuzz/xxe/`).
+- **Écriture atomique** (`internal/fsatomic`, temp + rename, ADR-010).
+- **Lecteurs/écrivains** CII (D16B), UBL 2.1 (Invoice + CreditNote) et JSON pivot, via un
+  registre ; **aller-retour lossless** vérifié pour CII et UBL (facture et avoir). Détection
+  de format par le contenu (jamais l'extension seule).
+- **Factur-X** : extraction du XML embarqué (`pkg/pdfa`, `pkg/read/facturx`, pdfcpu) et
+  embarquement (`kanjo embed`). Boucle embed→extract testée.
+- **Orchestration** (`pkg/convert`) : conversion via pivot + rapport de perte + politique
+  `--max-loss`.
+- **Moteur de validation** (`pkg/rules`) avec enveloppe de rapport ; sortie JSON versionnée
+  (`pkg/api`, enveloppe `schemaVersion`).
+- **Comparateur sémantique** (`pkg/diff`, `kanjo diff`) : compare deux pivots quels que soient
+  leurs formats (Factur-X vs UBL), distingue **pertes** et **divergences** (§G5).
+- **Pipeline de traitement par lot** (`pkg/pipeline`) : découverte (fichiers/dossiers/globs,
+  récursif, filtres include/exclude), pool de workers borné, sûreté aux paniques (une panique
+  devient une erreur de fichier, jamais un arrêt du lot), et **reprise `--resume`** (journal
+  append-only : aucun fichier retraité, aucun perdu). Câblé dans `kanjo convert`
+  (`--recursive`, `--workers`, `--include/--exclude`, `--resume`, `--fail-fast`).
+- **Writers XRechnung** (syntaxes UBL et CII) et **Peppol BIS Billing 3.0** (UBL), via override
+  du CustomizationID/ProfileID ; non-régression CII/UBL prouvée.
+- **Presets** (`pkg/preset`, `kanjo preset list|show|save|delete|export|import`) : réglages de
+  conversion nommés, stockés en JSON local (jamais de chemin absolu ni de secret, §G6).
+  `kanjo convert --preset <nom>` (les flags explicites priment).
+- **Surveillance de dossier** (`kanjo watch`) : scrutation pure Go (sans fsnotify), détection de
+  fichier stable (taille inchangée sur 2 scans), dossiers `output/done/failed`, `.error.json` en
+  quarantaine, mode `--once`, arrêt propre sur interruption. Affiche explicitement que la
+  surveillance s'arrête à la fermeture (pas de service, §G7).
+- **Writer CSV** (cible `csv`) : aplatissement dénormalisé du pivot (une ligne par ligne de facture).
+- **`kanjo generate`** (`pkg/generate`) : corpus synthétique reproductible (scénarios simple,
+  multi-tva, avoir, autoliquidation, intracommunautaire, acompte ; `--invalid`). Documents
+  arithmétiquement conformes vérifiés par le moteur de règles.
+- **`kanjo anonymize`** (`pkg/anonymize`) : remplacement déterministe des données personnelles
+  (noms, adresses, SIREN, TVA, IBAN synthétique valide mod-97, contacts), totaux recalculés
+  cohérents. Point de conformité RGPD (export sûr pour le support, §17.4).
+- **`kanjo repair`** (`pkg/repair`) : corrections sûres uniquement (nettoyage d'identifiants,
+  recalcul des totaux à partir de lignes cohérentes), journalisées avant/après, sauvegarde `.bak`.
+  N'invente jamais de donnée métier (§8.5 MUST).
+- **Validation par lot** : `kanjo validate` développe dossiers/globs (`--recursive`,
+  `--include/--exclude`) et valide en parallèle (`--workers`).
+- **Rendu de la face lisible** (`pkg/render`, `kanjo render --to html`) : facture HTML autonome
+  (sans réseau) dans l'esprit du design 大福帳, formatage monétaire français (espace fine
+  insécable U+202F, virgule décimale), sceau optionnel `--seal` reflétant un verdict réellement
+  calculé (§17.7). Le rendu PDF passera par ce HTML et un moteur externe optionnel (§G10).
+- **Rapport de validation HTML** (`kanjo validate --report rapport.html`, aussi `.json`) :
+  rapport autonome imprimable groupé par règle (§G4), joignable à un dossier de conformité.
+- **Interface texte (TUI)** (`kanjo tui`, ou `kanjo` sans argument sur un terminal) : bâtie sur
+  Bubble Tea + Lipgloss (pur Go, `CGO_ENABLED=0` préservé). Chrome 勘定, validation d'un dossier
+  via le pipeline, liste à sceaux (適/保/否) et volet de détails des anomalies, navigation
+  clavier, revalidation. Consomme le même cœur que la CLI (une implémentation, plusieurs façades).
+- **Couverture `pkg/model` portée à 85,7 %** (critère d'acceptation L1).
+- **Catalogue de règles généré** (`docs/rules.md`) depuis le registre ; test de synchronisation
+  qui échoue si le catalogue est désynchronisé (§8.2).
+- **CLI** (`kanjo`) : `convert`, `extract`, `embed`, `inspect`, `diff`, `validate`, `doctor`,
+  `version`, avec sortie `--format json` et codes de sortie normalisés (§11.4).
+- Compilation `CGO_ENABLED=0` vérifiée sur les 6 cibles OS/arch (ADR-002).
+
+### Ajouté (L3)
+- **Bibliothèque locale** (`pkg/library`, `kanjo library index|list|forget|purge`) : index
+  SQLite (`modernc.org/sqlite`, pur Go — `CGO_ENABLED=0` préservé, 6/6 cibles) des documents
+  traités. Stocke des **métadonnées et empreintes, pas le contenu** (§17.4) ; recherche à
+  facettes (texte, verdict, format, période), **droit à l'effacement** (`forget`) et **purge de
+  rétention** (`purge --months`, défaut 13 (politique de rétention à définir)).
+- **Journal d'audit** (`pkg/audit`, `kanjo audit list|export`) : journal horodaté append-only
+  (JSONL, §17.5). **Aucune donnée personnelle** — uniquement horodatage, action, acteur,
+  empreintes, formats, verdict, versions (test CI §17.4 qui échoue sur tout motif SIREN/IBAN/
+  e-mail). `convert` et `validate` journalisent automatiquement chaque traitement. Export CSV/JSONL.
+
+### Ajouté (L3 — fondation)
+- **Kanjō Studio — serveur** (`kanjo studio`, `cmd/kanjo/studio`) : serveur HTTP local pur Go
+  (ADR-005) exposant une **API JSON** (`/api/version`, `/api/formats`, `/api/validate`) et le
+  **frontend embarqué** via `go:embed` (ADR-006). Sécurité §17.3 : liaison **127.0.0.1
+  uniquement** par défaut (toute autre adresse exige `--i-understand`), **jeton de session**
+  exigé sur `/api/*` et injecté dans la page servie, aucune sortie réseau. API : `/api/version`,
+  `/api/formats`, `/api/validate`, `/api/inspect`, `/api/convert`. Testé via httptest.
+- **Kanjō Studio — frontend** (`gui/frontend/dist`, vanilla JS + CSS écrit à la main, sans
+  framework tiers ni chargement réseau, embarqué via `go:embed`) : **système de design 大福帳
+  complet** (`styles/tokens.css` — deux thèmes 昼/夜, échelle typographique, filet de reliure,
+  **sceau 朱印 avec animation d'apposition** et `prefers-reduced-motion`, aucune ombre ni rayon).
+  Chrome (rail idéogrammes, barre de titre, barre d'état à compteurs de verdict), écrans
+  **玄関 Accueil** (glisser-déposer), **検 Inspecteur** (termes BT + anomalies, sceau animé au
+  verdict), **証 Rapport** (groupé par règle), bascule de thème persistée, **palette de commandes
+  ⌘K**. Formatage monétaire français. Les écrans restants (流/蔵/型/番/記録/設定, éditeur G9) et
+  le wrapper Wails restent à développer.
+
+- **Kanjō Studio — client lourd desktop** (`cmd/kanjo-studio`) : application native (fenêtre
+  WebView WebKit) qui embarque en interne le même serveur (127.0.0.1 + jeton) et sert le même
+  frontend/API — une seule base de code UI, deux façades (ADR-005, §19.1). **Artefact séparé
+  compilé avec cgo** ; isolé par build tags (`//go:build cgo` / `!cgo`) pour que le binaire
+  `kanjo` (CLI/TUI/studio) reste pur Go et que `CGO_ENABLED=0 go build ./...` continue de passer.
+  Empaqueté en bundle `.app` macOS. (Le wrapper Wails v3 formel — icônes, menus, notarisation
+  multi-OS — reste une évolution possible.)
+
+### Ajouté (complétude)
+- **Unités mineures par devise** (`model.MinorUnits`) : la TVA s'arrondit à la précision de la
+  devise (2 par défaut, **0 pour JPY/HUF/KRW…**, 3 pour KWD/BHD…). Corrige le dernier faux
+  positif du corpus officiel → **33/34 conformes** en EN 16931 pur (le dernier utilise une
+  catégorie de TVA hors EN 16931, correctement rejeté).
+- **Remises et charges de niveau document (BG-20/21)** lues, écrites et préservées en CII et
+  UBL (montant, base, pourcentage, motif, catégorie de TVA). Round-trip CII→UBL→CII vérifié
+  lossless sur une facture réelle à remises/charges (37 termes identiques). Débloque
+  **BR-CO-11** (total des remises) et **BR-CO-12** (total des charges) → jeu porté à **57 règles**.
+- **Lecteur ZUGFeRD 1.0** (`pkg/read/zugferd1`) : format hérité `rsm:CrossIndustryDocument`
+  (CII D14B), détecté et lu vers le pivot. Les vraies factures ZUGFeRD 1.0 (Kraxi GmbH,
+  Bei Spiel GmbH) sont désormais lisibles et inspectables.
+- **Identifiant de partie BT-29** lu et écrit en CII (`ram:ID`/`GlobalID`) et UBL
+  (`cac:PartyIdentification`) ; **adresse électronique BT-34** en UBL via `cbc:EndpointID`.
+- **5 règles EN 16931 supplémentaires** (jeu porté à **55**) : BR-08/BR-10 (adresses),
+  BR-CO-26 (identification du vendeur), BR-47 (catégorie de ventilation de TVA),
+  BR-DEC-24 (décimales du montant de ligne). Catalogue `docs/rules.md` régénéré.
+
+### Ajouté (présentation & CI)
+- **README professionnel** (badges, captures d'écran, matrice de formats, cas d'usage) et
+  **site GitHub Pages** (`docs/index.html`) reprenant le design 大福帳 de l'application, avec
+  captures réelles (Studio, CLI, TUI, facture rendue) générées en headless.
+- **CI GitHub Actions** (`.github/workflows/ci.yml`) : gofmt, vet, tests, cross-compilation des
+  6 cibles `CGO_ENABLED=0`, vérification du catalogue de règles, déploiement de la GitHub Page.
+- **Corpus de test reproductible** (`testdata/corpus/fetch.sh`) : récupération des artefacts
+  officiels EN 16931 (CEN) et de Factur-X réelles (mustangproject), avec empreintes SHA-256.
+- **Idéogrammes remplacés par des icônes** dans toutes les façades (Studio : SVG style Lucide ;
+  TUI : symboles ✓ ▲ ✕ ; rendu HTML : symboles) — les kanji ne subsistent qu'en identité de
+  marque, doublés d'un libellé français et d'un `aria-label` (§12.10).
+
+### Corrigé
+- **Second `ram:TaxTotalAmount` (devise de comptabilisation, BT-111) en CII** : le lecteur ne
+  retient que le montant dans la devise du document — corrige des faux BR-CO-14/15 sur les
+  factures CII multi-devises (corpus CEN).
+- **BR-CO-25 restreinte aux factures** : un avoir n'a pas d'échéance de paiement au sens du
+  montant dû — aligné sur le validateur CEN. Résultat : **32/34 cas valides du corpus officiel
+  EN 16931 conformes** en EN 16931 pur (les 2 restants : arrondi HUF, catégorie hors norme
+  correctement rejetée).
+- **Lecture du nom de partie en UBL** : le nom (BT-27/BT-44) est lu depuis
+  `cac:PartyLegalEntity/cbc:RegistrationName` (avec repli sur `cac:PartyName`) — corrige des
+  faux positifs BR-06/BR-07 sur de vraies factures UBL valides (corpus CEN : conformes 7 → 18).
+- **Second `cac:TaxTotal` (devise de comptabilisation TVA, BT-111)** : le lecteur UBL ne retient
+  désormais que le `TaxTotal` exprimé dans la devise du document — corrige des faux BR-CO-14/15
+  sur les factures multi-devises.
+- **Motif d'exonération (BT-120/121) perdu à l'aller-retour** : les lecteurs et écrivains CII et
+  UBL ne portaient pas le motif d'exonération de TVA, rendant non conformes les factures en
+  autoliquidation / intracommunautaire / export après conversion. Désormais préservé dans les
+  deux syntaxes, verrouillé par un test d'aller-retour sur tous les scénarios.
+
+### Conformité
+- **jeu de règles 2026.3** — **50 règles** réparties en trois jeux (réellement calculées, §17.7),
+  chacune avec un test passant et un test échouant ; catalogue généré dans `docs/rules.md` :
+  - **EN 16931** (46) :
+    - présence en-tête : BR-02/03/04/05/06/07/09/11/16 ;
+    - présence ligne : BR-21/23/24/25/26/27 ;
+    - listes de codes : BR-CL-01/03/17 ;
+    - cohérence des totaux : BR-CO-09/10/13/14/15/16/17/18/25 ;
+    - décimales (max 2) : BR-DEC-12/13/14/16/19/23 ;
+    - TVA au taux normal : BR-S-01/05 ;
+    - TVA par catégorie (taux nul + motif d'exonération) : BR-Z-05, BR-E-05/10, BR-AE-05/10,
+      BR-K-05/10, BR-G-05/10, BR-O-05/10.
+  - **CIUS française** (`cius.fr`, 2) : identification du vendeur (FR-CTC-01), format SIREN (FR-SIREN-01).
+  - **Kanjō** (2) : échéance ≥ émission (KANJO-DATE-01), IBAN modulo 97 (KANJO-IBAN-01).

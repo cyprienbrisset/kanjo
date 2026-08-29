@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr" data-theme="hiru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="kanjo-token" content="__TOKEN__">
+<title>Kanjō Studio</title>
+<link rel="stylesheet" href="styles/tokens.css">
+<style>
+/* Chrome global (§14.0). Grille : rail fixe 72px + zone d'écran ; en-tête et barre d'état. */
+body{display:grid; grid-template-columns:72px 1fr; grid-template-rows:48px 1fr 28px; height:100vh; overflow:hidden}
+header{grid-column:1/3; display:flex; align-items:center; gap:12px; padding:0 24px;
+  border-bottom:1px solid var(--rule-firm); -webkit-app-region:drag}
+header .title{font-family:var(--font-title); font-size:var(--text-lg); color:var(--ink-700)}
+header .spacer{flex:1}
+header .hint{color:var(--ink-300); font-size:var(--text-2xs)}
+header .theme{background:none; border:1px solid var(--rule-firm); padding:2px 8px; color:var(--ink-500)}
+nav.rail{grid-row:2/4; display:flex; flex-direction:column; gap:4px; padding-top:12px; align-items:stretch}
+nav.rail button{background:none; border:0; border-left:3px solid transparent; padding:8px 0; color:var(--ink-500);
+  display:flex; flex-direction:column; align-items:center; gap:2px; transition:color var(--dur-fast) var(--ease)}
+nav.rail button .g{font-family:var(--font-title); font-size:20px}
+nav.rail button .l{font-size:var(--text-2xs)}
+nav.rail button:hover{color:var(--ink-900)}
+nav.rail button.active{color:var(--ink-900); border-left-color:var(--ink-700)}
+main{grid-row:2/3; overflow:auto; padding:24px 0}
+footer{grid-column:1/3; display:flex; align-items:center; gap:24px; padding:0 24px;
+  border-top:1px solid var(--rule-firm); font-size:var(--text-xs); color:var(--ink-500)}
+footer .count{cursor:pointer}
+footer .spacer{flex:1}
+.screen{display:none} .screen.active{display:block}
+.drop{border:2px dashed var(--rule-firm); padding:64px 24px; text-align:center; color:var(--ink-500);
+  transition:border-color var(--dur-fast) var(--ease)}
+.drop.over{border-color:var(--asagi)}
+.reliure h1{margin-bottom:2px}
+.sub{color:var(--ink-500); margin-bottom:24px}
+.doclist td{cursor:pointer}
+.layout{display:grid; grid-template-columns:340px 1fr; gap:24px}
+.panel .k{margin-bottom:8px}
+.finding{border-left:3px solid var(--rule-firm); padding:6px 12px; margin:8px 0; background:var(--paper-1)}
+.finding.err{border-left-color:var(--beni)} .finding.warn{border-left-color:var(--kohaku)}
+.finding .rid{font-family:var(--font-mono); color:var(--ink-700)}
+.termrow{display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid var(--rule-hair)}
+.termrow .bt{color:var(--ink-300); font-family:var(--font-mono); font-size:var(--text-xs)}
+.palette input{width:100%; padding:12px 16px; border:0; border-bottom:1px solid var(--rule-firm);
+  background:var(--paper-0); color:var(--ink-900); font-family:var(--font-ui); font-size:var(--text-base)}
+.palette .item{padding:8px 16px; cursor:pointer} .palette .item.on{background:var(--paper-2)}
+</style>
+</head>
+<body>
+<header>
+ <svg class="icon lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-2.5-1.6L13 21l-2.5-1.6L8 21l-2-1.6V3z"/><path d="M9 8h6M9 12h6"/></svg>
+ <span class="title">Kanjō Studio</span>
+ <span class="hint">⌘K</span>
+ <span class="spacer"></span>
+ <span class="hint" id="ver">…</span>
+ <button class="theme" id="theme" aria-label="Basculer le thème clair / sombre"><svg class="icon" id="theme-icon" viewBox="0 0 24 24"></svg></button>
+</header>
+
+<nav class="rail" id="rail">
+ <button data-screen="genkan" class="active" aria-label="Accueil">
+  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/></svg>
+  <span class="l">Accueil</span></button>
+ <button data-screen="ken" aria-label="Inspecteur">
+  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6"/><path d="M14 3v5h5"/><circle cx="16.5" cy="15.5" r="3"/><path d="m21 20-2.2-2.2"/></svg>
+  <span class="l">Inspecteur</span></button>
+ <button data-screen="sho" aria-label="Rapport">
+  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M9 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3"/><path d="m9 14 2 2 4-4"/></svg>
+  <span class="l">Rapport</span></button>
+</nav>
+
+<main>
+ <!-- Accueil -->
+ <section class="screen active reliure" id="screen-genkan">
+  <h1>Accueil</h1><div class="sub">Déposez et validez vos factures</div>
+  <div class="drop" id="drop">Déposez vos factures ici — PDF, XML, JSON
+   <div style="margin-top:12px"><input type="file" id="file" multiple accept=".xml,.pdf,.json"></div>
+  </div>
+ </section>
+
+ <!-- Inspecteur -->
+ <section class="screen reliure" id="screen-ken">
+  <h1>Inspecteur</h1><div class="sub">Termes, montants et anomalies</div>
+  <div class="layout">
+   <div class="panel"><div class="k">DOCUMENTS</div><table class="doclist"><tbody id="doclist"></tbody></table></div>
+   <div class="panel" id="detail"><div class="sub">Sélectionnez un document.</div></div>
+  </div>
+ </section>
+
+ <!-- Rapport -->
+ <section class="screen reliure" id="screen-sho">
+  <h1>Rapport de validation</h1><div class="sub">Anomalies groupées par règle</div>
+  <div id="report"></div>
+ </section>
+</main>
+
+<footer>
+ <span class="count" data-f="ok" title="documents conformes" style="display:inline-flex;align-items:center;gap:5px">
+  <svg class="icon" style="width:15px;height:15px;color:var(--koke)" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><b id="c-ok">0</b> conformes</span>
+ <span class="count" data-f="warning" title="documents sous réserve" style="display:inline-flex;align-items:center;gap:5px">
+  <svg class="icon" style="width:15px;height:15px;color:var(--kohaku)" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg><b id="c-warn">0</b> sous réserve</span>
+ <span class="count" data-f="error" title="documents non conformes" style="display:inline-flex;align-items:center;gap:5px">
+  <svg class="icon" style="width:15px;height:15px;color:var(--beni)" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg><b id="c-err">0</b> non conformes</span>
+ <span class="spacer"></span>
+ <span id="rules">jeu de règles …</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

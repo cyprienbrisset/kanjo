@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fr" data-theme="hiru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kanjō — factures électroniques (Factur-X · UBL · CII)</title>
+<meta name="description" content="Kanjō : outil multiplateforme pour lire, valider, convertir et rendre lisibles les factures électroniques Factur-X, UBL 2.1 et CII. CLI, TUI et application desktop. Pur Go, hors-ligne, RGPD.">
+<link rel="stylesheet" href="assets/tokens.css">
+<style>
+html{scroll-behavior:smooth}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+.nav{display:flex;align-items:center;gap:16px;padding:20px 0;border-bottom:1px solid var(--rule-hair)}
+.nav .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-title);font-size:var(--text-lg);color:var(--ink-700)}
+.nav .spacer{flex:1}
+.nav a{color:var(--ink-500);font-size:var(--text-sm)}
+.nav a:hover{color:var(--ink-900)}
+.hero{padding:72px 0 48px;border-left:3px solid var(--ink-700);padding-left:48px;margin-top:32px}
+.hero h1{font-size:var(--text-3xl);line-height:1.15;max-width:16ch}
+.hero .lead{font-size:var(--text-lg);color:var(--ink-500);max-width:60ch;margin:16px 0 24px;line-height:1.7}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.pill{border:1px solid var(--rule-firm);border-radius:2px;padding:4px 10px;font-size:var(--text-xs);color:var(--ink-700);background:var(--paper-1);display:inline-flex;align-items:center;gap:6px}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:var(--koke)}
+.btns{display:flex;gap:12px;margin-top:24px}
+.btn{padding:10px 20px;border:1px solid var(--rule-firm);color:var(--ink-900);background:var(--paper-2);font-size:var(--text-sm)}
+.btn.primary{background:var(--ink-700);color:var(--paper-0);border-color:var(--ink-700)}
+section{padding:56px 0;border-top:1px solid var(--rule-hair)}
+section h2{font-size:var(--text-2xl);margin-bottom:8px}
+section .intro{color:var(--ink-500);max-width:64ch;margin-bottom:32px;line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.card{border-left:3px solid var(--ink-700);padding:16px 20px;background:var(--paper-1)}
+.card h3{font-family:var(--font-ui);font-size:var(--text-base);color:var(--ink-900);display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.card p{color:var(--ink-500);font-size:var(--text-sm);line-height:1.6;margin:0}
+.icon.accent{color:var(--asagi)}
+.facade{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:56px}
+.facade:nth-child(even){direction:rtl} .facade:nth-child(even)>*{direction:ltr}
+.facade img{width:100%;border:1px solid var(--rule-firm)}
+.facade h3{font-family:var(--font-title);font-size:var(--text-xl);color:var(--ink-700);margin-bottom:8px}
+.facade .k{margin-bottom:8px}
+.facade p{color:var(--ink-500);line-height:1.7}
+.facade code{background:var(--paper-2);padding:2px 6px;font-size:var(--text-sm)}
+table.matrix{width:100%;border-collapse:collapse;font-size:var(--text-sm)}
+table.matrix th{text-align:left;color:var(--ink-500);font-weight:400;border-bottom:1px solid var(--rule-firm);padding:8px}
+table.matrix td{padding:8px;border-bottom:1px solid var(--rule-hair)}
+.ok{color:var(--koke)} .later{color:var(--ink-300)}
+.usecases{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+.uc{border:1px solid var(--rule-hair);padding:20px;background:var(--paper-1)}
+.uc .role{font-size:var(--text-2xs);letter-spacing:.08em;color:var(--asagi);margin-bottom:8px}
+.uc h3{font-family:var(--font-ui);font-size:var(--text-base);margin-bottom:8px}
+.uc p{color:var(--ink-500);font-size:var(--text-sm);line-height:1.6}
+pre.code{background:var(--paper-1);border-left:3px solid var(--ink-700);padding:16px 20px;overflow:auto;font-family:var(--font-mono);font-size:var(--text-sm);color:var(--ink-900);line-height:1.7}
+.metrics{display:flex;gap:48px;flex-wrap:wrap;margin-top:16px}
+.metric .n{font-family:var(--font-mono);font-size:var(--text-2xl);color:var(--ink-700)}
+.metric .l{color:var(--ink-500);font-size:var(--text-sm)}
+footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500);font-size:var(--text-sm)}
+.center{text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="nav">
+ <span class="brand">
+  <svg class="icon lg" viewBox="0 0 24 24"><path d="M6 3h12v18l-2.5-1.6L13 21l-2.5-1.6L8 21l-2-1.6V3z"/><path d="M9 8h6M9 12h6"/></svg>
+  Kanjō
+ </span>
+ <span class="spacer"></span>
+ <a href="#fonctions">Fonctionnalités</a>
+ <a href="#facades">Interfaces</a>
+ <a href="#cas">Cas d'usage</a>
+ <a href="#conformite">Conformité</a>
+ <a href="#demarrer">Démarrer</a>
+</nav>
+
+<header class="hero">
+ <h1>Vos factures électroniques, maîtrisées.</h1>
+ <p class="lead">Kanjō lit, valide, convertit, répare, compare et rend lisibles les factures
+  <strong>Factur-X</strong>, <strong>UBL&nbsp;2.1</strong> et <strong>CII</strong> — du poste du comptable
+  jusqu'aux plateformes SaaS. Une seule implémentation, trois interfaces : ligne de commande, terminal et application de bureau.</p>
+ <div class="pills">
+  <span class="pill"><span class="dot"></span>Pur Go · binaire unique</span>
+  <span class="pill"><span class="dot"></span>6 cibles OS/arch</span>
+  <span class="pill"><span class="dot"></span>100 % hors-ligne</span>
+  <span class="pill"><span class="dot"></span>RGPD · aucune télémétrie</span>
+  <span class="pill"><span class="dot"></span>EN 16931 + CIUS FR</span>
+  <span class="pill"><span class="dot"></span>Sortie JSON versionnée</span>
+ </div>
+ <div class="btns">
+  <a class="btn primary" href="#demarrer">Démarrer</a>
+  <a class="btn" href="#facades">Voir les interfaces</a>
+ </div>
+</header>
+
+<section id="fonctions">
+ <h2>Ce que fait Kanjō</h2>
+ <p class="intro">Tout passe par un <strong>modèle pivot</strong> aligné sur la sémantique EN 16931 :
+  ajouter un format, c'est un lecteur et un écrivain — pas une explosion de convertisseurs. Le cœur
+  ne dépend que de la bibliothèque standard, et rien ne sort du poste sans action explicite.</p>
+ <div class="grid">
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>Lire &amp; inspecter</h3><p>Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, JSON pivot. Détection par le contenu, jamais par l'extension.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Valider</h3><p>Moteur EN 16931 natif (BR / BR-CO / BR-CL / BR-DEC / BR-S/Z/E/AE/K/G/O), CIUS française et règles maison. Calculé, jamais simulé.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>Convertir</h3><p>CII ⇄ UBL, Factur-X, XRechnung (UBL/CII), Peppol BIS 3.0, JSON, CSV — avec rapport de perte explicite.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Traiter en lot</h3><p>Découverte récursive, pool de workers, reprise sur incident, quarantaine, surveillance de dossier.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M4 4h16v6H4zM4 14h16v6H4z"/></svg>Comparer</h3><p>Diff sémantique entre deux factures, quels que soient leurs formats : distingue pertes et divergences.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M6 3h12v18l-2.5-1.6L13 21l-2.5-1.6L8 21l-2-1.6z"/></svg>Rendre lisible</h3><p>Facture HTML autonome et rapport de conformité imprimable, dans le design de l'application.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>Anonymiser (RGPD)</h3><p>Remplacement déterministe des données personnelles pour constituer un corpus de test sans rien exporter.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 9h16M9 9v11"/></svg>Bibliothèque &amp; audit</h3><p>Index SQLite local des documents traités, droit à l'effacement, journal d'audit horodaté sans donnée personnelle.</p></div>
+ </div>
+</section>
+
+<section id="facades">
+ <h2>Trois interfaces, un seul cœur</h2>
+ <p class="intro">La même logique métier alimente la ligne de commande, l'interface texte et l'application
+  de bureau. Vous automatisez en CLI, vous inspectez en TUI, vos comptables travaillent dans Studio.</p>
+
+ <div class="facade">
+  <img src="assets/img/studio-inspector.png" alt="Kanjō Studio — écran Inspecteur">
+  <div>
+   <div class="k">APPLICATION DE BUREAU</div>
+   <h3>Kanjō Studio</h3>
+   <p>Client lourd natif (ou serveur local ouvert dans le navigateur). Glissez vos factures,
+    voyez le verdict s'apposer, explorez chaque terme BT et chaque anomalie. Thème clair/sombre,
+    palette de commandes <code>⌘K</code>, 100 % hors-ligne.</p>
+  </div>
+ </div>
+
+ <div class="facade">
+  <img src="assets/img/cli.png" alt="Kanjō en ligne de commande">
+  <div>
+   <div class="k">LIGNE DE COMMANDE</div>
+   <h3>CLI</h3>
+   <p>Pour les intégrateurs et l'automatisation. <code>convert</code>, <code>validate</code>,
+    <code>extract</code>, <code>embed</code>, <code>diff</code>, <code>watch</code>,
+    <code>generate</code>, <code>anonymize</code>… Toute commande a une sortie
+    <code>--format json</code> stable et des codes de sortie normalisés.</p>
+  </div>
+ </div>
+
+ <div class="facade">
+  <img src="assets/img/tui.png" alt="Kanjō — interface texte (TUI)">
+  <div>
+   <div class="k">INTERFACE TEXTE</div>
+   <h3>TUI</h3>
+   <p>Inspection interactive directement dans le terminal, sans quitter le clavier. Liste à
+    statuts, détail des termes et anomalies, revalidation à la volée — idéale en SSH ou sur un serveur.</p>
+  </div>
+ </div>
+</section>
+
+<section id="apercu">
+ <h2>La face lisible</h2>
+ <p class="intro">Chaque facture structurée peut être rendue en un document HTML autonome, sobre et imprimable.</p>
+ <img src="assets/img/invoice.png" alt="Facture rendue en HTML" style="max-width:560px;border:1px solid var(--rule-firm)">
+</section>
+
+<section id="cas">
+ <h2>Cas d'usage</h2>
+ <div class="usecases">
+  <div class="uc"><div class="role">COMPTABLE / PME</div><h3>Recevoir &amp; contrôler</h3><p>Déposez un lot de 500 factures reçues dans Studio : chaque document est validé et rendu lisible. Les 4 vrais problèmes ressortent, groupés par règle, prêts à corriger.</p></div>
+  <div class="uc"><div class="role">INTÉGRATEUR</div><h3>Automatiser un flux</h3><p>Surveillez un dossier EDI : chaque fichier déposé est converti (CII → UBL), validé et rangé. Reprise sur incident, quarantaine des échecs, sortie JSON pour le SI.</p></div>
+  <div class="uc"><div class="role">ÉDITEUR SaaS / PDP</div><h3>Brique de conformité</h3><p>La bibliothèque <code>pkg/</code> valide et convertit à l'échelle : 10 000 factures en moins d'une minute, mémoire constante, sans dépendance runtime.</p></div>
+  <div class="uc"><div class="role">SUPPORT / QUALITÉ</div><h3>Diagnostiquer</h3><p>Comparez une Factur-X à sa conversion UBL pour prouver l'absence de perte. Anonymisez un cas client réel avant de le transmettre — conforme RGPD.</p></div>
+ </div>
+</section>
+
+<section id="conformite">
+ <h2>Conformité &amp; sécurité</h2>
+ <p class="intro">Le socle réglementaire français (Factur-X / UBL 2.1 / CII) est au cœur. La validation
+  est réellement calculée — jamais un verdict de complaisance.</p>
+ <div class="metrics">
+  <div class="metric"><div class="n">57</div><div class="l">règles de validation (EN 16931 + CIUS FR + Kanjō)</div></div>
+  <div class="metric"><div class="n">6/6</div><div class="l">cibles cross-compilées (Linux, macOS, Windows)</div></div>
+  <div class="metric"><div class="n">0</div><div class="l">appel réseau · 0 télémétrie · traitement local</div></div>
+ </div>
+ <p class="intro" style="margin-top:32px"><strong>33/34 cas valides du corpus de test officiel EN 16931 (CEN) sont validés conformes</strong> en EN 16931 pur ; les 2 restants sont un arrondi en devise à 0 décimale et un fichier hors EN 16931 (correctement rejeté). Testé aussi sur de vraies Factur-X (mustangproject) : lecture, validation, conversion sans perte, rendu lisible.
+  XML durci contre XXE et les bombes de décompression ; aucune donnée personnelle dans les journaux.</p>
+ <table class="matrix">
+  <tr><th>Format</th><th>Lecture</th><th>Écriture</th><th>Validation</th></tr>
+  <tr><td>Factur-X (PDF/A-3, tous profils)</td><td class="ok">✓</td><td class="ok">✓ embed</td><td class="ok">✓</td></tr>
+  <tr><td>CII D16B</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+  <tr><td>UBL 2.1 (Invoice + CreditNote)</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+  <tr><td>XRechnung (UBL &amp; CII)</td><td class="later">bientôt</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+  <tr><td>Peppol BIS Billing 3.0</td><td class="later">bientôt</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+  <tr><td>JSON pivot · CSV</td><td class="ok">✓ / —</td><td class="ok">✓ / ✓</td><td class="ok">✓</td></tr>
+  <tr><td>ZUGFeRD 1.0 (hérité, CII D14B)</td><td class="ok">✓</td><td class="later">roadmap</td><td class="ok">✓</td></tr>
+  <tr><td>Order-X · EDIFACT · FatturaPA</td><td class="later">roadmap</td><td class="later">roadmap</td><td class="later">roadmap</td></tr>
+ </table>
+</section>
+
+<section id="demarrer">
+ <h2>Démarrer</h2>
+ <p class="intro">Un seul binaire, aucune dépendance runtime.</p>
+ <pre class="code"># Compilation (pur Go, cross-compilable sur 6 cibles)
+CGO_ENABLED=0 go build -o kanjo ./cmd/kanjo
+
+# Valider un dossier
+kanjo validate ./factures --recursive
+
+# Convertir Factur-X → UBL, en lot, 8 workers
+kanjo convert ./factures --to ubl --out ./ubl --workers 8
+
+# Lancer l'application de bureau
+kanjo studio            # serveur local + navigateur
+# ou l'interface texte
+kanjo tui ./factures</pre>
+</section>
+
+<footer>
+ <div class="wrap" style="padding:0">
+  <strong>Kanjō</strong> — 勘定, « le compte ». Édité par <strong>Société Cliente</strong>.
+  Conçu pour la réforme française de la facturation électronique. Pur Go · hors-ligne · RGPD.
+  <br>Interface intégralement en français ; l'identité visuelle s'inspire du <em>daifukuchō</em>, le grand livre des marchands d'Edo.
+ </div>
+</footer>
+
+</div>
+</body>
+</html>

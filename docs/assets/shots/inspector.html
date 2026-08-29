@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr" data-theme="hiru"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+body{display:grid;grid-template-columns:72px 1fr;grid-template-rows:48px 1fr 28px;height:760px;overflow:hidden}
+header{grid-column:1/3;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--rule-firm)}
+header .title{font-family:var(--font-title);font-size:var(--text-lg);color:var(--ink-700)}
+header .spacer{flex:1} header .hint{color:var(--ink-300);font-size:var(--text-2xs)}
+header .theme{background:none;border:1px solid var(--rule-firm);padding:2px 8px;color:var(--ink-500)}
+nav.rail{grid-row:2/4;display:flex;flex-direction:column;gap:4px;padding-top:12px}
+nav.rail button{background:none;border:0;border-left:3px solid transparent;padding:8px 0;color:var(--ink-500);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.rail button .l{font-size:var(--text-2xs)} nav.rail button.active{color:var(--ink-900);border-left-color:var(--ink-700)}
+main{grid-row:2/3;overflow:hidden;padding:24px 0}
+footer{grid-column:1/3;display:flex;align-items:center;gap:24px;padding:0 24px;border-top:1px solid var(--rule-firm);font-size:var(--text-xs);color:var(--ink-500)}
+.spacer{flex:1}
+.layout{display:grid;grid-template-columns:340px 1fr;gap:24px}
+.finding{border-left:3px solid var(--rule-firm);padding:6px 12px;margin:8px 0;background:var(--paper-1)}
+.finding.warn{border-left-color:var(--kohaku)} .finding .rid{font-family:var(--font-mono);color:var(--ink-700)}
+.termrow{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--rule-hair)}
+.termrow .bt{color:var(--ink-300);font-family:var(--font-mono);font-size:var(--text-xs)}
+.count{display:inline-flex;align-items:center;gap:5px}
+</style></head>
+<body>
+<header>
+ <svg class="icon lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-2.5-1.6L13 21l-2.5-1.6L8 21l-2-1.6V3z"/><path d="M9 8h6M9 12h6"/></svg>
+ <span class="title">Kanjō Studio</span><span class="hint">⌘K</span>
+ <span class="spacer"></span><span class="hint">v1.0 · schéma kanjo/1</span>
+ <button class="theme"><svg class="icon" viewBox="0 0 24 24"><path d="M20 14A8 8 0 0 1 10 4a7 7 0 1 0 10 10z"/></svg></button>
+</header>
+<nav class="rail">
+ <button><svg class="icon" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/></svg><span class="l">Accueil</span></button>
+ <button class="active"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6"/><path d="M14 3v5h5"/><circle cx="16.5" cy="15.5" r="3"/><path d="m21 20-2.2-2.2"/></svg><span class="l">Inspecteur</span></button>
+ <button><svg class="icon" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M9 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3"/><path d="m9 14 2 2 4-4"/></svg><span class="l">Rapport</span></button>
+</nav>
+<main class="reliure">
+ <h1>Inspecteur</h1><div class="sub">Termes, montants et anomalies</div>
+ <div class="layout">
+  <div>
+   <div class="k" style="margin-bottom:8px">DOCUMENTS</div>
+   <table><tbody>
+    <tr><td><span class="seal sm"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span></td><td>F2026-0038.xml</td><td>conforme</td><td class="k">cii</td></tr>
+    <tr><td><span class="seal sm"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span></td><td>F2026-0039.xml</td><td>conforme</td><td class="k">ubl</td></tr>
+    <tr class="sel"><td><span class="seal sm warn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg></span></td><td>471102.pdf</td><td>sous réserve</td><td class="k">facturx</td></tr>
+    <tr><td><span class="seal sm err"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg></span></td><td>F2026-0042.xml</td><td>non conforme</td><td class="k">cii</td></tr>
+   </tbody></table>
+  </div>
+  <div>
+   <div style="display:flex;align-items:center;gap:12px">
+    <span class="seal warn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg></span>
+    <div><h2 style="font-size:var(--text-xl)">471102</h2><div class="k">sous réserve · Lieferant GmbH → Kunden AG Mitte</div></div>
+   </div>
+   <div style="margin-top:16px"><div class="k">TERMES</div>
+    <div class="termrow"><span>Numéro : <b>471102</b></span><span class="bt">BT-1</span></div>
+    <div class="termrow"><span>Émission : <b>2024-11-15</b></span><span class="bt">BT-2</span></div>
+    <div class="termrow"><span>Vendeur : <b>Lieferant GmbH</b></span><span class="bt">BT-27</span></div>
+    <div class="termrow"><span>TVA vendeur : <b>DE123456789</b></span><span class="bt">BT-31</span></div>
+    <div class="termrow"><span>Total HT : <b>473,00 €</b></span><span class="bt">BT-109</span></div>
+    <div class="termrow"><span>Total TVA : <b>56,87 €</b></span><span class="bt">BT-110</span></div>
+    <div class="termrow"><span>Total TTC : <b>529,87 €</b></span><span class="bt">BT-112</span></div>
+   </div>
+   <div style="margin-top:16px"><div class="k">ANOMALIES</div>
+    <div class="finding warn"><span class="rid">KANJO-IBAN-01</span> L'IBAN doit satisfaire la vérification modulo 97 (ISO 13616).</div>
+   </div>
+  </div>
+ </div>
+</main>
+<footer>
+ <span class="count"><svg class="icon" style="width:15px;height:15px;color:var(--koke)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><b>117</b> conformes</span>
+ <span class="count"><svg class="icon" style="width:15px;height:15px;color:var(--kohaku)" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg><b>2</b> sous réserve</span>
+ <span class="count"><svg class="icon" style="width:15px;height:15px;color:var(--beni)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg><b>1</b> non conformes</span>
+ <span class="spacer"></span><span>jeu de règles 2026.3</span>
+</footer>
+</body></html>

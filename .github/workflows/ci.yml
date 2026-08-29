@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+# Le cœur, la CLI, la TUI et le serveur studio sont purs Go (CGO_ENABLED=0). Seul le client
+# lourd desktop (cmd/kanjo-studio) utilise cgo/WebKit ; il est exclu par build tag ici et
+# construit séparément (matrice par OS avec les SDK natifs).
+env:
+  CGO_ENABLED: "0"
+
+jobs:
+  build-test:
+    name: Build · Vet · Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: gofmt
+        run: test -z "$(gofmt -l pkg cmd internal)"
+      - name: go vet
+        run: go vet ./...
+      - name: Tests
+        run: go test ./...
+
+  cross-compile:
+    name: Cross-compile CGO_ENABLED=0 (6 cibles)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Cross-compile
+        run: |
+          for t in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64; do
+            echo "→ $t"
+            GOOS=${t%/*} GOARCH=${t#*/} CGO_ENABLED=0 \
+              go build -trimpath -ldflags "-s -w" -o /dev/null ./cmd/kanjo
+          done
+
+  rules-doc:
+    name: Catalogue des règles synchronisé
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Vérifier docs/rules.md
+        run: go test ./pkg/rules/ -run TestRulesDocInSync
+
+# La GitHub Page est servie directement depuis le dossier /docs (Settings → Pages).
