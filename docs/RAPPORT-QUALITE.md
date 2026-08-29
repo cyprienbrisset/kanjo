@@ -12,8 +12,8 @@
 
 | Indicateur | Valeur |
 |---|---|
-| Fonctions de test automatisées | **178** (54 fichiers) |
-| Paquets couverts par des tests | **34** |
+| Fonctions de test automatisées | **180** (56 fichiers) |
+| Paquets couverts par des tests | **36** |
 | Règles de validation EN 16931 | **95** (91 EN 16931 · 2 CIUS FR · 2 Kanjō) |
 | Corpus publiable — cas de succès | **38 / 38** déclarés conformes |
 | Corpus publiable — cas d'erreur | **12 / 12** correctement rejetés |
@@ -45,7 +45,7 @@ La justesse ne s'ajoute pas après coup ; elle est **inscrite dans les types** :
 
 ## 3. Comment nous testons
 
-### 3.1 Tests unitaires (174 fonctions)
+### 3.1 Tests unitaires (180 fonctions)
 Chaque paquet du cœur — modèle, arithmétique, lecteurs, écrivains, moteur de règles — possède ses
 tests. Le calcul monétaire, les arrondis et les conversions de devises sont testés au centime près.
 
@@ -150,7 +150,7 @@ Nous préférons annoncer ce qui **n'est pas** encore garanti plutôt que de le 
   durcissement (OutputIntent, XMP fx:).
 - Le format **EDIFACT** en lecture n'est pas encore couvert (feuille de route). **FatturaPA**
   (v1.2) est lu ; son **écriture** n'est pas encore fournie.
-- La couverture de tests moyenne (~70 %) progresse lot par lot ; les chemins critiques (modèle,
+- La couverture de tests moyenne (~73 %) progresse lot par lot ; les chemins critiques (modèle,
   règles, conversion, lecture Factur-X) sont les mieux couverts.
 
 Ces limites sont suivies dans le [CHANGELOG](../CHANGELOG.md) et le suivi du projet.
