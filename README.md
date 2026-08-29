@@ -5,6 +5,8 @@
 **Lire · valider · convertir · réparer · comparer · rendre lisibles vos factures électroniques**
 Factur-X · UBL 2.1 · CII · XRechnung · Peppol — une seule implémentation, trois interfaces.
 
+[![CI](https://github.com/cyprienbrisset/kanjo/actions/workflows/ci.yml/badge.svg)](https://github.com/cyprienbrisset/kanjo/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/cyprienbrisset/kanjo?label=release&color=B8862F)](https://github.com/cyprienbrisset/kanjo/releases)
 [![Go](https://img.shields.io/badge/Go-1.25%2B-00ADD8?logo=go&logoColor=white)](https://go.dev)
 [![CGO disabled](https://img.shields.io/badge/CGO-disabled-5E7A4A)](#architecture)
 [![OS](https://img.shields.io/badge/OS-Linux%20·%20macOS%20·%20Windows-24405E)](#démarrer)
@@ -13,7 +15,7 @@ Factur-X · UBL 2.1 · CII · XRechnung · Peppol — une seule implémentation,
 [![Qualité](https://img.shields.io/badge/rapport-qualité%20%26%20conformité-B8862F)](docs/RAPPORT-QUALITE.md)
 [![RGPD](https://img.shields.io/badge/RGPD-100%25%20hors--ligne-9E2B32)](#sécurité--rgpd)
 [![Façades](https://img.shields.io/badge/interfaces-CLI%20·%20TUI%20·%20Studio-B8862F)](#trois-interfaces-un-seul-cœur)
-[![Licence](https://img.shields.io/badge/licence-à%20arbitrer-8E9AA6)](#licence)
+[![Licence](https://img.shields.io/badge/licence-BSL%201.1-8E9AA6)](LICENSE)
 
 📖 **[Site web / démonstration →](https://cyprienbrisset.github.io/kanjo/)** &nbsp;·&nbsp; [Changelog](CHANGELOG.md)
 
@@ -64,8 +66,12 @@ jusqu'aux plateformes SaaS.
 
 ## Démarrer
 
+**Binaires précompilés** (Linux · macOS · Windows, amd64/arm64) : voir les
+[**Releases**](https://github.com/cyprienbrisset/kanjo/releases) — téléchargez l'archive de votre
+plateforme, vérifiez `SHA256SUMS.txt`, décompressez, c'est prêt (aucune dépendance runtime).
+
 ```bash
-# Compilation — pur Go, aucune dépendance runtime, cross-compilable sur 6 cibles
+# Ou compilez — pur Go, aucune dépendance runtime, cross-compilable sur 6 cibles
 CGO_ENABLED=0 go build -o kanjo ./cmd/kanjo
 
 kanjo validate ./factures --recursive              # valider un dossier
@@ -134,7 +140,13 @@ Sécurité  │ internal/xmlsafe (anti-XXE)  ·  internal/fsatomic (écriture at
 
 ## Licence
 
-À définir (interne / source-available / dual).
+**Business Source License 1.1** (source-available) — voir [`LICENSE`](LICENSE).
+
+- Code **visible**, modification, redistribution et **usage non-production** libres.
+- **Usage production autorisé**, sauf pour offrir Kanjō à des tiers comme service hébergé/managé
+  dont la valeur principale serait la lecture/conversion/validation de factures.
+- **Bascule automatique en Apache-2.0** à la *Change Date* (2030-01-01).
+- Pour un usage au-delà de ces termes : licence commerciale auprès du Licensor.
 
 ---
 
