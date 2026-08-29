@@ -12,12 +12,13 @@
 
 | Indicateur | Valeur |
 |---|---|
-| Fonctions de test automatisées | **155** (46 fichiers) |
-| Paquets couverts par des tests | **31** |
+| Fonctions de test automatisées | **174** (53 fichiers) |
+| Paquets couverts par des tests | **34** |
 | Règles de validation EN 16931 | **82** (78 EN 16931 · 2 CIUS FR · 2 Kanjō) |
 | Corpus publiable — cas de succès | **38 / 38** déclarés conformes |
 | Corpus publiable — cas d'erreur | **12 / 12** correctement rejetés |
-| Corpus **officiel CEN** (EN 16931) | **31 / 32** conformes (le 32ᵉ est hors-norme, voir §4) |
+| Corpus **réel open-source** (robustesse) | **507 documents** lus sans panic |
+| Exemples réels complets (CEN + Peppol) | **40 / 40** conformes |
 | Corpus **officiel Peppol** BIS 3.0 | **9 / 9** conformes |
 | Cibles de compilation vérifiées | **6** (Linux/macOS/Windows × amd64/arm64), `CGO_ENABLED=0` |
 | Appels réseau / télémétrie | **0** — 100 % hors-ligne |
@@ -44,7 +45,7 @@ La justesse ne s'ajoute pas après coup ; elle est **inscrite dans les types** :
 
 ## 3. Comment nous testons
 
-### 3.1 Tests unitaires (155 fonctions)
+### 3.1 Tests unitaires (174 fonctions)
 Chaque paquet du cœur — modèle, arithmétique, lecteurs, écrivains, moteur de règles — possède ses
 tests. Le calcul monétaire, les arrondis et les conversions de devises sont testés au centime près.
 
@@ -65,14 +66,21 @@ Le test d'intégration `test/corpus_test.go` **échoue la CI** si une facture va
 non conforme ou si une facture erronée passe à travers les mailles. Régénérable via
 `testdata/corpus/generer-corpus.sh`.
 
-### 3.4 Corpus officiels (CEN et Peppol)
-En complément, `testdata/corpus/fetch.sh` télécharge des corpus **officiels** (non vendorés pour
-raisons de licence) : les exemples du CEN (EN 16931) et ceux de **Peppol BIS Billing 3.0**
-(OpenPeppol). Résultats :
+### 3.4 Corpus réel open-source (> 500 documents)
+`testdata/corpus/fetch.sh` moissonne, à la demande et de façon reproductible, **plus de 500
+documents réels** issus de dépôts publics (non vendorés pour raisons de licence) :
 
-- **CEN EN 16931 : 31/32** — l'unique écart est une facture italienne utilisant une catégorie de
-  TVA « B » **hors du référentiel EN 16931**, donc **correctement rejetée**.
-- **Peppol BIS 3.0 : 9/9** exemples officiels validés conformes.
+- **CEN EN 16931** (ConnectingEurope, EUPL) : exemples UBL/CII + cas unitaires par règle ;
+- **XRechnung** (itplr-kosit, Apache) : jeux d'essai (testsuite + configuration du validateur) ;
+- **Peppol BIS 3.0** (OpenPeppol, Apache) : exemples officiels.
+
+Deux garanties en découlent, mesurées par `test/realcorpus_test.go` :
+
+- **Robustesse** : les **507 documents** réels sont lus **sans jamais faire paniquer** un lecteur
+  (les entrées inattendues deviennent des erreurs de fichier, jamais un crash).
+- **Conformité des exemples complets** : **40/40** factures d'exemple (CEN UBL 16/16, CEN CII
+  15/15, Peppol 9/9) sont validées conformes. Les cas unitaires du CEN sont des fragments par
+  règle, volontairement partiels, et servent la robustesse plutôt que la validation document.
 
 ### 3.5 Corpus d'attaque (sécurité)
 `testdata/fuzz/xxe/` contient des charges malveillantes (entités externes XXE, DTD distante,
@@ -142,7 +150,7 @@ Nous préférons annoncer ce qui **n'est pas** encore garanti plutôt que de le 
   durcissement (OutputIntent, XMP fx:).
 - Le format **EDIFACT** en lecture n'est pas encore couvert (feuille de route). **FatturaPA**
   (v1.2) est lu ; son **écriture** n'est pas encore fournie.
-- La couverture de tests moyenne (~62 %) progresse lot par lot ; les chemins critiques (modèle,
+- La couverture de tests moyenne (~70 %) progresse lot par lot ; les chemins critiques (modèle,
   règles, conversion, lecture Factur-X) sont les mieux couverts.
 
 Ces limites sont suivies dans le [CHANGELOG](../CHANGELOG.md) et le suivi du projet.
