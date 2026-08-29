@@ -14,7 +14,7 @@
 |---|---|
 | Fonctions de test automatisées | **146** (43 fichiers) |
 | Paquets couverts par des tests | **30** |
-| Règles de validation EN 16931 | **73** (69 EN 16931 · 2 CIUS FR · 2 Kanjō) |
+| Règles de validation EN 16931 | **78** (74 EN 16931 · 2 CIUS FR · 2 Kanjō) |
 | Corpus publiable — cas de succès | **24 / 24** déclarés conformes |
 | Corpus publiable — cas d'erreur | **10 / 10** correctement rejetés |
 | Corpus **officiel CEN** (EN 16931) | **31 / 32** conformes (le 32ᵉ est hors-norme, voir §4) |
@@ -80,7 +80,7 @@ par cette couche — aucun `encoding/xml` direct n'est autorisé dans les lecteu
 ## 4. Conformité EN 16931 — « jamais de verdict non calculé »
 
 Kanjō applique un **moteur de règles natif en Go** (pas de Schematron, pas de JVM). Le catalogue
-complet des **73 règles** est publié et généré depuis le code dans [`rules.md`](rules.md) ; il
+complet des **78 règles** est publié et généré depuis le code dans [`rules.md`](rules.md) ; il
 couvre les familles `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, la CIUS française et
 des règles maison (IBAN mod-97, cohérence des dates).
 

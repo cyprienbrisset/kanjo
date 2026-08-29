@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (69 règles)
+## en16931 (74 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -30,6 +30,8 @@ Version du jeu de règles : **2026.3**
 | BR-25 | error | BT-153 | Chaque ligne doit désigner un article (nom). |
 | BR-26 | error | BT-151 | Chaque ligne doit porter une catégorie de TVA. |
 | BR-27 | error | BT-146 | Le prix net d'une ligne ne doit pas être négatif. |
+| BR-29 | error | BT-73, BT-74 | La fin de période ne doit pas précéder son début. |
+| BR-30 | error | BT-134, BT-135 | La fin de période de ligne ne doit pas précéder son début. |
 | BR-31 | error | BT-92 | Une remise de niveau document doit porter un montant. |
 | BR-32 | error | BT-95 | Une remise de niveau document doit porter une catégorie de TVA. |
 | BR-33 | error | BT-97 | Une remise de niveau document doit porter un motif ou un code motif. |
@@ -43,6 +45,7 @@ Version du jeu de règles : **2026.3**
 | BR-45 | error | BT-116 | Chaque ventilation de TVA doit porter un montant imposable. |
 | BR-46 | error | BT-117 | Chaque ventilation de TVA doit porter un montant de TVA. |
 | BR-47 | error | BT-118 | Chaque ventilation de TVA doit indiquer une catégorie. |
+| BR-55 | error | BT-25 | Une référence de facture antérieure doit porter un identifiant. |
 | BR-AE-05 | error | BT-119, BT-152 | Une TVA en autoliquidation doit avoir un taux de zéro. |
 | BR-AE-10 | error | BT-120, BT-121 | Une TVA en autoliquidation doit indiquer un motif d'exonération. |
 | BR-CL-01 | error | BT-5 | Le code devise doit être un code ISO 4217 valide. |
@@ -58,6 +61,8 @@ Version du jeu de règles : **2026.3**
 | BR-CO-16 | error | BT-112, BT-113, BT-114, BT-115 | Le net à payer (BT-115) doit être égal au total TTC moins l'acompte plus l'arrondi. |
 | BR-CO-17 | error | BT-116, BT-117, BT-119 | Le montant de TVA par catégorie (BT-117) doit être égal à la base multipliée par le taux. |
 | BR-CO-18 | error | BG-23 | Une facture doit comporter au moins une ventilation de TVA. |
+| BR-CO-19 | error | BT-73, BT-74 | Une période de facturation doit indiquer une date de début ou de fin. |
+| BR-CO-20 | error | BT-134, BT-135 | Une période de ligne doit indiquer une date de début ou de fin. |
 | BR-CO-25 | error | BT-9, BT-20, BT-115 | Si un montant reste dû, une date d'échéance ou des conditions de paiement sont requises. |
 | BR-CO-26 | error | BT-29 | Le vendeur doit être identifiable (identifiant, SIREN/SIRET ou n° de TVA). |
 | BR-DEC-12 | error | BT-106 | Un montant monétaire ne doit pas avoir plus de deux décimales. |

@@ -46,7 +46,11 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   d'aller-retour lossless dédiés (`TestCIILineAllowanceRoundTrip`, `TestUBLLineAllowanceRoundTrip`).
 
 ### Conformité
-- **16 nouvelles règles EN 16931** (jeu de règles → **73 règles**) :
+- **Périodes et facture antérieure (5 règles, jeu → 78)** : **BR-CO-19/20** (une période de
+  facturation ou de ligne doit porter une date de début ou de fin), **BR-29/30** (la date de fin
+  ne doit pas précéder le début) et **BR-55** (chaque référence de facture antérieure BG-3 doit
+  porter un identifiant BT-25). Tests passant/échouant ; corpus inchangé.
+- **16 règles EN 16931** précédentes (jeu de règles → 73) :
   - Totaux du document (BG-22) : **BR-12** (total des lignes BT-106), **BR-13** (total HT
     BT-109), **BR-14** (total TTC BT-112) et **BR-15** (net à payer BT-115) obligatoires.
   - Remises/charges — niveau document : **BR-31/32/33** (remise : montant, catégorie de TVA,
