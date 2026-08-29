@@ -106,7 +106,7 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 - **137 règles** réparties en trois jeux (`en16931`, `cius.fr`, `kanjo`), chacune avec un test passant et un test échouant ; catalogue généré dans [`docs/rules.md`](docs/rules.md).
 - **Parité mesurée vs Schematron officiel CEN** : **132/223** règles EN 16931 couvertes (**59 %**), suivie automatiquement par [`test/parity_test.go`](test/parity_test.go) (cliquet anti-régression), détail dans [`docs/CONFORMITE-EN16931.md`](docs/CONFORMITE-EN16931.md). Aucune conformité n'est déclarée sans être **mesurée** contre la source officielle.
 - **Corpus publiable synthétique** ([`testdata/corpus/published`](testdata/corpus/published)) : **38/38 cas de succès** conformes et **12/12 cas d'erreur** rejetés — vérifié en continu par [`test/corpus_test.go`](test/corpus_test.go).
-- **Corpus réel open-source** ([`fetch.sh`](testdata/corpus/fetch.sh), non vendoré) : **> 500 documents** (CEN, XRechnung, Peppol) lus **sans panic** ; **40/40** exemples complets conformes (CEN 31/31 + Peppol 9/9).
+- **Corpus réel open-source** ([`fetch.sh`](testdata/corpus/fetch.sh), non vendoré) : **7 365 documents réels** (CEN, Peppol, XRechnung, phive-rules multi-juridictions, ZUGFeRD) lus **sans panic** ; 4 728 lus comme factures, exemples CEN 32/32.
 - **180 tests automatisés** (aller-retour sans perte, corpus, attaques XXE) ; un test de CI **échoue si un verdict de conformité régresse**.
 - 👉 **[Rapport de qualité et de conformité complet →](docs/RAPPORT-QUALITE.md)** (méthodologie, sécurité, reproductibilité).
 

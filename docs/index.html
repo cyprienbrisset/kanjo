@@ -157,7 +157,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
  <div class="usecases">
   <div class="uc"><div class="role">COMPTABLE / PME</div><h3>Recevoir &amp; contrôler</h3><p>Déposez un lot de 500 factures reçues dans Studio : chaque document est validé et rendu lisible. Les 4 vrais problèmes ressortent, groupés par règle, prêts à corriger.</p></div>
   <div class="uc"><div class="role">INTÉGRATEUR</div><h3>Automatiser un flux</h3><p>Surveillez un dossier EDI : chaque fichier déposé est converti (CII → UBL), validé et rangé. Reprise sur incident, quarantaine des échecs, sortie JSON pour le SI.</p></div>
-  <div class="uc"><div class="role">ÉDITEUR SaaS / PDP</div><h3>Brique de conformité</h3><p>La bibliothèque <code>pkg/</code> valide et convertit à l'échelle : 10 000 factures en moins d'une minute, mémoire constante, sans dépendance runtime.</p></div>
+  <div class="uc"><div class="role">ÉDITEUR SaaS / PDP</div><h3>Brique de conformité</h3><p>La bibliothèque <code>pkg/</code> valide et convertit à l'échelle, mémoire constante, sans dépendance runtime — éprouvée sur un corpus de <strong>7 365 factures réelles</strong> open-source (CEN, Peppol, XRechnung, ZUGFeRD).</p></div>
   <div class="uc"><div class="role">SUPPORT / QUALITÉ</div><h3>Diagnostiquer</h3><p>Comparez une Factur-X à sa conversion UBL pour prouver l'absence de perte. Anonymisez un cas client réel avant de le transmettre — conforme RGPD.</p></div>
  </div>
 </section>
@@ -171,7 +171,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   <div class="metric"><div class="n">6/6</div><div class="l">cibles cross-compilées (Linux, macOS, Windows)</div></div>
   <div class="metric"><div class="n">0</div><div class="l">appel réseau · 0 télémétrie · traitement local</div></div>
  </div>
- <p class="intro" style="margin-top:32px"><strong>Corpus publiable synthétique : 38/38 cas de succès validés conformes et 12/12 cas d'erreur correctement rejetés</strong> — vérifié en continu par la CI. Sur les corpus <em>officiels</em> : CEN 31/32 (l'unique écart, une catégorie de TVA hors EN 16931, est correctement rejeté) et Peppol BIS 3.0 : 9/9 exemples conformes.
+ <p class="intro" style="margin-top:32px"><strong>Corpus réel open-source : 7 365 factures</strong> (CEN, Peppol, XRechnung, phive-rules multi-juridictions, ZUGFeRD) lues <strong>sans jamais faire paniquer</strong> un lecteur. Corpus synthétique de contrôle vérifié en continu (38/38 succès, 12/12 erreurs). Exemples CEN complets lus 32/32 ; validation CEN CII 15/15, UBL 16/17 (l'écart, catégorie « B » hors norme, correctement rejeté).
   XML durci contre XXE et les bombes de décompression ; aucune donnée personnelle dans les journaux.</p>
  <p style="text-align:center;margin-top:24px">
   <a class="btn" href="https://github.com/cyprienbrisset/kanjo/blob/main/docs/RAPPORT-QUALITE.md">Lire le rapport de qualité &amp; de conformité →</a>
