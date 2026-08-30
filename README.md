@@ -54,7 +54,7 @@ jusqu'aux plateformes SaaS.
 
 ## Fonctionnalités
 
-- **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, JSON pivot. Détection **par le contenu**, jamais par l'extension.
+- **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, FatturaPA, **UN/EDIFACT INVOIC**, JSON pivot. Détection **par le contenu**, jamais par l'extension.
 - **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **219 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.**
 - **Convertir** — CII ⇄ UBL, Factur-X, XRechnung (UBL/CII), Peppol BIS 3.0, JSON, CSV — avec **rapport de perte explicite** et politique `--max-loss`.
 - **Traiter en lot** — découverte récursive, pool de workers, **reprise `--resume`**, quarantaine, **surveillance de dossier** (`watch`).
@@ -99,7 +99,8 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 | JSON pivot · CSV | ✅ / — | ✅ / ✅ | ✅ |
 | ZUGFeRD 1.0 (CII D14B, hérité) | ✅ | 🗺️ | ✅ |
 | FatturaPA (FatturaElettronica v1.2) | ✅ *(lecture)* | 🗺️ | ✅ |
-| Order-X · EDIFACT | 🗺️ roadmap | 🗺️ | 🗺️ |
+| UN/EDIFACT INVOIC (D.9xA / D.0xB) | ✅ *(lecture)* | 🗺️ | ✅ |
+| Order-X | 🗺️ roadmap | 🗺️ | 🗺️ |
 
 ## Conformité
 

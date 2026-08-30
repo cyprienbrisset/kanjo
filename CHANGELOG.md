@@ -12,6 +12,12 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (formats)
+- **Lecteur UN/EDIFACT INVOIC** (`pkg/read/edifact`) — nouvel analyseur natif (ISO 9735), conscient
+  du segment de service `UNA` et du caractère d'échappement, sans dépendance externe. Cartographie
+  BGM/DTM/NAD/RFF/CUX/LIN/IMD/QTY/MOA/PRI/TAX vers le pivot ; détection par le contenu (`UNA`/`UNB`).
+  Testé sur des messages **réels** (corpus pydifact, MIT). Lecture seule ; §17.7 respecté (rien inventé).
+
 ### Conformité (jeu de règles)
 - **BR-01 activée** — la présence de l'identifiant de spécification (BT-24) est désormais vérifiée.
   Il est tracé dans la provenance à la lecture : `CustomizationID` (UBL), `GuidelineSpecifiedDocumentContextParameter` (CII),
