@@ -13,6 +13,11 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 ## [Non publié]
 
 ### Ajouté (formats)
+- **Écriture FatturaPA** (`pkg/write/fatturapa`) — sérialiseur FatturaElettronica v1.2 (profil FPR12) :
+  root préfixé `p:`, en-tête (cédant/cessionnaire, TVA scindée IdPaese/IdCodice, adresses), document
+  (TipoDocumento TD01/TD04 selon facture/avoir), lignes, ventilation (`DatiRiepilogo` avec `Natura`
+  déduite de la catégorie de TVA), paiement. **Aller-retour pivot→FatturaPA→pivot testé.** Extensions
+  purement italiennes non modélisées (bollo, ritenuta, CIG/CUP…) non émises (§17.7, rien inventé).
 - **Écriture UN/EDIFACT INVOIC** (`pkg/write/edifact`) — sérialiseur natif D.96A (ISO 9735,
   séparateurs de service par défaut, échappement) : en-tête d'interchange complet (UNB…UNZ),
   parties, lignes, catégories/taux de TVA, totaux. **Aller-retour pivot→EDIFACT→pivot testé.**
