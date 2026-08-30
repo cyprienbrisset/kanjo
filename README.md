@@ -10,7 +10,7 @@ Factur-X · UBL 2.1 · CII · XRechnung · Peppol — une seule implémentation,
 [![Go](https://img.shields.io/badge/Go-1.25%2B-00ADD8?logo=go&logoColor=white)](https://go.dev)
 [![CGO disabled](https://img.shields.io/badge/CGO-disabled-5E7A4A)](#architecture)
 [![OS](https://img.shields.io/badge/OS-Linux%20·%20macOS%20·%20Windows-24405E)](#démarrer)
-[![Tests](https://img.shields.io/badge/tests-193%20·%20passing-5E7A4A)](docs/RAPPORT-QUALITE.md)
+[![Tests](https://img.shields.io/badge/tests-199%20·%20passing-5E7A4A)](docs/RAPPORT-QUALITE.md)
 [![EN 16931](https://img.shields.io/badge/EN%2016931-206%20règles-24405E)](#conformité)
 [![Qualité](https://img.shields.io/badge/rapport-qualité%20%26%20conformité-B8862F)](docs/RAPPORT-QUALITE.md)
 [![RGPD](https://img.shields.io/badge/RGPD-100%25%20hors--ligne-9E2B32)](#sécurité--rgpd)
@@ -103,13 +103,43 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 
 ## Conformité
 
-- **206 règles** réparties en trois jeux (`en16931`, `cius.fr`, `kanjo`), chacune avec un test passant et un test échouant ; catalogue généré dans [`docs/rules.md`](docs/rules.md).
-- **Parité mesurée vs Schematron officiel CEN** : **201/223** règles EN 16931 couvertes (**90 %**), suivie automatiquement par [`test/parity_test.go`](test/parity_test.go) (cliquet anti-régression), détail dans [`docs/CONFORMITE-EN16931.md`](docs/CONFORMITE-EN16931.md). Aucune conformité n'est déclarée sans être **mesurée** contre la source officielle.
-- **Corpus publiable synthétique** ([`testdata/corpus/published`](testdata/corpus/published)) : **38/38 cas de succès** conformes et **12/12 cas d'erreur** rejetés — vérifié en continu par [`test/corpus_test.go`](test/corpus_test.go).
-- **Corpus réel open-source** ([`fetch.sh`](testdata/corpus/fetch.sh), non vendoré) : **7 365 documents réels** (CEN, Peppol, XRechnung, phive-rules multi-juridictions, ZUGFeRD) lus **sans panic** ; 4 728 lus comme factures, exemples CEN 32/32.
-- **193 tests automatisés** (aller-retour sans perte, corpus, attaques XXE) ; un test de CI **échoue si un verdict de conformité régresse**.
-- 📊 **[Visualisation de la conformité par famille de règles →](https://cyprienbrisset.github.io/kanjo/#parite)** (graphiques).
-- 👉 **[Rapport de qualité et de conformité complet →](docs/RAPPORT-QUALITE.md)** (méthodologie, sécurité, reproductibilité).
+> **La conformité EN 16931 n'est pas *déclarée*, elle est *mesurée*.** Nous extrayons la liste
+> canonique des **223 règles** depuis le **Schematron officiel du CEN** et un test compare, à chaque
+> commit, ce que Kanjō valide réellement. Un **cliquet anti-régression** interdit toute baisse.
+
+### Parité mesurée : **201 / 223 règles EN 16931 (90 %)**
+
+| Famille | Couverture | | Famille | Couverture |
+|---|---|---|---|---|
+| Présence & structure (`BR`) | 54 / 58 | | TVA taux normal (`BR-S`) | **10 / 10** |
+| Calculs (`BR-CO`) | 18 / 23 | | TVA taux zéro (`BR-Z`) | **10 / 10** |
+| Décimales (`BR-DEC`) | **21 / 21** | | TVA exonérée (`BR-E`) | **10 / 10** |
+| Listes de codes (`BR-CL`) | 12 / 23 | | Autoliquidation (`BR-AE`) | **10 / 10** |
+| Hors champ (`BR-O`) | **14 / 14** | | Export (`BR-G`) | **10 / 10** |
+| Intracommunautaire (`BR-IC`) | **12 / 12** | | Régional IGIC/IPSI (`BR-AF/AG`) | **20 / 20** |
+
+Suivie par [`test/parity_test.go`](test/parity_test.go) ; détail couvert/manquant par famille dans
+[`docs/CONFORMITE-EN16931.md`](docs/CONFORMITE-EN16931.md) (généré). Les ~22 règles restantes sont
+des cas de faible valeur métier (split-payment italien hors référentiel, schémas ISO 6523 non
+modélisés, règles « même type » non automatisables).
+
+### Ce que Kanjō vérifie réellement
+
+- **Structure & présence** — numéro, dates, parties, lignes, ventilations de TVA, bénéficiaire,
+  représentant fiscal, pièces jointes, instructions de paiement.
+- **Calculs exacts** — sommes de lignes, totaux HT/TVA/TTC, net à payer, base × taux par
+  catégorie **et** par taux (arithmétique entière, jamais de `float64`).
+- **Catégories de TVA** — S, Z, E, AE (autoliquidation), K/IC (intracommunautaire), G (export),
+  O (hors champ, exclusif), L/M (IGIC/IPSI espagnols) : taux, exonération, identifiants requis.
+- **Listes de codes officielles** — devise **ISO 4217**, pays **ISO 3166-1**, moyens de paiement
+  **UNCL 4461**, catégories **UNCL 5305**, motifs **UNCL 5189/7161**, schémas **CEF EAS**.
+
+### Éprouvé sur des données réelles
+
+- **Corpus publiable synthétique** ([`testdata/corpus/published`](testdata/corpus/published)) : **38/38** succès conformes et **12/12** erreurs rejetées — [`test/corpus_test.go`](test/corpus_test.go).
+- **Corpus réel open-source** ([`fetch.sh`](testdata/corpus/fetch.sh)) : **7 365 documents** (CEN, Peppol, XRechnung, phive-rules multi-juridictions, ZUGFeRD) lus **sans panic** ; exemples CEN 32/32.
+- **199 tests automatisés** ; **206 règles** au total (EN 16931 + CIUS FR + Kanjō), chacune avec un test passant et un test échouant.
+- 📊 **[Visualisation graphique par famille →](https://cyprienbrisset.github.io/kanjo/#parite)** &nbsp;·&nbsp; 👉 **[Rapport de qualité complet →](docs/RAPPORT-QUALITE.md)**
 
 ## Architecture
 
@@ -135,7 +165,7 @@ Sécurité  │ internal/xmlsafe (anti-XXE)  ·  internal/fsatomic (écriture at
 
 ## Qualité
 
-- **193 tests automatisés** : unitaires, aller-retour **lossless**, propriétés (arrondis exacts), corpus de conformité, attaques XXE/bombes XML, intégration CLI de bout en bout.
+- **199 tests automatisés** : unitaires, aller-retour **lossless**, propriétés (arrondis exacts), corpus de conformité, attaques XXE/bombes XML, intégration CLI de bout en bout.
 - **Corpus publiable** ([`testdata/corpus/published`](testdata/corpus/published), 50 factures synthétiques) validé en continu : 38/38 succès conformes, 12/12 erreurs rejetées.
 - `gofmt` + `go vet` propres ; **aucune `panic`** dans un chemin de traitement (converti en erreur de fichier).
 - Tout est reproductible : [`scripts/rapport-qualite.sh`](scripts/rapport-qualite.sh) rejoue compilation, tests, règles, corpus et sécurité.

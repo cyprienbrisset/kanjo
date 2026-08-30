@@ -235,7 +235,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
    <div class="barrow"><span class="fam">Autoliquidation</span><span class="bar"><span style="width:100%"></span></span><span class="n">10/10</span></div>
    <div class="barrow"><span class="fam">Export hors UE</span><span class="bar"><span style="width:100%"></span></span><span class="n">10/10</span></div>
    <div class="barrow"><span class="fam">Intracommunautaire</span><span class="bar"><span style="width:100%"></span></span><span class="n">12/12</span></div>
-   <div class="barrow"><span class="fam">Hors champ TVA</span><span class="bar partial"><span style="width:86%"></span></span><span class="n">12/14</span></div>
+   <div class="barrow"><span class="fam">Hors champ TVA</span><span class="bar"><span style="width:100%"></span></span><span class="n">14/14</span></div>
    <div class="barrow"><span class="fam">Régional ES / IT</span><span class="bar partial"><span style="width:91%"></span></span><span class="n">20/22</span></div>
    <div class="legend">
     <span><i style="background:var(--koke)"></i>complet</span>
@@ -245,7 +245,16 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   </div>
  </div>
 
- <div class="grid" style="margin-top:40px">
+ <h3 style="font-family:var(--font-title);color:var(--ink-700);margin:44px 0 4px;font-size:var(--text-xl)">Ce que Kanjō vérifie réellement</h3>
+ <div class="grid" style="margin-top:16px">
+  <div class="card"><h3>Structure &amp; présence</h3><p>Numéro, dates, parties, lignes, ventilations de TVA, bénéficiaire, représentant fiscal, pièces jointes, instructions de paiement — chaque terme obligatoire est contrôlé.</p></div>
+  <div class="card"><h3>Calculs exacts</h3><p>Sommes de lignes, totaux HT / TVA / TTC, net à payer, base × taux par catégorie <strong>et</strong> par taux — en arithmétique entière, jamais en <code>float64</code>.</p></div>
+  <div class="card"><h3>Catégories de TVA</h3><p>Taux normal, zéro, exonéré, autoliquidation, intracommunautaire, export, hors champ (exclusif), IGIC/IPSI espagnols : taux, exonération et identifiants requis.</p></div>
+  <div class="card"><h3>Listes de codes officielles</h3><p>Devise <strong>ISO 4217</strong>, pays <strong>ISO 3166-1</strong>, moyens de paiement <strong>UNCL 4461</strong>, catégories <strong>UNCL 5305</strong>, motifs <strong>UNCL 5189 / 7161</strong>, schémas <strong>CEF EAS</strong>.</p></div>
+ </div>
+
+ <h3 style="font-family:var(--font-title);color:var(--ink-700);margin:44px 0 4px;font-size:var(--text-xl)">Notre méthode</h3>
+ <div class="grid" style="margin-top:16px">
   <div class="card"><h3>Mesurée, jamais affirmée</h3><p>La liste de référence vient du Schematron CEN. Le test <code>parity_test.go</code> calcule la couverture réelle et échoue si elle régresse. Le chiffre « 90&nbsp;% » est donc vérifiable, pas marketing.</p></div>
   <div class="card"><h3>Le cœur métier est complet</h3><p>Toutes les familles de TVA usuelles (taux normal, zéro, exonéré, autoliquidation, export) sont couvertes à <strong>100&nbsp;%</strong>, calculs de base et cohérence des montants inclus.</p></div>
   <div class="card"><h3>Jamais de verdict inventé</h3><p>Chaque règle est réellement exécutée ; aucun sceau « conforme » n'est apposé sans calcul, aucune conformité PDF/A sans validation veraPDF effective (§17.7).</p></div>

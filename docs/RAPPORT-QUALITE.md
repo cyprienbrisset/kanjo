@@ -12,7 +12,7 @@
 
 | Indicateur | Valeur |
 |---|---|
-| Fonctions de test automatisées | **193** (60 fichiers) |
+| Fonctions de test automatisées | **199** (65 fichiers) |
 | Paquets couverts par des tests | **36** |
 | Règles de validation EN 16931 | **206** (202 EN 16931 · 2 CIUS FR · 2 Kanjō) |
 | Parité vs Schematron officiel CEN | **201 / 223** (90 %) — [détail](CONFORMITE-EN16931.md) |
@@ -46,7 +46,7 @@ La justesse ne s'ajoute pas après coup ; elle est **inscrite dans les types** :
 
 ## 3. Comment nous testons
 
-### 3.1 Tests unitaires (193 fonctions)
+### 3.1 Tests unitaires (199 fonctions)
 Chaque paquet du cœur — modèle, arithmétique, lecteurs, écrivains, moteur de règles — possède ses
 tests. Le calcul monétaire, les arrondis et les conversions de devises sont testés au centime près.
 
