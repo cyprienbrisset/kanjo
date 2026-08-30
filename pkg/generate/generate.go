@@ -75,6 +75,13 @@ func Generate(index int, opts Options) (*model.Document, error) {
 	case ScenarioIntracommunautaire:
 		doc.Buyer.Address.CountryCode = "DE"
 		doc.Buyer.VATID = "DE" + fmt.Sprintf("%09d", 100000000+rng.Intn(899999999))
+		// Une livraison intracommunautaire exige une date et un pays de livraison (BR-IC-11/12).
+		delivery, _ := model.NewDate(2026, 9, 1+rng.Intn(27))
+		doc.DeliverTo = &model.DeliveryInfo{
+			Name:         doc.Buyer.Name,
+			Address:      model.Address{City: "Berlin", PostalCode: "10115", CountryCode: "DE"},
+			DeliveryDate: &delivery,
+		}
 	}
 
 	cat, rate := scenarioTax(opts.Scenario)

@@ -11,7 +11,7 @@ Factur-X · UBL 2.1 · CII · XRechnung · Peppol — une seule implémentation,
 [![CGO disabled](https://img.shields.io/badge/CGO-disabled-5E7A4A)](#architecture)
 [![OS](https://img.shields.io/badge/OS-Linux%20·%20macOS%20·%20Windows-24405E)](#démarrer)
 [![Tests](https://img.shields.io/badge/tests-193%20·%20passing-5E7A4A)](docs/RAPPORT-QUALITE.md)
-[![EN 16931](https://img.shields.io/badge/EN%2016931-158%20règles-24405E)](#conformité)
+[![EN 16931](https://img.shields.io/badge/EN%2016931-165%20règles-24405E)](#conformité)
 [![Qualité](https://img.shields.io/badge/rapport-qualité%20%26%20conformité-B8862F)](docs/RAPPORT-QUALITE.md)
 [![RGPD](https://img.shields.io/badge/RGPD-100%25%20hors--ligne-9E2B32)](#sécurité--rgpd)
 [![Façades](https://img.shields.io/badge/interfaces-CLI%20·%20TUI%20·%20Studio-B8862F)](#trois-interfaces-un-seul-cœur)
@@ -55,7 +55,7 @@ jusqu'aux plateformes SaaS.
 ## Fonctionnalités
 
 - **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, JSON pivot. Détection **par le contenu**, jamais par l'extension.
-- **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **158 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.**
+- **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **165 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.**
 - **Convertir** — CII ⇄ UBL, Factur-X, XRechnung (UBL/CII), Peppol BIS 3.0, JSON, CSV — avec **rapport de perte explicite** et politique `--max-loss`.
 - **Traiter en lot** — découverte récursive, pool de workers, **reprise `--resume`**, quarantaine, **surveillance de dossier** (`watch`).
 - **Comparer** — `diff` sémantique entre deux factures quels que soient leurs formats (distingue **pertes** et **divergences**).
@@ -103,8 +103,8 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 
 ## Conformité
 
-- **158 règles** réparties en trois jeux (`en16931`, `cius.fr`, `kanjo`), chacune avec un test passant et un test échouant ; catalogue généré dans [`docs/rules.md`](docs/rules.md).
-- **Parité mesurée vs Schematron officiel CEN** : **153/223** règles EN 16931 couvertes (**68 %**), suivie automatiquement par [`test/parity_test.go`](test/parity_test.go) (cliquet anti-régression), détail dans [`docs/CONFORMITE-EN16931.md`](docs/CONFORMITE-EN16931.md). Aucune conformité n'est déclarée sans être **mesurée** contre la source officielle.
+- **165 règles** réparties en trois jeux (`en16931`, `cius.fr`, `kanjo`), chacune avec un test passant et un test échouant ; catalogue généré dans [`docs/rules.md`](docs/rules.md).
+- **Parité mesurée vs Schematron officiel CEN** : **160/223** règles EN 16931 couvertes (**71 %**), suivie automatiquement par [`test/parity_test.go`](test/parity_test.go) (cliquet anti-régression), détail dans [`docs/CONFORMITE-EN16931.md`](docs/CONFORMITE-EN16931.md). Aucune conformité n'est déclarée sans être **mesurée** contre la source officielle.
 - **Corpus publiable synthétique** ([`testdata/corpus/published`](testdata/corpus/published)) : **38/38 cas de succès** conformes et **12/12 cas d'erreur** rejetés — vérifié en continu par [`test/corpus_test.go`](test/corpus_test.go).
 - **Corpus réel open-source** ([`fetch.sh`](testdata/corpus/fetch.sh), non vendoré) : **7 365 documents réels** (CEN, Peppol, XRechnung, phive-rules multi-juridictions, ZUGFeRD) lus **sans panic** ; 4 728 lus comme factures, exemples CEN 32/32.
 - **193 tests automatisés** (aller-retour sans perte, corpus, attaques XXE) ; un test de CI **échoue si un verdict de conformité régresse**.

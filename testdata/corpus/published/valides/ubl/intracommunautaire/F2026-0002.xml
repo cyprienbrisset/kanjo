@@ -49,13 +49,30 @@
       </cac:PartyLegalEntity>
     </cac:Party>
   </cac:AccountingCustomerParty>
+  <cac:Delivery>
+    <cbc:ActualDeliveryDate>2026-09-14</cbc:ActualDeliveryDate>
+    <cac:DeliveryLocation>
+      <cac:Address>
+        <cbc:CityName>Berlin</cbc:CityName>
+        <cbc:PostalZone>10115</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>DE</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:Address>
+    </cac:DeliveryLocation>
+    <cac:DeliveryParty>
+      <cac:PartyName>
+        <cbc:Name>EURL Ozero</cbc:Name>
+      </cac:PartyName>
+    </cac:DeliveryParty>
+  </cac:Delivery>
   <cac:PaymentTerms>
     <cbc:Note>Paiement à 30 jours à réception de facture.</cbc:Note>
   </cac:PaymentTerms>
   <cac:TaxTotal>
     <cbc:TaxAmount currencyID="EUR">0.00</cbc:TaxAmount>
     <cac:TaxSubtotal>
-      <cbc:TaxableAmount currencyID="EUR">1502.94</cbc:TaxableAmount>
+      <cbc:TaxableAmount currencyID="EUR">2077.22</cbc:TaxableAmount>
       <cbc:TaxAmount currencyID="EUR">0.00</cbc:TaxAmount>
       <cac:TaxCategory>
         <cbc:ID>K</cbc:ID>
@@ -68,17 +85,17 @@
     </cac:TaxSubtotal>
   </cac:TaxTotal>
   <cac:LegalMonetaryTotal>
-    <cbc:LineExtensionAmount currencyID="EUR">1502.94</cbc:LineExtensionAmount>
-    <cbc:TaxExclusiveAmount currencyID="EUR">1502.94</cbc:TaxExclusiveAmount>
-    <cbc:TaxInclusiveAmount currencyID="EUR">1502.94</cbc:TaxInclusiveAmount>
-    <cbc:PayableAmount currencyID="EUR">1502.94</cbc:PayableAmount>
+    <cbc:LineExtensionAmount currencyID="EUR">2077.22</cbc:LineExtensionAmount>
+    <cbc:TaxExclusiveAmount currencyID="EUR">2077.22</cbc:TaxExclusiveAmount>
+    <cbc:TaxInclusiveAmount currencyID="EUR">2077.22</cbc:TaxInclusiveAmount>
+    <cbc:PayableAmount currencyID="EUR">2077.22</cbc:PayableAmount>
   </cac:LegalMonetaryTotal>
   <cac:InvoiceLine>
     <cbc:ID>1</cbc:ID>
-    <cbc:InvoicedQuantity unitCode="C62">2</cbc:InvoicedQuantity>
-    <cbc:LineExtensionAmount currencyID="EUR">775.66</cbc:LineExtensionAmount>
+    <cbc:InvoicedQuantity unitCode="C62">4</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="EUR">1137.44</cbc:LineExtensionAmount>
     <cac:Item>
-      <cbc:Name>Prestation de conseil</cbc:Name>
+      <cbc:Name>Formation</cbc:Name>
       <cac:ClassifiedTaxCategory>
         <cbc:ID>K</cbc:ID>
         <cbc:Percent>0</cbc:Percent>
@@ -88,13 +105,13 @@
       </cac:ClassifiedTaxCategory>
     </cac:Item>
     <cac:Price>
-      <cbc:PriceAmount currencyID="EUR">387.83</cbc:PriceAmount>
+      <cbc:PriceAmount currencyID="EUR">284.36</cbc:PriceAmount>
     </cac:Price>
   </cac:InvoiceLine>
   <cac:InvoiceLine>
     <cbc:ID>2</cbc:ID>
-    <cbc:InvoicedQuantity unitCode="C62">4</cbc:InvoicedQuantity>
-    <cbc:LineExtensionAmount currencyID="EUR">727.28</cbc:LineExtensionAmount>
+    <cbc:InvoicedQuantity unitCode="C62">3</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="EUR">939.78</cbc:LineExtensionAmount>
     <cac:Item>
       <cbc:Name>Hébergement</cbc:Name>
       <cac:ClassifiedTaxCategory>
@@ -106,7 +123,7 @@
       </cac:ClassifiedTaxCategory>
     </cac:Item>
     <cac:Price>
-      <cbc:PriceAmount currencyID="EUR">181.82</cbc:PriceAmount>
+      <cbc:PriceAmount currencyID="EUR">313.26</cbc:PriceAmount>
     </cac:Price>
   </cac:InvoiceLine>
 </Invoice>

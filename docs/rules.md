@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (154 règles)
+## en16931 (161 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -24,6 +24,7 @@ Version du jeu de règles : **2026.3**
 | BR-14 | error | BT-112 | Le total TVA comprise est obligatoire. |
 | BR-15 | error | BT-115 | Le net à payer est obligatoire. |
 | BR-16 | error | BG-25 | Une facture doit comporter au moins une ligne. |
+| BR-17 | error | BT-59 | Le nom du bénéficiaire est obligatoire si un bénéficiaire est indiqué. |
 | BR-21 | error | BT-126 | Chaque ligne doit avoir un identifiant. |
 | BR-23 | error | BT-130 | Chaque ligne doit indiquer une unité de mesure. |
 | BR-24 | error | BT-131 | Chaque ligne doit porter un montant net. |
@@ -47,6 +48,10 @@ Version du jeu de règles : **2026.3**
 | BR-46 | error | BT-117 | Chaque ventilation de TVA doit porter un montant de TVA. |
 | BR-47 | error | BT-118 | Chaque ventilation de TVA doit indiquer une catégorie. |
 | BR-55 | error | BT-25 | Une référence de facture antérieure doit porter un identifiant. |
+| BR-61 | error | BT-84 | Un paiement par virement impose un identifiant de compte. |
+| BR-62 | error | BT-34 | Une adresse électronique doit porter un identifiant de schéma. |
+| BR-63 | error | BT-49 | Une adresse électronique doit porter un identifiant de schéma. |
+| BR-64 | error | BT-157 | Un identifiant normalisé d'article doit porter un identifiant de schéma. |
 | BR-AE-01 | error | BT-118 | Une catégorie en autoliquidation employée impose une ventilation de TVA correspondante. |
 | BR-AE-02 | error | BT-31, BT-48 | Une catégorie en autoliquidation exige les identifiants TVA du vendeur et de l'acheteur. |
 | BR-AE-03 | error | BT-31, BT-48 | Une remise en autoliquidation exige les identifiants TVA du vendeur et de l'acheteur. |
@@ -131,6 +136,8 @@ Version du jeu de règles : **2026.3**
 | BR-IC-08 | error | BT-116 | La base d'imposition d'une ventilation intracommunautaire doit égaler la somme des montants de cette catégorie. |
 | BR-IC-09 | error | BT-117 | Le montant de TVA d'une ventilation intracommunautaire doit être nul. |
 | BR-IC-10 | error | BT-120, BT-121 | Une TVA intracommunautaire doit indiquer un motif d'exonération. |
+| BR-IC-11 | error | BT-72, BG-14 | Une facture intracommunautaire doit indiquer une date de livraison ou une période. |
+| BR-IC-12 | error | BT-80 | Une facture intracommunautaire doit indiquer le pays de livraison. |
 | BR-O-01 | error | BT-118 | Une catégorie hors champ employée impose une ventilation de TVA correspondante. |
 | BR-O-02 | error | BT-151, BT-31, BT-48 | Une catégorie « hors champ de la TVA » interdit les identifiants de TVA. |
 | BR-O-03 | error | BT-95, BT-31, BT-48 | Une catégorie « hors champ de la TVA » interdit les identifiants de TVA. |
