@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (202 règles)
+## en16931 (211 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -97,6 +97,8 @@ Version du jeu de règles : **2026.3**
 | BR-CL-03 | error | BT-5 | La devise des montants doit être un code ISO 4217. |
 | BR-CL-04 | error | BT-5 | Le code devise de la facture doit être un code ISO 4217. |
 | BR-CL-05 | error | BT-6 | La devise de comptabilisation de la TVA doit être un code ISO 4217. |
+| BR-CL-10 | error | BT-29 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
+| BR-CL-11 | error | BT-30 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
 | BR-CL-14 | error | BT-40, BT-55, BT-80 | Les codes pays doivent appartenir à la liste ISO 3166-1. |
 | BR-CL-15 | error | BT-40, BT-55, BT-80 | Les codes pays doivent appartenir à la liste ISO 3166-1. |
 | BR-CL-16 | error | BT-81 | Le moyen de paiement doit appartenir à la liste UNCL 4461. |
@@ -104,8 +106,15 @@ Version du jeu de règles : **2026.3**
 | BR-CL-18 | error | BT-118, BT-151 | Le code catégorie de TVA doit appartenir à la liste UNCL 5305. |
 | BR-CL-19 | error | BT-98 | Le code motif de remise/charge doit appartenir à sa liste officielle. |
 | BR-CL-20 | error | BT-105 | Le code motif de remise/charge doit appartenir à sa liste officielle. |
-| BR-CL-25 | error | BT-34, BT-49 | Le schéma d'une adresse électronique doit appartenir à la liste CEF EAS. |
+| BR-CL-21 | error | BT-157-1 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
+| BR-CL-24 | error | BT-125-1 | Le type MIME d'une pièce jointe doit appartenir à la liste autorisée. |
+| BR-CL-26 | error | BT-71-1 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
+| BR-CO-03 | error | BT-7, BT-8 | La date d'exigibilité de la TVA et son code sont mutuellement exclusifs. |
 | BR-CO-04 | error | BT-151 | Chaque ligne doit porter une catégorie de TVA. |
+| BR-CO-05 | error | BT-98 | Code motif et motif de remise (document) doivent indiquer le même type. |
+| BR-CO-06 | error | BT-105 | Code motif et motif de charge (document) doivent indiquer le même type. |
+| BR-CO-07 | error | BT-140 | Code motif et motif de remise (ligne) doivent indiquer le même type. |
+| BR-CO-08 | error | BT-145 | Code motif et motif de charge (ligne) doivent indiquer le même type. |
 | BR-CO-09 | error | BT-31 | Le n° de TVA du vendeur doit commencer par un préfixe pays à deux lettres. |
 | BR-CO-10 | error | BT-106, BT-131 | La somme des montants nets de ligne doit être égale au total des lignes (BT-106). |
 | BR-CO-11 | error | BT-107, BT-92 | Le total des remises (BT-107) doit être égal à la somme des remises de niveau document. |
