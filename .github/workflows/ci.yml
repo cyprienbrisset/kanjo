@@ -54,4 +54,48 @@ jobs:
       - name: Vérifier docs/rules.md
         run: go test ./pkg/rules/ -run TestRulesDocInSync
 
+  pdfa-verapdf:
+    name: Conformité PDF/A (veraPDF)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Installer veraPDF (validateur PDF/A de référence, open source)
+        run: |
+          set -euo pipefail
+          curl -sL -o verapdf-installer.zip \
+            https://software.verapdf.org/releases/verapdf-installer.zip
+          unzip -q verapdf-installer.zip -d verapdf-installer
+          installer=$(find verapdf-installer -name 'verapdf-install' | head -1)
+          # Installation silencieuse via fichier de réponses AutomatedInstallation.
+          cat > auto-install.xml <<'XML'
+          <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+          <AutomatedInstallation langpack="eng">
+            <com.izforge.izpack.panels.htmlhello.HTMLHelloPanel id="welcome"/>
+            <com.izforge.izpack.panels.target.TargetPanel id="install_dir">
+              <installpath>${HOME}/verapdf</installpath>
+            </com.izforge.izpack.panels.target.TargetPanel>
+            <com.izforge.izpack.panels.packs.PacksPanel id="sdk_pack_select">
+              <pack index="0" name="veraPDF GUI" selected="true"/>
+              <pack index="1" name="veraPDF Mac and *nix Startup Scripts" selected="true"/>
+            </com.izforge.izpack.panels.packs.PacksPanel>
+            <com.izforge.izpack.panels.install.InstallPanel id="install"/>
+            <com.izforge.izpack.panels.finish.FinishPanel id="finish"/>
+          </AutomatedInstallation>
+          XML
+          # Le chemin d'installation doit être littéral (izpack n'interpole pas ${HOME}).
+          sed -i "s|\${HOME}|$HOME|g" auto-install.xml
+          "$installer" auto-install.xml
+          echo "$HOME/verapdf" >> "$GITHUB_PATH"
+      - name: Vérifier veraPDF
+        run: verapdf --version
+      - name: Valider le corpus PDF/A réel + la sortie d'embed
+        run: go test ./pkg/pdfa/ -run 'VeraPDF' -v
+
 # La GitHub Page est servie directement depuis le dossier /docs (Settings → Pages).

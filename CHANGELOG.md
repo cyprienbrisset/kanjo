@@ -70,6 +70,16 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   ainsi être validée, convertie (UBL/CII/Factur-X) et rendue lisible comme tout autre format.
 
 ### Ajouté (conformité PDF/A)
+- **Association Factur-X structurelle à l'embarquement** : `embed` établit désormais l'association
+  exigée par PDF/A-3 — l'`EmbeddedFile` porte `/Subtype text/xml` et `/Params`, la spécification de
+  fichier porte **`/AFRelationship /Data`**, et le catalogue référence le fichier via un tableau
+  **`/AF`** (ISO 19005-3 §6.8). Vérifié par **relecture** du PDF produit (`pkg/pdfa` :
+  `TestEmbedEstablishesFacturXAssociation`). L'association rend le XML *associé* au document, pas
+  une simple pièce jointe.
+- **Job CI veraPDF + corpus PDF/A réel** : une facture **Factur-X EN 16931 réelle** (PDF/A-3b,
+  corpus akretion, BSD) est archivée dans `testdata/corpus/pdfa/` ; un job CI installe **veraPDF** et
+  valide effectivement ce PDF ainsi que la sortie d'`embed`. La préservation globale de la conformité
+  PDF/A-3b après réécriture est **mesurée**, jamais supposée (§17.7).
 - **Validation PDF/A-3b effective** via veraPDF : `pkg/pdfa.ValidatePDFA` + option
   `kanjo embed --verify-pdfa`. Verdict réel quand veraPDF est installé ; **jamais de conformité
   déclarée sans validation** (§17.7) — en l'absence de l'outil, le rapport l'indique explicitement.
