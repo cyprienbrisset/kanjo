@@ -12,6 +12,29 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (formats)
+- **Écriture UN/EDIFACT INVOIC** (`pkg/write/edifact`) — sérialiseur natif D.96A (ISO 9735,
+  séparateurs de service par défaut, échappement) : en-tête d'interchange complet (UNB…UNZ),
+  parties, lignes, catégories/taux de TVA, totaux. **Aller-retour pivot→EDIFACT→pivot testé.**
+  Limite assumée : la richesse EN 16931 non transportable par INVOIC n'est pas émise (rien inventé, §17.7).
+- **Lecteur UN/EDIFACT INVOIC** (`pkg/read/edifact`) — nouvel analyseur natif (ISO 9735), conscient
+  du segment de service `UNA` et du caractère d'échappement, sans dépendance externe. Cartographie
+  BGM/DTM/NAD/RFF/CUX/LIN/IMD/QTY/MOA/PRI/TAX vers le pivot ; détection par le contenu (`UNA`/`UNB`).
+  Testé sur des messages **réels** (corpus pydifact, MIT). §17.7 respecté (rien inventé).
+- **Correctif tokeniseur EDIFACT** : un séparateur de composant échappé (`?:`) à l'intérieur d'une
+  valeur était scindé à tort (découpage en deux passes retirant l'échappement trop tôt). Le premier
+  niveau préserve désormais l'échappement ; le second seul le retire. Couvert par un test d'échappement.
+
+### Conformité (jeu de règles)
+- **BR-01 activée** — la présence de l'identifiant de spécification (BT-24) est désormais vérifiée.
+  Il est tracé dans la provenance à la lecture : `CustomizationID` (UBL), `GuidelineSpecifiedDocumentContextParameter` (CII),
+  attribut racine `versione`/`FormatoTrasmissione` (FatturaPA). Les factures produites par `generate`
+  portent l'URN EN 16931. **Parité EN 16931 : 213 → 214 / 223 (96 %)** ; cliquet relevé à 214.
+
+### Sécurité
+- **Fuzzing Go natif** du durcissement XML (`internal/xmlsafe`) et des lecteurs (`pkg/read`) :
+  aucune entrée aléatoire, tronquée ou malveillante ne provoque de panic (contrat testé en continu).
+
 ### Modifié (cohérence UI)
 - **Suppression des idéogrammes de l'interface CLI** (comme déjà fait dans la GUI) : marqueurs de
   statut clairs et universels `✓` / `⚠` / `✗` / `·`, en-têtes `▸`, bandeaux sans idéogramme. Le

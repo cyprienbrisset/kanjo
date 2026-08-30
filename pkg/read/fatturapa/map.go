@@ -62,6 +62,14 @@ func mapToPivot(x *fattura, sourceName string) (*model.Document, error) {
 	}
 
 	doc.Provenance = model.NewProvenance(sourceName, "fatturapa", "")
+	// FatturaPA porte son identifiant de spécification via l'attribut racine `versione`
+	// (FPA12/FPR12), ou à défaut FormatoTrasmissione : c'est l'équivalent italien de BT-24,
+	// tracé tel quel dans la provenance.
+	if spec := strings.TrimSpace(x.Versione); spec != "" {
+		doc.Provenance.SpecIdentifier = spec
+	} else if spec := strings.TrimSpace(x.Header.FormatoTrasmissione); spec != "" {
+		doc.Provenance.SpecIdentifier = spec
+	}
 	return doc, nil
 }
 
