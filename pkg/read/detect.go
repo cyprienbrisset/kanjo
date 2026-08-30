@@ -19,6 +19,11 @@ func Detect(data []byte) Format {
 		return FormatFacturX
 	}
 
+	// UN/EDIFACT : le flux débute par le segment de service UNA ou l'en-tête d'interchange UNB.
+	if bytes.HasPrefix(trimmed, []byte("UNA")) || bytes.HasPrefix(trimmed, []byte("UNB")) {
+		return FormatEDIFACT
+	}
+
 	// JSON pivot Kanjō.
 	if len(trimmed) > 0 && trimmed[0] == '{' {
 		if bytes.Contains(trimmed, []byte(`"schemaVersion"`)) && bytes.Contains(trimmed, []byte(`kanjo/1`)) {

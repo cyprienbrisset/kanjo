@@ -14,7 +14,12 @@ func TestDetect(t *testing.T) {
 		{"UBL Invoice", `<?xml version="1.0"?><Invoice xmlns="urn:oasis:names:...:Invoice-2">`, FormatUBLInvoice},
 		{"UBL CreditNote", `<?xml version="1.0"?><CreditNote xmlns="urn:oasis:names:...:CreditNote-2">`, FormatUBLCreditNote},
 		{"PDF", "%PDF-1.7\n...", FormatFacturX},
+<<<<<<< HEAD
 		{"Order-X", `<?xml version="1.0"?><rsm:SCRDMCCBDACIOMESSAGE xmlns:rsm="urn:un:unece:uncefact:data:standard:SCRDMCCBDACIOMESSAGEStructure:100">`, FormatOrderX},
+=======
+		{"EDIFACT UNB", "UNB+UNOA:1+X+Y+991006:1902+REF'UNH+1+INVOIC:D:97A:UN'", FormatEDIFACT},
+		{"EDIFACT UNA", "UNA:+.? 'UNB+UNOA:1+X+Y", FormatEDIFACT},
+>>>>>>> origin/main
 		{"Kanjo JSON", `{"schemaVersion":"github.com/cyprienbrisset/kanjo/1"}`, FormatKanjoJSON},
 		{"JSON quelconque", `{"foo":"bar"}`, FormatUnknown},
 		{"inconnu", `bonjour`, FormatUnknown},

@@ -12,12 +12,53 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+<<<<<<< HEAD
 ### Ajouté (nouveau format)
 - **Order-X (bon de commande hybride)** — lecture et écriture (`pkg/read/orderx`, `pkg/write/orderx`)
   du format UN/CEFACT SCRDM `SCRDMCCBDACIOMESSAGE` (CrossIndustryOrder), profil comfort. Partage la
   structure CII ; spécificités gérées : racine SCRDM, `OrderCurrencyCode`, `RequestedQuantity`,
   TypeCode 220 (commande). Détection par le contenu. **Aller-retour pivot→Order-X→pivot testé** et
   lecture d'un **échantillon Order-X réaliste**. Cible `orderx` (`kanjo convert --to orderx`).
+=======
+<<<<<<< HEAD
+### Ajouté (audit & conformité)
+- **Journal d'audit chaîné (tamper-evident)** : chaque entrée porte un numéro de séquence, l'empreinte
+  de la précédente (`prevHash`) et sa propre empreinte SHA-256 (`pkg/audit`). `kanjo audit verify`
+  recalcule la chaîne et **détecte toute modification, suppression ou réinsertion** (code de sortie non
+  nul en cas de rupture). Aucune donnée métier dans l'empreinte (§17.5).
+- **Export d'audit consolidé** : `kanjo audit export --from <date> --to <date> --format csv|jsonl|html`
+  — filtrage par période et **rapport HTML imprimable** (dossier de preuve RGPD/ISO 27001) affichant le
+  bilan d'intégrité. Sans donnée personnelle.
+=======
+### Ajouté (formats)
+- **Écriture FatturaPA** (`pkg/write/fatturapa`) — sérialiseur FatturaElettronica v1.2 (profil FPR12) :
+  root préfixé `p:`, en-tête (cédant/cessionnaire, TVA scindée IdPaese/IdCodice, adresses), document
+  (TipoDocumento TD01/TD04 selon facture/avoir), lignes, ventilation (`DatiRiepilogo` avec `Natura`
+  déduite de la catégorie de TVA), paiement. **Aller-retour pivot→FatturaPA→pivot testé.** Extensions
+  purement italiennes non modélisées (bollo, ritenuta, CIG/CUP…) non émises (§17.7, rien inventé).
+- **Écriture UN/EDIFACT INVOIC** (`pkg/write/edifact`) — sérialiseur natif D.96A (ISO 9735,
+  séparateurs de service par défaut, échappement) : en-tête d'interchange complet (UNB…UNZ),
+  parties, lignes, catégories/taux de TVA, totaux. **Aller-retour pivot→EDIFACT→pivot testé.**
+  Limite assumée : la richesse EN 16931 non transportable par INVOIC n'est pas émise (rien inventé, §17.7).
+- **Lecteur UN/EDIFACT INVOIC** (`pkg/read/edifact`) — nouvel analyseur natif (ISO 9735), conscient
+  du segment de service `UNA` et du caractère d'échappement, sans dépendance externe. Cartographie
+  BGM/DTM/NAD/RFF/CUX/LIN/IMD/QTY/MOA/PRI/TAX vers le pivot ; détection par le contenu (`UNA`/`UNB`).
+  Testé sur des messages **réels** (corpus pydifact, MIT). §17.7 respecté (rien inventé).
+- **Correctif tokeniseur EDIFACT** : un séparateur de composant échappé (`?:`) à l'intérieur d'une
+  valeur était scindé à tort (découpage en deux passes retirant l'échappement trop tôt). Le premier
+  niveau préserve désormais l'échappement ; le second seul le retire. Couvert par un test d'échappement.
+
+### Conformité (jeu de règles)
+- **BR-01 activée** — la présence de l'identifiant de spécification (BT-24) est désormais vérifiée.
+  Il est tracé dans la provenance à la lecture : `CustomizationID` (UBL), `GuidelineSpecifiedDocumentContextParameter` (CII),
+  attribut racine `versione`/`FormatoTrasmissione` (FatturaPA). Les factures produites par `generate`
+  portent l'URN EN 16931. **Parité EN 16931 : 213 → 214 / 223 (96 %)** ; cliquet relevé à 214.
+
+### Sécurité
+- **Fuzzing Go natif** du durcissement XML (`internal/xmlsafe`) et des lecteurs (`pkg/read`) :
+  aucune entrée aléatoire, tronquée ou malveillante ne provoque de panic (contrat testé en continu).
+>>>>>>> origin/main
+>>>>>>> origin/main
 
 ### Modifié (cohérence UI)
 - **Suppression des idéogrammes de l'interface CLI** (comme déjà fait dans la GUI) : marqueurs de
@@ -77,6 +118,16 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   ainsi être validée, convertie (UBL/CII/Factur-X) et rendue lisible comme tout autre format.
 
 ### Ajouté (conformité PDF/A)
+- **Association Factur-X structurelle à l'embarquement** : `embed` établit désormais l'association
+  exigée par PDF/A-3 — l'`EmbeddedFile` porte `/Subtype text/xml` et `/Params`, la spécification de
+  fichier porte **`/AFRelationship /Data`**, et le catalogue référence le fichier via un tableau
+  **`/AF`** (ISO 19005-3 §6.8). Vérifié par **relecture** du PDF produit (`pkg/pdfa` :
+  `TestEmbedEstablishesFacturXAssociation`). L'association rend le XML *associé* au document, pas
+  une simple pièce jointe.
+- **Job CI veraPDF + corpus PDF/A réel** : une facture **Factur-X EN 16931 réelle** (PDF/A-3b,
+  corpus akretion, BSD) est archivée dans `testdata/corpus/pdfa/` ; un job CI installe **veraPDF** et
+  valide effectivement ce PDF ainsi que la sortie d'`embed`. La préservation globale de la conformité
+  PDF/A-3b après réécriture est **mesurée**, jamais supposée (§17.7).
 - **Validation PDF/A-3b effective** via veraPDF : `pkg/pdfa.ValidatePDFA` + option
   `kanjo embed --verify-pdfa`. Verdict réel quand veraPDF est installé ; **jamais de conformité
   déclarée sans validation** (§17.7) — en l'absence de l'outil, le rapport l'indique explicitement.
