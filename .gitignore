@@ -20,3 +20,6 @@
 # État de plugins éditeur
 /.claude/
 /.idea/
+
+# Corpus de fuzzing généré (crashers commités à la main si besoin)
+testdata/fuzz/Fuzz*/
