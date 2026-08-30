@@ -12,6 +12,16 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+<<<<<<< HEAD
+### Ajouté (audit & conformité)
+- **Journal d'audit chaîné (tamper-evident)** : chaque entrée porte un numéro de séquence, l'empreinte
+  de la précédente (`prevHash`) et sa propre empreinte SHA-256 (`pkg/audit`). `kanjo audit verify`
+  recalcule la chaîne et **détecte toute modification, suppression ou réinsertion** (code de sortie non
+  nul en cas de rupture). Aucune donnée métier dans l'empreinte (§17.5).
+- **Export d'audit consolidé** : `kanjo audit export --from <date> --to <date> --format csv|jsonl|html`
+  — filtrage par période et **rapport HTML imprimable** (dossier de preuve RGPD/ISO 27001) affichant le
+  bilan d'intégrité. Sans donnée personnelle.
+=======
 ### Ajouté (formats)
 - **Écriture FatturaPA** (`pkg/write/fatturapa`) — sérialiseur FatturaElettronica v1.2 (profil FPR12) :
   root préfixé `p:`, en-tête (cédant/cessionnaire, TVA scindée IdPaese/IdCodice, adresses), document
@@ -39,6 +49,7 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 ### Sécurité
 - **Fuzzing Go natif** du durcissement XML (`internal/xmlsafe`) et des lecteurs (`pkg/read`) :
   aucune entrée aléatoire, tronquée ou malveillante ne provoque de panic (contrat testé en continu).
+>>>>>>> origin/main
 
 ### Modifié (cohérence UI)
 - **Suppression des idéogrammes de l'interface CLI** (comme déjà fait dans la GUI) : marqueurs de

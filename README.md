@@ -60,8 +60,13 @@ jusqu'aux plateformes SaaS.
 - **Traiter en lot** — découverte récursive, pool de workers, **reprise `--resume`**, quarantaine, **surveillance de dossier** (`watch`).
 - **Comparer** — `diff` sémantique entre deux factures quels que soient leurs formats (distingue **pertes** et **divergences**).
 - **Rendre lisible** — facture **HTML autonome** et **rapport de validation** imprimable, dans le design de l'application.
+<<<<<<< HEAD
+- **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle, **chaîné (tamper-evident)** : `audit verify` détecte toute modification/suppression, `audit export --from/--to --format html` produit un **rapport consolidé signé de son empreinte**.
+- **Extraire / embarquer** — `extract` le XML d'une Factur-X, `embed` un XML dans un PDF.
+=======
 - **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle.
 - **Extraire / embarquer** — `extract` le XML d'une Factur-X ; `embed` un XML dans un PDF en établissant l'**association Factur-X** exigée par PDF/A-3 (`/AF`, `/AFRelationship /Data`, `EmbeddedFile` en `text/xml`). Conformité PDF/A-3b **validée par veraPDF** (`--verify-pdfa`), jamais déclarée sans validation.
+>>>>>>> origin/main
 - **Générer** — `generate` un corpus synthétique (scénarios TVA variés, cas volontairement invalides).
 
 ## Démarrer
