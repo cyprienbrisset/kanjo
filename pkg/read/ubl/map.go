@@ -251,6 +251,7 @@ func mapTax(ts ublTaxSubtotal, currency string) (model.TaxSubtotal, error) {
 	return model.TaxSubtotal{
 		Category:            model.TaxCategoryCode(strings.TrimSpace(ts.Category.ID)),
 		Rate:                rate,
+		RatePresent:         strings.TrimSpace(ts.Category.Percent) != "",
 		TaxableAmount:       basis,
 		TaxAmount:           amount,
 		ExemptionReason:     strings.TrimSpace(ts.Category.ExemptionReason),
@@ -278,19 +279,22 @@ func mapLine(l *ublLine, creditNote bool, currency string) (model.Line, error) {
 		return model.Line{}, fmt.Errorf("montant net (BT-131): %w", err)
 	}
 	out := model.Line{
-		ID:               strings.TrimSpace(l.ID),
-		Note:             strings.TrimSpace(l.Note),
-		Name:             strings.TrimSpace(l.Item.Name),
-		Description:      strings.TrimSpace(l.Item.Description),
-		SellerAssignedID: strings.TrimSpace(l.Item.SellersItemID),
-		BuyerAssignedID:  strings.TrimSpace(l.Item.BuyersItemID),
-		StandardID:       strings.TrimSpace(l.Item.StandardItemID.Value),
-		StandardScheme:   strings.TrimSpace(l.Item.StandardItemID.Scheme),
-		Quantity:         qty,
-		UnitCode:         model.UnitCode(strings.TrimSpace(unit)),
-		NetPrice:         netPrice,
-		NetAmount:        netAmount,
-		TaxCategory:      model.TaxCategoryCode(strings.TrimSpace(l.Item.ClassifiedTaxCategory.ID)),
+		ID:                   strings.TrimSpace(l.ID),
+		Note:                 strings.TrimSpace(l.Note),
+		Name:                 strings.TrimSpace(l.Item.Name),
+		Description:          strings.TrimSpace(l.Item.Description),
+		SellerAssignedID:     strings.TrimSpace(l.Item.SellersItemID),
+		BuyerAssignedID:      strings.TrimSpace(l.Item.BuyersItemID),
+		StandardID:           strings.TrimSpace(l.Item.StandardItemID.Value),
+		StandardScheme:       strings.TrimSpace(l.Item.StandardItemID.Scheme),
+		ClassificationID:     strings.TrimSpace(l.Item.Classification.Value),
+		ClassificationScheme: strings.TrimSpace(l.Item.Classification.ListID),
+		Quantity:             qty,
+		QuantityPresent:      strings.TrimSpace(qtyStr) != "",
+		UnitCode:             model.UnitCode(strings.TrimSpace(unit)),
+		NetPrice:             netPrice,
+		NetAmount:            netAmount,
+		TaxCategory:          model.TaxCategoryCode(strings.TrimSpace(l.Item.ClassifiedTaxCategory.ID)),
 	}
 	if r := strings.TrimSpace(l.Item.ClassifiedTaxCategory.Percent); r != "" {
 		rate, err := model.ParseDecimal(r)

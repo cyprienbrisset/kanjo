@@ -136,6 +136,7 @@ func mapToPivot(x *order, sourceName string) (*model.Document, error) {
 		if q := strings.TrimSpace(l.Delivery.Requested.Value); q != "" {
 			if dq, err := model.ParseDecimal(q); err == nil {
 				line.Quantity = dq
+				line.QuantityPresent = true
 			}
 		}
 		if p := strings.TrimSpace(l.Agreement.Net.ChargeAmount); p != "" {

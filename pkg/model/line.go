@@ -18,13 +18,23 @@ type Line struct {
 	StandardScheme   string `json:"standardScheme,omitempty"`
 	OriginCountry    string `json:"originCountry,omitempty"` // BT-159
 
+	// Classification de marchandise (BT-158) — optionnelle ; si présente, son schéma (listID)
+	// est requis par BR-65.
+	ClassificationID     string `json:"classificationId,omitempty"`     // BT-158
+	ClassificationScheme string `json:"classificationScheme,omitempty"` // schéma (listID) de BT-158
+
 	// Quantité et prix
-	Quantity      Decimal  `json:"quantity"`                    // BT-129 quantité facturée
-	UnitCode      UnitCode `json:"unitCode"`                    // BT-130 unité
-	NetPrice      Amount   `json:"netPrice"`                    // BT-146 prix unitaire net
-	PriceBaseQty  *Decimal `json:"priceBaseQuantity,omitempty"` // BT-149 quantité de base du prix
-	GrossPrice    *Amount  `json:"grossPrice,omitempty"`        // BT-148 prix unitaire brut
-	PriceDiscount *Amount  `json:"priceDiscount,omitempty"`     // BT-147 remise sur prix unitaire
+	Quantity Decimal  `json:"quantity"` // BT-129 quantité facturée
+	UnitCode UnitCode `json:"unitCode"` // BT-130 unité
+
+	// QuantityPresent indique que la quantité (BT-129) était réellement portée par la source
+	// (distinction « absent » vs « zéro », règle 5 du CDC), nécessaire à BR-22. Métadonnée de
+	// lecture, non sérialisée.
+	QuantityPresent bool     `json:"-"`
+	NetPrice        Amount   `json:"netPrice"`                    // BT-146 prix unitaire net
+	PriceBaseQty    *Decimal `json:"priceBaseQuantity,omitempty"` // BT-149 quantité de base du prix
+	GrossPrice      *Amount  `json:"grossPrice,omitempty"`        // BT-148 prix unitaire brut
+	PriceDiscount   *Amount  `json:"priceDiscount,omitempty"`     // BT-147 remise sur prix unitaire
 
 	// TVA de la ligne (BG-30)
 	TaxCategory TaxCategoryCode `json:"taxCategory"`       // BT-151

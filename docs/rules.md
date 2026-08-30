@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (215 règles)
+## en16931 (218 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -30,6 +30,7 @@ Version du jeu de règles : **2026.3**
 | BR-19 | error | BG-12 | L'adresse postale du représentant fiscal est obligatoire. |
 | BR-20 | error | BT-69 | Le code pays du représentant fiscal est obligatoire. |
 | BR-21 | error | BT-126 | Chaque ligne doit avoir un identifiant. |
+| BR-22 | error | BT-129 | Chaque ligne doit porter une quantité (BT-129). |
 | BR-23 | error | BT-130 | Chaque ligne doit indiquer une unité de mesure. |
 | BR-24 | error | BT-131 | Chaque ligne doit porter un montant net. |
 | BR-25 | error | BT-153 | Chaque ligne doit désigner un article (nom). |
@@ -51,6 +52,7 @@ Version du jeu de règles : **2026.3**
 | BR-45 | error | BT-116 | Chaque ventilation de TVA doit porter un montant imposable. |
 | BR-46 | error | BT-117 | Chaque ventilation de TVA doit porter un montant de TVA. |
 | BR-47 | error | BT-118 | Chaque ventilation de TVA doit indiquer une catégorie. |
+| BR-48 | error | BT-119 | Chaque ventilation de TVA doit porter un taux (BT-119), sauf hors champ (O). |
 | BR-49 | error | BT-81 | Une instruction de paiement doit préciser un moyen de paiement. |
 | BR-50 | error | BT-84 | Un virement doit indiquer un identifiant de compte. |
 | BR-51 | warning | BT-87 | Le numéro de carte doit être masqué (au plus 10 caractères). |
@@ -64,6 +66,7 @@ Version du jeu de règles : **2026.3**
 | BR-62 | error | BT-34 | Une adresse électronique doit porter un identifiant de schéma. |
 | BR-63 | error | BT-49 | Une adresse électronique doit porter un identifiant de schéma. |
 | BR-64 | error | BT-157 | Un identifiant normalisé d'article doit porter un identifiant de schéma. |
+| BR-65 | error | BT-158 | La classification d'article (BT-158) doit porter un identifiant de schéma. |
 | BR-AE-01 | error | BT-118 | Une catégorie en autoliquidation employée impose une ventilation de TVA correspondante. |
 | BR-AE-02 | error | BT-31, BT-48 | Une catégorie en autoliquidation exige les identifiants TVA du vendeur et de l'acheteur. |
 | BR-AE-03 | error | BT-31, BT-48 | Une remise en autoliquidation exige les identifiants TVA du vendeur et de l'acheteur. |

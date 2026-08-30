@@ -80,6 +80,12 @@ type ciiLine struct {
 		BuyerAssignedID  string `xml:"BuyerAssignedID"`
 		Name             string `xml:"Name"`
 		Description      string `xml:"Description"`
+		Classification   struct {
+			Code struct {
+				ListID string `xml:"listID,attr"`
+				Value  string `xml:",chardata"`
+			} `xml:"ClassCode"`
+		} `xml:"DesignatedProductClassification"` // BT-158
 	} `xml:"SpecifiedTradeProduct"`
 	Agreement struct {
 		Gross struct {
