@@ -1,6 +1,9 @@
 package model
 
-import "strings"
+import (
+	_ "embed"
+	"strings"
+)
 
 // Listes de codes officielles pour la validation (BR-CL-*). Stockées en chaînes compactes et
 // indexées à l'init() : plus léger qu'une map littérale, et facile à mettre à jour.
@@ -88,3 +91,11 @@ func IsKnownChargeReason(code string) bool { return knownChargeReasons[code] }
 
 // IsKnownEAS indique si le schéma d'adresse électronique appartient à la liste CEF EAS.
 func IsKnownEAS(code string) bool { return knownEAS[code] }
+
+//go:embed codelists_data/icd.txt
+var icdData string
+
+var knownICD = fieldSet(icdData)
+
+// IsKnownICD indique si le schéma d'identifiant appartient au registre ISO 6523 ICD (inclut EAS).
+func IsKnownICD(code string) bool { return knownICD[code] }
