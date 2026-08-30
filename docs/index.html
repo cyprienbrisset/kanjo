@@ -112,7 +112,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   ajouter un format, c'est un lecteur et un écrivain — pas une explosion de convertisseurs. Le cœur
   ne dépend que de la bibliothèque standard, et rien ne sort du poste sans action explicite.</p>
  <div class="grid">
-  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>Lire &amp; inspecter</h3><p>Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, FatturaPA, UN/EDIFACT INVOIC, JSON pivot. Détection par le contenu, jamais par l'extension.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>Lire &amp; inspecter</h3><p>Factur-X (PDF/A-3), UBL, CII D16B, FatturaPA, UN/EDIFACT INVOIC, Order-X, JSON pivot. Détection par le contenu, jamais par l'extension.</p></div>
   <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Valider</h3><p>Moteur EN 16931 natif (BR / BR-CO / BR-CL / BR-DEC / BR-S/Z/E/AE/K/G/O), CIUS française et règles maison. Calculé, jamais simulé.</p></div>
   <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>Convertir</h3><p>CII ⇄ UBL, Factur-X, XRechnung (UBL/CII), Peppol BIS 3.0, JSON, CSV — avec rapport de perte explicite.</p></div>
   <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Traiter en lot</h3><p>Découverte récursive, pool de workers, reprise sur incident, quarantaine, surveillance de dossier.</p></div>
@@ -201,17 +201,9 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   <tr><td>Peppol BIS Billing 3.0</td><td class="ok">✓ via UBL</td><td class="ok">✓</td><td class="ok">✓</td></tr>
   <tr><td>JSON pivot · CSV</td><td class="ok">✓ / —</td><td class="ok">✓ / ✓</td><td class="ok">✓</td></tr>
   <tr><td>ZUGFeRD 1.0 (hérité, CII D14B)</td><td class="ok">✓</td><td class="later">roadmap</td><td class="ok">✓</td></tr>
-<<<<<<< HEAD
-  <tr><td>FatturaPA (FatturaElettronica v1.2)</td><td class="ok">✓ lecture</td><td class="later">roadmap</td><td class="ok">✓</td></tr>
-  <tr><td>Order-X (bon de commande, CrossIndustryOrder)</td><td class="ok">✓ lecture</td><td class="ok">✓ écriture</td><td class="later">—</td></tr>
-  <tr><td>EDIFACT INVOIC</td><td class="later">roadmap</td><td class="later">roadmap</td><td class="later">roadmap</td></tr>
-=======
   <tr><td>FatturaPA (FatturaElettronica v1.2)</td><td class="ok">✓ lecture</td><td class="ok">✓ écriture</td><td class="ok">✓</td></tr>
-  <tr><td>Order-X · EDIFACT</td><td class="later">roadmap</td><td class="later">roadmap</td><td class="later">roadmap</td></tr>
-  <tr><td>FatturaPA (FatturaElettronica v1.2)</td><td class="ok">✓ lecture</td><td class="later">roadmap</td><td class="ok">✓</td></tr>
   <tr><td>UN/EDIFACT INVOIC (D.96A)</td><td class="ok">✓ lecture</td><td class="ok">✓ écriture</td><td class="ok">✓</td></tr>
-  <tr><td>Order-X</td><td class="later">roadmap</td><td class="later">roadmap</td><td class="later">roadmap</td></tr>
->>>>>>> origin/main
+  <tr><td>Order-X (bon de commande, CrossIndustryOrder)</td><td class="ok">✓ lecture</td><td class="ok">✓ écriture</td><td class="later">—</td></tr>
  </table>
 
  <h3 style="margin-top:40px">Conformité PDF/A (Factur-X) — mesurée par veraPDF</h3>
