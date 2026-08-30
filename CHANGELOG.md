@@ -12,6 +12,13 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (formats)
+- **Écriture FatturaPA** (`pkg/write/fatturapa`) — sérialiseur FatturaElettronica v1.2 (profil FPR12) :
+  root préfixé `p:`, en-tête (cédant/cessionnaire, TVA scindée IdPaese/IdCodice, adresses), document
+  (TipoDocumento TD01/TD04 selon facture/avoir), lignes, ventilation (`DatiRiepilogo` avec `Natura`
+  déduite de la catégorie de TVA), paiement. **Aller-retour pivot→FatturaPA→pivot testé.** Extensions
+  purement italiennes non modélisées (bollo, ritenuta, CIG/CUP…) non émises (§17.7, rien inventé).
+
 ### Modifié (cohérence UI)
 - **Suppression des idéogrammes de l'interface CLI** (comme déjà fait dans la GUI) : marqueurs de
   statut clairs et universels `✓` / `⚠` / `✗` / `·`, en-têtes `▸`, bandeaux sans idéogramme. Le
