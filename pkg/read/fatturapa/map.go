@@ -115,6 +115,7 @@ func mapLine(l dettaglioLinea, currency string) (model.Line, error) {
 		return model.Line{}, fmt.Errorf("quantité: %w", err)
 	}
 	out.Quantity = q
+	out.QuantityPresent = true // FatturaPA porte toujours une quantité (défaut 1 si omise)
 
 	if out.NetPrice, err = model.ParseAmount(orZero(l.PrezzoUnitario), currency); err != nil {
 		return model.Line{}, fmt.Errorf("prix unitaire: %w", err)
@@ -148,6 +149,7 @@ func mapRiepilogo(r datiRiepilogo, currency string) (model.TaxSubtotal, error) {
 	return model.TaxSubtotal{
 		Category:      category(r.AliquotaIVA, r.Natura),
 		Rate:          rate,
+		RatePresent:   trimmed(r.AliquotaIVA) != "",
 		TaxableAmount: base,
 		TaxAmount:     tax,
 	}, nil

@@ -103,6 +103,7 @@ func mapToPivot(segs []segment, profile, sourceName string) (*model.Document, er
 			if line != nil {
 				if q, err := model.ParseDecimal(strings.TrimSpace(s.comp(0, 1))); err == nil {
 					line.Quantity = q
+					line.QuantityPresent = true
 				}
 				if u := strings.TrimSpace(s.comp(0, 2)); u != "" {
 					line.UnitCode = model.UnitCode(u)
@@ -221,7 +222,7 @@ func applyTAX(s segment, doc *model.Document, line *model.Line) {
 			return
 		}
 	}
-	doc.TaxBreakdown = append(doc.TaxBreakdown, model.TaxSubtotal{Category: cat, Rate: rate})
+	doc.TaxBreakdown = append(doc.TaxBreakdown, model.TaxSubtotal{Category: cat, Rate: rate, RatePresent: true})
 }
 
 // joinComps assemble les composants non vides d'un élément (nom/adresse répartis en composants).

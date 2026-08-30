@@ -179,7 +179,7 @@ func computeTotals(doc *model.Document) {
 	taxTotal := model.ZeroAmount("EUR")
 	doc.TaxBreakdown = nil
 	for _, k := range order {
-		ts := model.TaxSubtotal{Category: k.cat, Rate: rates[k], TaxableAmount: bases[k].Rescale(2)}
+		ts := model.TaxSubtotal{Category: k.cat, Rate: rates[k], RatePresent: true, TaxableAmount: bases[k].Rescale(2)}
 		ts.TaxAmount = ts.ComputeTaxAmount()
 		if reason := exemptionReason(k.cat); reason != "" {
 			ts.ExemptionReason = reason

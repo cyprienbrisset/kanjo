@@ -12,6 +12,17 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Conformité (jeu de règles → 97 %)
+- **BR-22, BR-48, BR-65 activées** — présence/structure désormais **58/58 (100 %)** ; parité globale
+  **214 → 217/223 (97 %)**, cliquet relevé à 217.
+  - **BR-22** : chaque ligne doit porter une quantité (BT-129). **BR-48** : chaque ventilation de TVA
+    doit porter un taux (BT-119), sauf hors champ (O). **BR-65** : une classification d'article
+    (BT-158) doit porter un identifiant de schéma.
+  - Repose sur une **distinction « absent » vs « zéro »** tracée à la lecture (règle 5 du CDC) :
+    nouveaux indicateurs `QuantityPresent`/`RatePresent` (non sérialisés) posés par les lecteurs
+    CII, UBL, FatturaPA, EDIFACT, Order-X et JSON ; ajout de la classification BT-158 au modèle et
+    aux lecteurs CII/UBL. **Zéro faux positif** mesuré sur le corpus réel (§17.7).
+
 ### Ajouté (conformité)
 - **Validation croisée** (`pkg/crossvalidate`, `kanjo validate --cross-check`) : confronte le verdict
   de Kanjō à des validateurs externes de référence — **Mustangproject** (Factur-X/ZUGFeRD) et

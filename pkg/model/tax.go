@@ -4,6 +4,7 @@ package model
 type TaxSubtotal struct {
 	Category            TaxCategoryCode `json:"category"`                      // BT-118
 	Rate                Decimal         `json:"rate"`                          // BT-119 taux (%)
+	RatePresent         bool            `json:"-"`                             // BT-119 réellement porté (BR-48) ; métadonnée de lecture
 	TaxableAmount       Amount          `json:"taxableAmount"`                 // BT-116 base d'imposition
 	TaxAmount           Amount          `json:"taxAmount"`                     // BT-117 montant de TVA
 	ExemptionReason     string          `json:"exemptionReason,omitempty"`     // BT-120
