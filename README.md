@@ -61,7 +61,7 @@ jusqu'aux plateformes SaaS.
 - **Comparer** — `diff` sémantique entre deux factures quels que soient leurs formats (distingue **pertes** et **divergences**).
 - **Rendre lisible** — facture **HTML autonome** et **rapport de validation** imprimable, dans le design de l'application.
 - **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle.
-- **Extraire / embarquer** — `extract` le XML d'une Factur-X, `embed` un XML dans un PDF.
+- **Extraire / embarquer** — `extract` le XML d'une Factur-X ; `embed` un XML dans un PDF en établissant l'**association Factur-X** exigée par PDF/A-3 (`/AF`, `/AFRelationship /Data`, `EmbeddedFile` en `text/xml`). Conformité PDF/A-3b **validée par veraPDF** (`--verify-pdfa`), jamais déclarée sans validation.
 - **Générer** — `generate` un corpus synthétique (scénarios TVA variés, cas volontairement invalides).
 
 ## Démarrer
@@ -140,6 +140,23 @@ modélisés, règles « même type » non automatisables).
 - **Corpus réel open-source** ([`fetch.sh`](testdata/corpus/fetch.sh)) : **7 365 documents** (CEN, Peppol, XRechnung, phive-rules multi-juridictions, ZUGFeRD) lus **sans panic** ; exemples CEN 32/32.
 - **199 tests automatisés** ; **218 règles** au total (EN 16931 + CIUS FR + Kanjō), chacune avec un test passant et un test échouant.
 - 📊 **[Visualisation graphique par famille →](https://cyprienbrisset.github.io/kanjo/#parite)** &nbsp;·&nbsp; 👉 **[Rapport de qualité complet →](docs/RAPPORT-QUALITE.md)**
+
+### Conformité PDF/A (Factur-X) — mesurée, jamais déclarée
+
+Même rigueur que pour EN 16931 : la conformité PDF/A n'est jamais affirmée sans validation par
+[**veraPDF**](https://verapdf.org) (le validateur PDF/A de référence).
+
+| Élément | État | Preuve |
+|---|:---:|---|
+| Lecture Factur-X / ZUGFeRD (XML embarqué) | ✅ | extraction + relecture testées |
+| Association Factur-X à l'`embed` (`/AF`, `/AFRelationship`, `text/xml`) | ✅ | vérifiée par relecture du PDF produit |
+| Validation PDF/A-3b effective (veraPDF) | ✅ | **job CI dédié** sur un Factur-X EN 16931 **réel** (corpus akretion, BSD) |
+| Préservation PDF/A-3b après réécriture d'un PDF | 🗺️ | **mesurée non conforme** (limite pdfcpu) — jamais masquée |
+
+> **`PDFAChecked` ne passe à `true` que si veraPDF confirme.** Le job CI mesure la sortie d'`embed` :
+> l'association est correcte, mais la réécriture pdfcpu ne préserve pas encore la conformité globale —
+> constat **prouvé** (roadmap : embarquement incrémental préservant les octets du PDF de base), jamais
+> un faux verdict (règle 11 / §17.7).
 
 ## Architecture
 
