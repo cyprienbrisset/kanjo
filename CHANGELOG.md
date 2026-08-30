@@ -12,6 +12,13 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (documentation)
+- **Documentation utilisateur complète** ([`docs/documentation.html`](docs/documentation.html)) —
+  page autonome, stylée, **imprimable en PDF** et téléchargeable depuis la GitHub Page : présentation,
+  concepts, installation, démarrage, **référence détaillée des 18 commandes CLI** (options + exemples
+  réels), guide **TUI** (raccourcis) et **Studio** (écrans + flux), captures d'écran, annexes
+  (formats, conformité, codes de sortie, sécurité/RGPD). Liée depuis le README et la page d'accueil.
+
 ### Ajouté (validation)
 - **Validation Order-X** (`pkg/rules/orderx`, jeu `orderx`) : 9 règles de présence/structure propres
   aux bons de commande (identifiant, date, type, devise, vendeur, acheteur, lignes, désignation,
