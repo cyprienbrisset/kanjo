@@ -38,8 +38,9 @@ func TestCodeListRulesFail(t *testing.T) {
 		rule   string
 		mutate func(*model.Document)
 	}{
-		{"BR-CL-01", func(d *model.Document) { d.CurrencyCode = "EURO" }},
-		{"BR-CL-03", func(d *model.Document) { d.TypeCode = "999" }},
+		{"BR-CL-01", func(d *model.Document) { d.TypeCode = "999" }},
+		{"BR-CL-04", func(d *model.Document) { d.CurrencyCode = "EURO" }},
+		{"BR-CL-14", func(d *model.Document) { d.Seller.Address.CountryCode = "XX" }},
 		{"BR-CL-17", func(d *model.Document) { d.TaxBreakdown[0].Category = "Q" }},
 	}
 	for _, c := range cases {
