@@ -54,24 +54,16 @@ jusqu'aux plateformes SaaS.
 
 ## Fonctionnalités
 
-<<<<<<< HEAD
-- **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, JSON pivot. Détection **par le contenu**, jamais par l'extension.
 - **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **218 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.** Option `--cross-check` : confrontation aux validateurs externes (Mustangproject/KoSIT).
-=======
-- **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, FatturaPA, **UN/EDIFACT INVOIC**, JSON pivot. Détection **par le contenu**, jamais par l'extension.
+- **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL, CII D16B, FatturaPA, **UN/EDIFACT INVOIC**, **Order-X**, JSON pivot. Détection **par le contenu**, jamais par l'extension.
 - **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **219 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.**
->>>>>>> origin/main
 - **Convertir** — CII ⇄ UBL, Factur-X, XRechnung (UBL/CII), Peppol BIS 3.0, JSON, CSV — avec **rapport de perte explicite** et politique `--max-loss`.
 - **Traiter en lot** — découverte récursive, pool de workers, **reprise `--resume`**, quarantaine, **surveillance de dossier** (`watch`).
 - **Comparer** — `diff` sémantique entre deux factures quels que soient leurs formats (distingue **pertes** et **divergences**).
 - **Rendre lisible** — facture **HTML autonome** et **rapport de validation** imprimable, dans le design de l'application.
-<<<<<<< HEAD
 - **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle, **chaîné (tamper-evident)** : `audit verify` détecte toute modification/suppression, `audit export --from/--to --format html` produit un **rapport consolidé signé de son empreinte**.
-- **Extraire / embarquer** — `extract` le XML d'une Factur-X, `embed` un XML dans un PDF.
-=======
 - **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle.
 - **Extraire / embarquer** — `extract` le XML d'une Factur-X ; `embed` un XML dans un PDF en établissant l'**association Factur-X** exigée par PDF/A-3 (`/AF`, `/AFRelationship /Data`, `EmbeddedFile` en `text/xml`). Conformité PDF/A-3b **validée par veraPDF** (`--verify-pdfa`), jamais déclarée sans validation.
->>>>>>> origin/main
 - **Générer** — `generate` un corpus synthétique (scénarios TVA variés, cas volontairement invalides).
 
 ## Démarrer
@@ -108,17 +100,9 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 | Peppol BIS Billing 3.0 | ✅ *(via UBL)* | ✅ | ✅ |
 | JSON pivot · CSV | ✅ / — | ✅ / ✅ | ✅ |
 | ZUGFeRD 1.0 (CII D14B, hérité) | ✅ | 🗺️ | ✅ |
-<<<<<<< HEAD
-| FatturaPA (FatturaElettronica v1.2) | ✅ *(lecture)* | 🗺️ | ✅ |
-| Order-X (CrossIndustryOrder) | ✅ *(lecture)* | ✅ *(écriture)* | — |
-| EDIFACT INVOIC | 🗺️ roadmap | 🗺️ | 🗺️ |
-=======
-| FatturaPA (FatturaElettronica v1.2) | ✅ *(lecture)* | ✅ *(écriture)* | ✅ |
-| Order-X · EDIFACT | 🗺️ roadmap | 🗺️ | 🗺️ |
-| FatturaPA (FatturaElettronica v1.2) | ✅ *(lecture)* | 🗺️ | ✅ |
-| UN/EDIFACT INVOIC (D.96A) | ✅ *(lecture)* | ✅ *(écriture)* | ✅ |
-| Order-X | 🗺️ roadmap | 🗺️ | 🗺️ |
->>>>>>> origin/main
+| FatturaPA (FatturaElettronica v1.2) | ✅ | ✅ | ✅ |
+| UN/EDIFACT INVOIC (D.96A) | ✅ | ✅ | ✅ |
+| Order-X (CrossIndustryOrder) | ✅ | ✅ | — |
 
 ## Conformité
 
