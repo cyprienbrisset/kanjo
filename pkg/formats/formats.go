@@ -17,6 +17,7 @@ import (
 	// Écrivains
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/cii"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/edifact"
+	_ "github.com/cyprienbrisset/kanjo/pkg/write/fatturapa"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/peppol"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/tabular"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/ubl"
