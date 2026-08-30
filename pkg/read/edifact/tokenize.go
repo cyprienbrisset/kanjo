@@ -105,11 +105,15 @@ func tokenize(data []byte) ([]segment, delimiters, error) {
 
 // splitSegment éclate un segment brut (sans son terminateur) en étiquette + éléments/composants,
 // en respectant le caractère d'échappement.
+//
+// Le découpage se fait en deux niveaux : d'abord par séparateur d'élément de données, puis par
+// séparateur de composant. Le premier niveau PRÉSERVE l'échappement (un « ?: » doit rester
+// intact pour que le second niveau le reconnaisse) ; seul le second niveau retire l'échappement.
 func splitSegment(raw string, del delimiters) segment {
-	fields := splitEscaped(raw, del.data, del.release)
+	fields := splitKeepEscape(raw, del.data, del.release)
 	seg := segment{}
 	if len(fields) > 0 {
-		seg.tag = strings.TrimSpace(fields[0])
+		seg.tag = strings.TrimSpace(unescape(fields[0], del.release))
 		fields = fields[1:]
 	}
 	for _, f := range fields {
@@ -118,8 +122,32 @@ func splitSegment(raw string, del delimiters) segment {
 	return seg
 }
 
+// splitKeepEscape découpe s sur sep non échappé, mais CONSERVE les caractères d'échappement dans
+// le résultat (pour un découpage ultérieur à un niveau plus fin).
+func splitKeepEscape(s string, sep, rel byte) []string {
+	var out []string
+	var cur strings.Builder
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+		if c == rel && i+1 < len(s) {
+			cur.WriteByte(c)      // conserver l'échappement
+			cur.WriteByte(s[i+1]) // et le caractère échappé
+			i++
+			continue
+		}
+		if c == sep {
+			out = append(out, cur.String())
+			cur.Reset()
+			continue
+		}
+		cur.WriteByte(c)
+	}
+	out = append(out, cur.String())
+	return out
+}
+
 // splitEscaped découpe s sur sep, sauf lorsque sep est précédé du caractère d'échappement rel.
-// L'échappement est retiré du résultat.
+// L'échappement est retiré du résultat (niveau terminal : composants).
 func splitEscaped(s string, sep, rel byte) []string {
 	var out []string
 	var cur strings.Builder
@@ -139,4 +167,18 @@ func splitEscaped(s string, sep, rel byte) []string {
 	}
 	out = append(out, cur.String())
 	return out
+}
+
+// unescape retire le caractère d'échappement d'une chaîne (sans découpage).
+func unescape(s string, rel byte) string {
+	var b strings.Builder
+	for i := 0; i < len(s); i++ {
+		if s[i] == rel && i+1 < len(s) {
+			b.WriteByte(s[i+1])
+			i++
+			continue
+		}
+		b.WriteByte(s[i])
+	}
+	return b.String()
 }
