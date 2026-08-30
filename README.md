@@ -102,7 +102,7 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 | ZUGFeRD 1.0 (CII D14B, hérité) | ✅ | 🗺️ | ✅ |
 | FatturaPA (FatturaElettronica v1.2) | ✅ | ✅ | ✅ |
 | UN/EDIFACT INVOIC (D.96A) | ✅ | ✅ | ✅ |
-| Order-X (CrossIndustryOrder) | ✅ | ✅ | — |
+| Order-X (CrossIndustryOrder) | ✅ | ✅ | ✅ *(structure)* |
 
 ## Conformité
 

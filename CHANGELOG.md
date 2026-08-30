@@ -12,6 +12,14 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (validation)
+- **Validation Order-X** (`pkg/rules/orderx`, jeu `orderx`) : 9 règles de présence/structure propres
+  aux bons de commande (identifiant, date, type, devise, vendeur, acheteur, lignes, désignation,
+  quantité). Le moteur est désormais **conscient du type de document** : une commande (Kind=order)
+  n'exécute **que** le jeu `orderx` — les règles facture EN 16931 (TVA, totaux) ne s'y appliquent
+  plus (zéro faux positif) ; réciproquement une facture n'exécute jamais les règles Order-X.
+  Order-X passe ainsi en **lecture + écriture + validation**.
+
 ### Conformité (jeu de règles → 100 %)
 - **BR-CL-06 activée — parité EN 16931 : 223 / 223 (100 %)** 🎯. Le code de date d'exigibilité de
   la TVA (**BT-8**) est désormais modélisé (`Document.TaxPointDateCode`) et lu depuis CII
