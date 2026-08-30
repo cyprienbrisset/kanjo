@@ -9,12 +9,15 @@ package formats
 import (
 	// Lecteurs
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/cii"
+	_ "github.com/cyprienbrisset/kanjo/pkg/read/edifact"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/facturx"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/fatturapa"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/ubl"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/zugferd1"
 	// Écrivains
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/cii"
+	_ "github.com/cyprienbrisset/kanjo/pkg/write/edifact"
+	_ "github.com/cyprienbrisset/kanjo/pkg/write/fatturapa"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/peppol"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/tabular"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/ubl"
