@@ -7,4 +7,5 @@ import (
 	_ "github.com/cyprienbrisset/kanjo/pkg/rules/cius/fr"
 	_ "github.com/cyprienbrisset/kanjo/pkg/rules/en16931"
 	_ "github.com/cyprienbrisset/kanjo/pkg/rules/kanjo"
+	_ "github.com/cyprienbrisset/kanjo/pkg/rules/orderx"
 )
