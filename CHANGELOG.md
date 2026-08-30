@@ -12,6 +12,19 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Conformité (jeu de règles → 99 %)
+- **5 règles activées : BR-B-01, BR-B-02, BR-CL-13, BR-CL-22, BR-CL-25** — parité EN 16931
+  **217 → 222/223 (99 %)**, cliquet relevé à 222.
+  - **BR-B-01/B-02** : le split-payment italien (catégorie « B ») exige une facture nationale
+    italienne et interdit le mélange avec le taux normal (S). Zéro faux positif : ne se déclenchent
+    que si la catégorie B est employée.
+  - **BR-CL-13/22/25** : schéma de classification d'article (UNTDID 7143), code d'exonération
+    (CEF **VATEX**), schéma d'adresse électronique (CEF **EAS**). Réintroduites avec les **listes CEN
+    complètes** vendorées depuis le Schematron officiel (la liste EAS inclut désormais « EM ») :
+    l'absence antérieure venait de listes incomplètes provoquant des faux positifs. **Zéro faux
+    positif mesuré** sur le corpus valide (publié + exemples CEN).
+  - Seule **BR-CL-06** reste (code de date d'exigibilité TVA, BT-8, non modélisé — faible valeur).
+
 ### Conformité (jeu de règles → 97 %)
 - **BR-22, BR-48, BR-65 activées** — présence/structure désormais **58/58 (100 %)** ; parité globale
   **214 → 217/223 (97 %)**, cliquet relevé à 217.
