@@ -3,8 +3,7 @@ package pdfa
 import (
 	"bytes"
 	"fmt"
-	"os"
-	"path/filepath"
+	"time"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 )
@@ -13,46 +12,49 @@ import (
 type EmbedResult struct {
 	PDF         []byte
 	AttachedAs  string
-	PDFAChecked bool // false : la conformité PDF/A-3b n'a pas été validée (veraPDF absent)
+	PDFAChecked bool // true UNIQUEMENT si un validateur (veraPDF) a effectivement confirmé (§17.7)
 	Warnings    []string
 }
 
 // EmbedXML embarque le XML de facture dans un PDF existant sous le nom `attachName`
-// (typiquement "factur-x.xml"). Il attache le fichier via pdfcpu.
+// (typiquement "factur-x.xml"), en établissant l'association Factur-X requise par PDF/A-3 :
+// EmbeddedFile /Subtype text/xml, /AFRelationship /Data sur la spécification de fichier, et
+// référencement par le tableau /AF du catalogue.
 //
-// Honnêteté (§17.7) : cette fonction NE prétend PAS produire un PDF/A-3b conforme. Elle
-// embarque la pièce jointe de façon extractible ; la mise en conformité PDF/A-3 complète
-// (OutputIntent, XMP fx:, /AFRelationship /Data) et sa validation veraPDF restent à compléter.
-// Le résultat porte PDFAChecked=false pour ne jamais mentir sur la conformité.
+// Honnêteté (§17.7) : cette fonction établit une association *structurellement conforme*
+// (vérifiable par relecture), mais ne PRÉTEND PAS à la conformité PDF/A-3b globale — celle-ci
+// dépend du PDF de base et n'est affirmée que si veraPDF la confirme (voir ValidatePDFA).
+// `PDFAChecked` reste false ici : aucun verdict n'est apposé sans validation effective.
 func EmbedXML(pdf, xml []byte, attachName string) (*EmbedResult, error) {
 	if attachName == "" {
 		attachName = "factur-x.xml"
 	}
-	tmpDir, err := os.MkdirTemp("", "kanjo-embed-*")
-	if err != nil {
-		return nil, fmt.Errorf("pdfa: dossier temporaire: %w", err)
-	}
-	defer os.RemoveAll(tmpDir)
 
-	// pdfcpu utilise le nom de base du fichier comme nom de pièce jointe.
-	xmlPath := filepath.Join(tmpDir, attachName)
-	if err := os.WriteFile(xmlPath, xml, 0o600); err != nil {
-		return nil, fmt.Errorf("pdfa: écriture temporaire du XML: %w", err)
-	}
-
-	var buf bytes.Buffer
 	conf := config()
-	if err := api.AddAttachments(bytes.NewReader(pdf), &buf, []string{xmlPath}, false, conf); err != nil {
+	ctx, err := api.ReadContext(bytes.NewReader(pdf), conf)
+	if err != nil {
 		if isEncryptedErr(err) {
 			return nil, ErrEncrypted
 		}
-		return nil, fmt.Errorf("pdfa: embarquement de %s: %w", attachName, err)
+		return nil, fmt.Errorf("pdfa: lecture du PDF: %w", err)
+	}
+
+	desc := "Facture électronique (XML) — donnée du document"
+	if err := embedFacturX(ctx.XRefTable, xml, attachName, desc, time.Now()); err != nil {
+		return nil, fmt.Errorf("pdfa: embarquement Factur-X de %s: %w", attachName, err)
+	}
+
+	var buf bytes.Buffer
+	if err := api.WriteContext(ctx, &buf); err != nil {
+		return nil, fmt.Errorf("pdfa: écriture du PDF: %w", err)
 	}
 
 	return &EmbedResult{
 		PDF:         buf.Bytes(),
 		AttachedAs:  attachName,
 		PDFAChecked: false,
-		Warnings:    []string{"W-PDF-001: conformité PDF/A-3b non vérifiée (embarquement de la pièce jointe uniquement)"},
+		Warnings: []string{
+			"W-PDF-001: association Factur-X établie (/AF, /AFRelationship) ; conformité PDF/A-3b globale non vérifiée sans veraPDF (voir kanjo doctor / job CI veraPDF)",
+		},
 	}, nil
 }

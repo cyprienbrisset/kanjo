@@ -36,12 +36,22 @@ type Entry struct {
 	Verdict       string   `json:"verdict"`
 	LossCount     int      `json:"lossCount"`
 	DisabledRules []string `json:"disabledRules"`
+
+	// Chaînage d'intégrité (tamper-evident, §17.5). Seq est un numéro de séquence croissant ;
+	// PrevHash référence l'empreinte de l'entrée précédente ; Hash est l'empreinte SHA-256 de la
+	// présente entrée (calculée hors champ Hash). Une rupture de chaîne révèle une modification,
+	// une suppression ou une réinsertion. Ces champs ne contiennent aucune donnée métier.
+	Seq      int64  `json:"seq,omitempty"`
+	PrevHash string `json:"prevHash,omitempty"`
+	Hash     string `json:"hash,omitempty"`
 }
 
-// Journal est un journal d'audit append-only (JSONL).
+// Journal est un journal d'audit append-only (JSONL), avec chaînage d'intégrité.
 type Journal struct {
-	mu sync.Mutex
-	f  *os.File
+	mu       sync.Mutex
+	f        *os.File
+	lastHash string // empreinte de la dernière entrée (pour le chaînage)
+	lastSeq  int64  // numéro de séquence de la dernière entrée
 }
 
 // DefaultPath renvoie le chemin standard du journal (répertoire d'état, §15.1).
@@ -62,7 +72,14 @@ func Open(path string) (*Journal, error) {
 	if err != nil {
 		return nil, fmt.Errorf("ouverture du journal d'audit %q: %w", path, err)
 	}
-	return &Journal{f: f}, nil
+	j := &Journal{f: f}
+	// Reprendre le chaînage à partir de la dernière entrée existante.
+	if existing, err := Read(path); err == nil && len(existing) > 0 {
+		last := existing[len(existing)-1]
+		j.lastSeq = last.Seq
+		j.lastHash = last.Hash
+	}
+	return j, nil
 }
 
 // Log complète l'entrée (horodatage, acteur, versions) et l'écrit.
@@ -80,10 +97,16 @@ func (j *Journal) Log(e Entry) error {
 	if e.DisabledRules == nil {
 		e.DisabledRules = []string{}
 	}
+	// Chaînage d'intégrité : numéro de séquence + empreinte de l'entrée précédente + empreinte propre.
+	e.Seq = j.lastSeq + 1
+	e.PrevHash = j.lastHash
+	e.Hash = entryHash(e)
 	data, err := json.Marshal(e)
 	if err != nil {
 		return err
 	}
+	j.lastSeq = e.Seq
+	j.lastHash = e.Hash
 	if _, err := j.f.Write(append(data, '\n')); err != nil {
 		return err
 	}
