@@ -30,9 +30,11 @@ func Read(data []byte, sourceName string) (*model.Document, error) {
 // --- Structures XML FatturaElettronica v1.2 (tags par nom local) ---
 
 type fattura struct {
-	Header struct {
-		Cedente     anagrafica `xml:"CedentePrestatore"`
-		Cessionario anagrafica `xml:"CessionarioCommittente"`
+	Versione string `xml:"versione,attr"` // FPA12 / FPR12 — identifiant de spécification (attribut racine)
+	Header   struct {
+		FormatoTrasmissione string     `xml:"DatiTrasmissione>FormatoTrasmissione"`
+		Cedente             anagrafica `xml:"CedentePrestatore"`
+		Cessionario         anagrafica `xml:"CessionarioCommittente"`
 	} `xml:"FatturaElettronicaHeader"`
 	Body struct {
 		DatiGenerali struct {
