@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (135 règles)
+## en16931 (147 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -75,20 +75,32 @@ Version du jeu de règles : **2026.3**
 | BR-CO-18 | error | BG-23 | Une facture doit comporter au moins une ventilation de TVA. |
 | BR-CO-19 | error | BT-73, BT-74 | Une période de facturation doit indiquer une date de début ou de fin. |
 | BR-CO-20 | error | BT-134, BT-135 | Une période de ligne doit indiquer une date de début ou de fin. |
+| BR-CO-21 | error | BT-97 | Une remise de niveau document doit porter un motif ou un code motif. |
+| BR-CO-22 | error | BT-104 | Une charge de niveau document doit porter un motif ou un code motif. |
+| BR-CO-23 | error | BT-139 | Une remise de ligne doit porter un motif ou un code motif. |
+| BR-CO-24 | error | BT-144 | Une charge de ligne doit porter un motif ou un code motif. |
 | BR-CO-25 | error | BT-9, BT-20, BT-115 | Si un montant reste dû, une date d'échéance ou des conditions de paiement sont requises. |
 | BR-CO-26 | error | BT-29 | Le vendeur doit être identifiable (identifiant, SIREN/SIRET ou n° de TVA). |
 | BR-DEC-01 | error | BT-92 | Un montant de remise/charge ne doit pas avoir plus de deux décimales. |
+| BR-DEC-02 | error | BT-93 | La base d'une remise/charge ne doit pas avoir plus de deux décimales. |
 | BR-DEC-05 | error | BT-99 | Un montant de remise/charge ne doit pas avoir plus de deux décimales. |
+| BR-DEC-06 | error | BT-100 | La base d'une remise/charge ne doit pas avoir plus de deux décimales. |
 | BR-DEC-09 | error | BT-106 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
+| BR-DEC-10 | error | BT-107 | Un montant total ne doit pas avoir plus de deux décimales. |
+| BR-DEC-11 | error | BT-108 | Un montant total ne doit pas avoir plus de deux décimales. |
 | BR-DEC-12 | error | BT-109 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
 | BR-DEC-13 | error | BT-110 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
 | BR-DEC-14 | error | BT-112 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
+| BR-DEC-16 | error | BT-113 | Un montant total ne doit pas avoir plus de deux décimales. |
+| BR-DEC-17 | error | BT-114 | Un montant total ne doit pas avoir plus de deux décimales. |
 | BR-DEC-18 | error | BT-115 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
 | BR-DEC-19 | error | BT-116 | Un montant de la ventilation de TVA ne doit pas avoir plus de deux décimales. |
 | BR-DEC-20 | error | BT-117 | Un montant de la ventilation de TVA ne doit pas avoir plus de deux décimales. |
 | BR-DEC-23 | error | BT-131 | Le montant net d'une ligne ne doit pas avoir plus de deux décimales. |
 | BR-DEC-24 | error | BT-136 | Un montant de remise/charge de ligne ne doit pas avoir plus de deux décimales. |
+| BR-DEC-25 | error | BT-137 | La base d'une remise/charge de ligne ne doit pas avoir plus de deux décimales. |
 | BR-DEC-27 | error | BT-141 | Un montant de remise/charge de ligne ne doit pas avoir plus de deux décimales. |
+| BR-DEC-28 | error | BT-142 | La base d'une remise/charge de ligne ne doit pas avoir plus de deux décimales. |
 | BR-E-01 | error | BT-118 | Une catégorie exonérée employée impose une ventilation de TVA correspondante. |
 | BR-E-02 | error | BT-31, BT-32 | Une catégorie exonérée exige un identifiant TVA ou fiscal du vendeur. |
 | BR-E-03 | error | BT-31, BT-32 | Une remise exonérée exige un identifiant TVA/fiscal du vendeur. |
