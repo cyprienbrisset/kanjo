@@ -13,6 +13,14 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 ## [Non publié]
 
 <<<<<<< HEAD
+### Ajouté (conformité)
+- **Validation croisée** (`pkg/crossvalidate`, `kanjo validate --cross-check`) : confronte le verdict
+  de Kanjō à des validateurs externes de référence — **Mustangproject** (Factur-X/ZUGFeRD) et
+  **KoSIT** (XRechnung) — configurés par variables d'environnement (`KANJO_MUSTANG_JAR`,
+  `KANJO_KOSIT_JAR` + `KANJO_KOSIT_SCENARIOS`, `java` requis). Rapport d'accord/désaccord par outil.
+  **Aucun verdict externe simulé** : outil absent = « non exécuté », jamais « conforme » (§17.7).
+=======
+<<<<<<< HEAD
 ### Ajouté (nouveau format)
 - **Order-X (bon de commande hybride)** — lecture et écriture (`pkg/read/orderx`, `pkg/write/orderx`)
   du format UN/CEFACT SCRDM `SCRDMCCBDACIOMESSAGE` (CrossIndustryOrder), profil comfort. Partage la
@@ -57,6 +65,7 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 ### Sécurité
 - **Fuzzing Go natif** du durcissement XML (`internal/xmlsafe`) et des lecteurs (`pkg/read`) :
   aucune entrée aléatoire, tronquée ou malveillante ne provoque de panic (contrat testé en continu).
+>>>>>>> origin/main
 >>>>>>> origin/main
 >>>>>>> origin/main
 

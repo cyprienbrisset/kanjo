@@ -12,6 +12,7 @@ import (
 	"github.com/cyprienbrisset/kanjo/internal/fsatomic"
 	"github.com/cyprienbrisset/kanjo/internal/version"
 	"github.com/cyprienbrisset/kanjo/pkg/api"
+	"github.com/cyprienbrisset/kanjo/pkg/crossvalidate"
 	"github.com/cyprienbrisset/kanjo/pkg/pipeline"
 	"github.com/cyprienbrisset/kanjo/pkg/read"
 	"github.com/cyprienbrisset/kanjo/pkg/render"
@@ -29,6 +30,7 @@ func runValidate(args []string) int {
 	recursive := fs.Bool("recursive", false, "parcours récursif des dossiers")
 	workers := fs.Int("workers", 0, "nombre de workers (0 = NumCPU)")
 	report := fs.String("report", "", "écrire un rapport (.html|.json)")
+	crossCheck := fs.Bool("cross-check", false, "confronter le verdict aux validateurs externes configurés (Mustangproject/KoSIT)")
 	var include, exclude stringSlice
 	fs.Var(&include, "include", "filtre glob d'inclusion (répétable)")
 	fs.Var(&exclude, "exclude", "filtre glob d'exclusion (répétable)")
@@ -126,10 +128,53 @@ func runValidate(args []string) int {
 
 	if outputFormat(*format) == "json" {
 		printJSON(env)
+		if *crossCheck {
+			runCrossCheck(env)
+		}
 		return worstExit
 	}
 	renderValidate(env, *explain)
+	if *crossCheck {
+		runCrossCheck(env)
+	}
 	return worstExit
+}
+
+// runCrossCheck confronte le verdict de Kanjō aux validateurs externes configurés (§ dossier
+// d'agrément). Purement informatif : n'altère pas le code de sortie. Ne simule jamais un verdict :
+// si aucun outil n'est configuré, il le dit clairement (§17.7).
+func runCrossCheck(env *api.Envelope) {
+	avail := crossvalidate.Available()
+	fmt.Fprintln(os.Stdout, "\n▸ Validation croisée")
+	if len(avail) == 0 {
+		fmt.Fprintln(os.Stdout, "  aucun validateur externe configuré "+
+			"(définir KANJO_MUSTANG_JAR et/ou KANJO_KOSIT_JAR + KANJO_KOSIT_SCENARIOS ; java requis).")
+		return
+	}
+	totalDisagree := 0
+	for _, r := range env.Results {
+		verdicts := crossvalidate.Run(r.Input)
+		if len(verdicts) == 0 {
+			continue
+		}
+		kanjoCompliant := r.Status != api.StatusError
+		_, disagree, lines := crossvalidate.Compare(kanjoCompliant, verdicts)
+		totalDisagree += disagree
+		fmt.Fprintf(os.Stdout, "  %s (Kanjō : %s)\n", r.Input, verdictLabel(kanjoCompliant))
+		for _, l := range lines {
+			fmt.Fprintf(os.Stdout, "    · %s\n", l)
+		}
+	}
+	if totalDisagree > 0 {
+		fmt.Fprintf(os.Stdout, "  ⚠ %d désaccord(s) avec un validateur externe — à investiguer.\n", totalDisagree)
+	}
+}
+
+func verdictLabel(compliant bool) string {
+	if compliant {
+		return "conforme"
+	}
+	return "non conforme"
 }
 
 // writeReport écrit un rapport de validation selon l'extension (.html ou .json).
