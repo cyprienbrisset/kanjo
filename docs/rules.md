@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (211 règles)
+## en16931 (214 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -97,6 +97,8 @@ Version du jeu de règles : **2026.3**
 | BR-CL-03 | error | BT-5 | La devise des montants doit être un code ISO 4217. |
 | BR-CL-04 | error | BT-5 | Le code devise de la facture doit être un code ISO 4217. |
 | BR-CL-05 | error | BT-6 | La devise de comptabilisation de la TVA doit être un code ISO 4217. |
+| BR-CL-07 | error | BT-128-1 | Le code doit appartenir à sa liste officielle. |
+| BR-CL-08 | error | BT-21 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-10 | error | BT-29 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
 | BR-CL-11 | error | BT-30 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
 | BR-CL-14 | error | BT-40, BT-55, BT-80 | Les codes pays doivent appartenir à la liste ISO 3166-1. |
@@ -107,6 +109,7 @@ Version du jeu de règles : **2026.3**
 | BR-CL-19 | error | BT-98 | Le code motif de remise/charge doit appartenir à sa liste officielle. |
 | BR-CL-20 | error | BT-105 | Le code motif de remise/charge doit appartenir à sa liste officielle. |
 | BR-CL-21 | error | BT-157-1 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
+| BR-CL-23 | error | BT-130 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-24 | error | BT-125-1 | Le type MIME d'une pièce jointe doit appartenir à la liste autorisée. |
 | BR-CL-26 | error | BT-71-1 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
 | BR-CO-03 | error | BT-7, BT-8 | La date d'exigibilité de la TVA et son code sont mutuellement exclusifs. |
