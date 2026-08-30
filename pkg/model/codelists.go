@@ -118,3 +118,29 @@ var (
 func IsKnownUnit(code string) bool         { return knownUnits[code] }
 func IsKnownNoteSubject(code string) bool  { return knownNoteSubjects[code] }
 func IsKnownObjectScheme(code string) bool { return knownObjectSchemes[code] }
+
+//go:embed codelists_data/eas.txt
+var easFullData string
+
+//go:embed codelists_data/vatex.txt
+var vatexData string
+
+//go:embed codelists_data/classscheme.txt
+var classSchemeData string
+
+var (
+	knownEASFull     = fieldSet(easFullData)     // liste CEF EAS complète (Schematron CEN, inclut EM)
+	knownVATEX       = fieldSet(vatexData)       // codes d'exonération CEF VATEX (BR-CL-22)
+	knownClassScheme = fieldSet(classSchemeData) // schémas de classification UNTDID 7143 (BR-CL-13)
+)
+
+// IsKnownEASFull indique si le schéma d'adresse électronique appartient à la liste CEF EAS
+// complète du Schematron CEN (BR-CL-25). Plus complète que la liste historique IsKnownEAS.
+func IsKnownEASFull(code string) bool { return knownEASFull[code] }
+
+// IsKnownVATEX indique si le code d'exonération appartient à la liste CEF VATEX (BR-CL-22).
+// La comparaison est insensible à la casse (le Schematron applique upper-case).
+func IsKnownVATEX(code string) bool { return knownVATEX[strings.ToUpper(code)] }
+
+// IsKnownClassScheme indique si le schéma de classification d'article appartient à UNTDID 7143 (BR-CL-13).
+func IsKnownClassScheme(code string) bool { return knownClassScheme[code] }

@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (218 règles)
+## en16931 (223 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -97,6 +97,8 @@ Version du jeu de règles : **2026.3**
 | BR-AG-08 | error | BT-116 | La base d'une ventilation IPSI (Ceuta/Melilla) doit égaler la somme des montants de même catégorie et même taux. |
 | BR-AG-09 | error | BT-117 | Le montant de TVA d'une ventilation IPSI (Ceuta/Melilla) doit égaler la base multipliée par le taux. |
 | BR-AG-10 | error | BT-120, BT-121 | Une ventilation IPSI (Ceuta/Melilla) ne doit pas porter de motif d'exonération. |
+| BR-B-01 | error | BT-151, BT-95, BT-102 | Le split payment (catégorie B) est réservé aux factures nationales italiennes. |
+| BR-B-02 | error | BT-151, BT-95, BT-102 | Une facture en split payment (B) ne peut pas mélanger la catégorie taux normal (S). |
 | BR-CL-01 | error | BT-3 | Le code type de facture doit appartenir à la liste UNTDID 1001. |
 | BR-CL-03 | error | BT-5 | La devise des montants doit être un code ISO 4217. |
 | BR-CL-04 | error | BT-5 | Le code devise de la facture doit être un code ISO 4217. |
@@ -105,6 +107,7 @@ Version du jeu de règles : **2026.3**
 | BR-CL-08 | error | BT-21 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-10 | error | BT-29 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
 | BR-CL-11 | error | BT-30 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
+| BR-CL-13 | error | BT-158 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-14 | error | BT-40, BT-55, BT-80 | Les codes pays doivent appartenir à la liste ISO 3166-1. |
 | BR-CL-15 | error | BT-40, BT-55, BT-80 | Les codes pays doivent appartenir à la liste ISO 3166-1. |
 | BR-CL-16 | error | BT-81 | Le moyen de paiement doit appartenir à la liste UNCL 4461. |
@@ -113,8 +116,10 @@ Version du jeu de règles : **2026.3**
 | BR-CL-19 | error | BT-98 | Le code motif de remise/charge doit appartenir à sa liste officielle. |
 | BR-CL-20 | error | BT-105 | Le code motif de remise/charge doit appartenir à sa liste officielle. |
 | BR-CL-21 | error | BT-157-1 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
+| BR-CL-22 | error | BT-121 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-23 | error | BT-130 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-24 | error | BT-125-1 | Le type MIME d'une pièce jointe doit appartenir à la liste autorisée. |
+| BR-CL-25 | error | BT-49 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-26 | error | BT-71-1 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |
 | BR-CO-03 | error | BT-7, BT-8 | La date d'exigibilité de la TVA et son code sont mutuellement exclusifs. |
 | BR-CO-04 | error | BT-151 | Chaque ligne doit porter une catégorie de TVA. |
