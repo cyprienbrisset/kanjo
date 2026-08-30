@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="fr" data-theme="hiru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kanjō — Documentation utilisateur</title>
+<meta name="description" content="Documentation utilisateur complète de Kanjō : CLI, TUI et Studio. Lire, valider, convertir, réparer et rendre lisibles les factures électroniques Factur-X, UBL, CII, XRechnung, Peppol, FatturaPA, EDIFACT et Order-X.">
+<link rel="stylesheet" href="assets/tokens.css">
+<style>
+:root{--sidebar:280px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink-900);background:var(--paper-0);font-size:15px;line-height:1.65}
+a{color:var(--asagi);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:var(--font-mono);font-size:.88em;background:var(--paper-2);padding:1px 5px;border-radius:3px}
+pre{background:var(--paper-1);border-left:3px solid var(--ink-700);padding:14px 18px;overflow:auto;font-family:var(--font-mono);font-size:.82rem;line-height:1.6;border-radius:0 4px 4px 0}
+pre code{background:none;padding:0}
+/* Layout */
+.layout{display:grid;grid-template-columns:var(--sidebar) 1fr;max-width:1280px;margin:0 auto}
+.side{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--rule-hair);padding:24px 20px}
+.side .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-title);font-size:var(--text-lg);color:var(--ink-700);margin-bottom:6px}
+.side .ver{color:var(--ink-500);font-size:var(--text-xs);margin-bottom:18px}
+.side nav a{display:block;color:var(--ink-500);font-size:var(--text-sm);padding:3px 0}
+.side nav a:hover{color:var(--ink-900);text-decoration:none}
+.side nav .h{color:var(--ink-700);font-weight:600;margin-top:14px;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em}
+.side nav .sub{padding-left:12px;font-size:var(--text-xs)}
+.main{padding:40px 56px;max-width:900px}
+h1{font-size:var(--text-3xl);line-height:1.15;margin:0 0 8px}
+h2{font-size:var(--text-2xl);margin:48px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--rule-firm)}
+h3{font-size:var(--text-lg);margin:32px 0 8px;color:var(--ink-700)}
+h4{font-size:var(--text-base);margin:20px 0 6px;font-family:var(--font-mono);color:var(--ink-900)}
+p{margin:10px 0}
+.lead{font-size:var(--text-lg);color:var(--ink-500)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;margin:12px 0}
+th{text-align:left;background:var(--paper-2);border:1px solid var(--rule-hair);padding:7px 10px;font-weight:600}
+td{border:1px solid var(--rule-hair);padding:7px 10px;vertical-align:top}
+td code{white-space:nowrap}
+img{max-width:100%;border:1px solid var(--rule-firm);border-radius:4px;margin:14px 0;display:block}
+figcaption{color:var(--ink-500);font-size:var(--text-sm);margin:-8px 0 18px;font-style:italic}
+.note{border-left:3px solid var(--asagi);background:var(--paper-1);padding:10px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.note.warn{border-color:var(--beni)}
+.note.ok{border-color:var(--koke)}
+.pill{display:inline-block;border:1px solid var(--rule-firm);border-radius:3px;padding:1px 8px;font-size:var(--text-xs);color:var(--ink-700);background:var(--paper-1)}
+.cmdbar{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.btn{padding:8px 16px;border:1px solid var(--rule-firm);color:var(--ink-900);background:var(--paper-2);font-size:var(--text-sm);border-radius:3px;cursor:pointer}
+.btn.primary{background:var(--ink-700);color:var(--paper-0);border-color:var(--ink-700)}
+.toc-top{color:var(--ink-300);font-size:var(--text-xs)}
+kbd{font-family:var(--font-mono);font-size:.8em;border:1px solid var(--rule-firm);border-bottom-width:2px;border-radius:3px;padding:1px 5px;background:var(--paper-1)}
+hr{border:none;border-top:1px solid var(--rule-hair);margin:32px 0}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule-hair)}.main{padding:24px}}
+@media print{
+  .side,.cmdbar,.no-print{display:none!important}
+  .layout{grid-template-columns:1fr;max-width:none}
+  .main{padding:0;max-width:none}
+  body{font-size:11pt}
+  h2{page-break-after:avoid}pre,table,figure{page-break-inside:avoid}
+  a{color:var(--ink-900);text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="side">
+ <div class="brand">
+  <svg class="icon lg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-2.5-1.6L13 21l-2.5-1.6L8 21l-2-1.6V3z"/><path d="M9 8h6M9 12h6"/></svg>
+  Kanjō
+ </div>
+ <div class="ver">Documentation utilisateur · v0.1</div>
+ <nav>
+  <a href="#intro">Présentation</a>
+  <a href="#concepts">Concepts clés</a>
+  <a href="#install">Installation</a>
+  <a href="#demarrage">Démarrage rapide</a>
+  <div class="h">Ligne de commande (CLI)</div>
+  <a class="sub" href="#cli-generalites">Généralités</a>
+  <a class="sub" href="#cmd-inspect">inspect</a>
+  <a class="sub" href="#cmd-validate">validate</a>
+  <a class="sub" href="#cmd-convert">convert</a>
+  <a class="sub" href="#cmd-extract">extract</a>
+  <a class="sub" href="#cmd-embed">embed</a>
+  <a class="sub" href="#cmd-diff">diff</a>
+  <a class="sub" href="#cmd-repair">repair</a>
+  <a class="sub" href="#cmd-anonymize">anonymize</a>
+  <a class="sub" href="#cmd-render">render</a>
+  <a class="sub" href="#cmd-generate">generate</a>
+  <a class="sub" href="#cmd-watch">watch</a>
+  <a class="sub" href="#cmd-preset">preset</a>
+  <a class="sub" href="#cmd-library">library</a>
+  <a class="sub" href="#cmd-audit">audit</a>
+  <a class="sub" href="#cmd-doctor">doctor / version</a>
+  <div class="h">Interface texte (TUI)</div>
+  <a class="sub" href="#tui">Utiliser la TUI</a>
+  <div class="h">Studio (bureau)</div>
+  <a class="sub" href="#studio">Utiliser Studio</a>
+  <div class="h">Annexes</div>
+  <a class="sub" href="#formats">Formats pris en charge</a>
+  <a class="sub" href="#conformite">Conformité EN 16931</a>
+  <a class="sub" href="#exit">Codes de sortie</a>
+  <a class="sub" href="#rgpd">Sécurité & RGPD</a>
+ </nav>
+</aside>
+
+<main class="main">
+
+<h1>Kanjō — Documentation utilisateur</h1>
+<p class="lead">Lire, valider, convertir, réparer, comparer et rendre lisibles vos factures
+électroniques — <strong>Factur-X, UBL 2.1, CII, XRechnung, Peppol, FatturaPA, UN/EDIFACT et Order-X</strong> —
+depuis une seule implémentation, à travers trois interfaces : ligne de commande, terminal et application de bureau.</p>
+
+<div class="cmdbar no-print">
+ <button class="btn primary" onclick="window.print()">Télécharger en PDF (imprimer)</button>
+ <a class="btn" href="https://github.com/cyprienbrisset/kanjo">Dépôt GitHub</a>
+ <a class="btn" href="index.html">Site de présentation</a>
+</div>
+
+<div class="note">Ce document est <strong>téléchargeable</strong> : utilisez le bouton
+<em>« Télécharger en PDF »</em> (impression navigateur → « Enregistrer au format PDF ») pour obtenir
+une version hors-ligne. La mise en page est optimisée pour l'impression.</div>
+
+<!-- ============================ PRÉSENTATION ============================ -->
+<h2 id="intro">1. Présentation</h2>
+<p><strong>Kanjō</strong> (勘定, « le compte ») est un outil multiplateforme dédié à la manipulation
+des factures électroniques. Il s'adresse aussi bien au comptable qui veut lire et vérifier une
+facture reçue, qu'à l'équipe technique qui automatise la conversion de milliers de documents.</p>
+<p>Trois interfaces, un seul cœur :</p>
+<table>
+<tr><th>Interface</th><th>Pour qui / quand</th><th>Lancement</th></tr>
+<tr><td><strong>CLI</strong> (ligne de commande)</td><td>Automatisation, intégration, CI/CD, traitement en lot</td><td><code>kanjo &lt;commande&gt;</code></td></tr>
+<tr><td><strong>TUI</strong> (interface texte)</td><td>Inspection interactive rapide au terminal</td><td><code>kanjo tui</code> ou <code>kanjo</code></td></tr>
+<tr><td><strong>Studio</strong> (bureau)</td><td>Usage quotidien par un comptable, sans terminal</td><td><code>kanjo studio</code></td></tr>
+</table>
+<div class="note ok"><strong>Principe fondateur — honnêteté.</strong> Kanjō ne déclare jamais une
+conformité qu'il n'a pas calculée : aucun sceau « conforme » sans exécution effective des règles,
+aucune conformité PDF/A sans validation. Le traitement est <strong>100 % local</strong> : aucun
+appel réseau, aucune télémétrie.</p>
+
+<!-- ============================ CONCEPTS ============================ -->
+<h2 id="concepts">2. Concepts clés</h2>
+<h3>Le modèle pivot</h3>
+<p>Tous les formats sont traduits vers un <strong>modèle pivot</strong> unique, aligné sur la
+sémantique <strong>EN 16931</strong> (les « BT », <em>Business Terms</em>, et « BG », <em>Business
+Groups</em>). Ajouter un format, c'est écrire un lecteur et un écrivain vers ce pivot — jamais un
+convertisseur direct de format à format. Conséquence pratique : <em>toute</em> conversion passe par
+le pivot, et une même facture peut être lue en CII et réécrite en UBL sans perte.</p>
+<h3>Détection par le contenu</h3>
+<p>Kanjō identifie le format en inspectant le <strong>contenu</strong> du fichier (octets magiques,
+racine XML, espaces de noms), jamais uniquement l'extension. Un <code>.xml</code> mal nommé sera
+correctement reconnu.</p>
+<h3>Exactitude des montants et des dates</h3>
+<p>Les montants sont manipulés en <strong>arithmétique entière exacte</strong> (unités mineures +
+échelle + devise) — jamais en <code>float64</code>. Les dates de facture sont des dates civiles
+sans fuseau horaire. Aucune erreur d'arrondi n'est introduite.</p>
+<h3>Rapport de perte</h3>
+<p>Une conversion qui perdrait de l'information produit un <strong>rapport de perte explicite</strong>.
+La politique <code>--max-loss</code> décide si une conversion dégradante est autorisée, refusée, ou
+signalée.</p>
+
+<!-- ============================ INSTALLATION ============================ -->
+<h2 id="install">3. Installation</h2>
+<h3>Binaires précompilés (recommandé)</h3>
+<p>Téléchargez l'archive de votre plateforme depuis la page
+<a href="https://github.com/cyprienbrisset/kanjo/releases">Releases</a> (Linux, macOS, Windows ·
+amd64/arm64), vérifiez l'empreinte, décompressez : le binaire <code>kanjo</code> est autonome,
+sans dépendance d'exécution.</p>
+<pre><code># Vérifier l'intégrité puis décompresser (exemple Linux amd64)
+sha256sum -c SHA256SUMS.txt
+tar xzf kanjo_linux_amd64.tar.gz
+./kanjo version</code></pre>
+<h3>Compilation depuis les sources</h3>
+<p>Kanjō est écrit en Go et se compile en un binaire statique (pur Go, <code>CGO_ENABLED=0</code>)
+sur six cibles.</p>
+<pre><code>CGO_ENABLED=0 go build -o kanjo ./cmd/kanjo
+# Client lourd de bureau (fenêtre native, nécessite cgo/WebKit)
+CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio</code></pre>
+<div class="note">Vérifiez votre environnement à tout moment avec <code>kanjo doctor</code>
+(voir <a href="#cmd-doctor">§ doctor</a>).</div>
+
+<!-- ============================ DÉMARRAGE ============================ -->
+<h2 id="demarrage">4. Démarrage rapide</h2>
+<p>Cinq commandes pour couvrir l'essentiel :</p>
+<pre><code>kanjo inspect facture.pdf                 # résumé lisible d'une facture
+kanjo validate facture.xml               # vérifier la conformité EN 16931
+kanjo convert facture.pdf --to ubl --out ./sortie
+kanjo diff facture.pdf facture.ubl.xml   # prouver une conversion sans perte
+kanjo render facture.xml                 # produire la face lisible (HTML)</code></pre>
+
+<!-- ============================ CLI ============================ -->
+<h2 id="cli-generalites">5. Ligne de commande (CLI)</h2>
+<p>La forme générale est <code>kanjo &lt;commande&gt; [options] [fichiers…]</code>. La plupart des
+commandes acceptent un fichier, plusieurs fichiers, ou un dossier (avec <code>--recursive</code>).</p>
+<h4>Options globales fréquentes</h4>
+<table>
+<tr><th>Option</th><th>Effet</th></tr>
+<tr><td><code>--format table|json</code></td><td>Format de sortie. Par défaut : <code>table</code> sur un terminal, <code>json</code> quand la sortie est redirigée (idéal pour scripts/CI).</td></tr>
+<tr><td><code>--help</code></td><td>Aide détaillée d'une commande : <code>kanjo &lt;commande&gt; --help</code>.</td></tr>
+</table>
+<figure>
+<img src="assets/img/cli.png" alt="Kanjō en ligne de commande">
+<figcaption>La CLI : sortie lisible sur terminal, JSON stable pour l'automatisation, codes de sortie normalisés.</figcaption>
+</figure>
+
+<h3 id="cmd-inspect">5.1 <code>inspect</code> — inspecter un document</h3>
+<p>Affiche une synthèse lisible, la valeur d'un terme métier précis, ou le pivot complet.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--show summary|terms|json</code></td><td>Niveau de détail (défaut : <code>summary</code>).</td></tr>
+<tr><td><code>--term BT-112</code></td><td>Afficher un <em>Business Term</em> précis.</td></tr>
+<tr><td><code>--format table|json</code></td><td>Format de sortie.</td></tr>
+</table>
+<pre><code>$ kanjo inspect facture.xml
+▸ F2026-0001  (cii / en16931)
+  Type          380 (Facture commerciale)
+  Émission      2026-09-14
+  Devise        EUR
+  Émetteur      SA Meunier  (TVA FR81627131848)
+  Destinataire  Société Cliente
+  Lignes        2
+  Total HT      299.61 EUR
+  Total TVA     59.92 EUR
+  Total TTC     359.53 EUR
+  Net à payer   359.53 EUR
+
+# Valeur d'un terme précis
+$ kanjo inspect facture.xml --term BT-112
+# Pivot complet en JSON
+$ kanjo inspect facture.xml --show json</code></pre>
+
+<h3 id="cmd-validate">5.2 <code>validate</code> — valider la conformité</h3>
+<p>Applique le moteur de règles <strong>EN 16931 natif</strong> (et les CIUS françaises) au document.
+Le verdict est réellement calculé, jamais simulé.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--rules en16931,cius.fr,kanjo</code></td><td>Jeux de règles à appliquer (défaut : tous ceux applicables au type de document).</td></tr>
+<tr><td><code>--severity error|warning</code></td><td>Seuil d'échec (défaut : <code>error</code>).</td></tr>
+<tr><td><code>--explain</code></td><td>Afficher le texte intégral des règles échouées (attendu / trouvé).</td></tr>
+<tr><td><code>--report fichier.html|.json</code></td><td>Écrire un rapport de validation imprimable.</td></tr>
+<tr><td><code>--recursive</code>, <code>--include</code>, <code>--exclude</code></td><td>Parcours de dossiers et filtres glob.</td></tr>
+<tr><td><code>--cross-check</code></td><td>Confronter le verdict à des validateurs externes (Mustangproject, KoSIT) s'ils sont configurés.</td></tr>
+</table>
+<pre><code>$ kanjo validate facture.xml
+✓ facture.xml  [cii]
+
+✓ 1   ⚠ 0   ✗ 0
+
+# Valider un dossier entier et produire un rapport HTML
+$ kanjo validate ./factures --recursive --report rapport.html
+
+# Détail des règles échouées
+$ kanjo validate facture.xml --explain</code></pre>
+<div class="note">Le code de sortie reflète le verdict (voir <a href="#exit">§ codes de sortie</a>) :
+idéal pour bloquer une chaîne d'intégration sur une facture non conforme.</div>
+
+<h3 id="cmd-convert">5.3 <code>convert</code> — convertir d'un format à un autre</h3>
+<p>Convertit une ou plusieurs factures via le modèle pivot, avec rapport de perte et politique de perte.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--to cii|ubl|facturx|xrechnung|peppol|fatturapa|edifact|orderx|json</code></td><td>Format cible (<strong>requis</strong>).</td></tr>
+<tr><td><code>--out fichier|dossier</code></td><td>Sortie (fichier pour une entrée unique, dossier pour un lot).</td></tr>
+<tr><td><code>--profile minimum|basicwl|basic|en16931|extended</code></td><td>Profil Factur-X (défaut : <code>en16931</code>).</td></tr>
+<tr><td><code>--syntax ubl|cii</code></td><td>Syntaxe pour XRechnung.</td></tr>
+<tr><td><code>--max-loss none|minor|any</code></td><td>Politique de perte (défaut : <code>minor</code>).</td></tr>
+<tr><td><code>--allow-loss</code></td><td>Autoriser explicitement une conversion dégradante.</td></tr>
+<tr><td><code>--workers N</code>, <code>--recursive</code>, <code>--resume</code></td><td>Lot : parallélisme, récursivité, reprise d'un lot interrompu.</td></tr>
+<tr><td><code>--preset nom</code></td><td>Appliquer un jeu de réglages enregistré (voir <a href="#cmd-preset">preset</a>).</td></tr>
+</table>
+<pre><code># Une facture Factur-X vers UBL
+$ kanjo convert facture.pdf --to ubl --out ./sortie
+
+# Lot : tout un dossier vers Factur-X, 8 workers, reprise possible
+$ kanjo convert ./entrantes --to facturx --out ./facturx -w 8 --recursive --resume
+
+# Vers XRechnung en syntaxe CII
+$ kanjo convert facture.xml --to xrechnung --syntax cii --out ./x</code></pre>
+
+<h3 id="cmd-extract">5.4 <code>extract</code> — extraire le XML d'une Factur-X</h3>
+<p>Extrait le XML de facture (et, au besoin, les pièces jointes) embarqué dans un PDF Factur-X/ZUGFeRD.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--stdout</code></td><td>Écrire le XML sur la sortie standard.</td></tr>
+<tr><td><code>--out dossier</code></td><td>Dossier de sortie.</td></tr>
+<tr><td><code>--attachments</code></td><td>Extraire aussi les pièces jointes additionnelles.</td></tr>
+<tr><td><code>--xml-only</code></td><td>N'extraire que le XML principal (défaut : activé).</td></tr>
+</table>
+<pre><code>$ kanjo extract facture.pdf --out ./xml
+$ kanjo extract facture.pdf --stdout &gt; facture.xml</code></pre>
+
+<h3 id="cmd-embed">5.5 <code>embed</code> — embarquer un XML dans un PDF</h3>
+<p>Produit une Factur-X en associant un XML de facture à un PDF, avec l'association exigée par
+PDF/A-3 (<code>/AF</code>, <code>/AFRelationship</code>).</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--xml fichier</code></td><td>XML de facture à embarquer (<strong>requis</strong>).</td></tr>
+<tr><td><code>--out fichier</code></td><td>PDF de sortie.</td></tr>
+<tr><td><code>--name factur-x.xml</code></td><td>Nom de la pièce jointe embarquée.</td></tr>
+<tr><td><code>--verify-pdfa</code></td><td>Valider la conformité PDF/A-3b avec veraPDF (si installé).</td></tr>
+</table>
+<pre><code>$ kanjo embed modele.pdf --xml facture.xml --out facture-x.pdf --verify-pdfa</code></pre>
+<div class="note warn">La conformité PDF/A-3b n'est déclarée que si veraPDF l'a effectivement
+confirmée ; sinon le rapport l'indique explicitement.</div>
+
+<h3 id="cmd-diff">5.6 <code>diff</code> — comparer deux documents</h3>
+<p>Compare sémantiquement deux factures, quels que soient leurs formats, et distingue les
+<strong>pertes</strong> des <strong>divergences</strong>. Idéal pour prouver qu'une conversion est
+sans perte.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--semantic</code></td><td>Comparaison sur le pivot (défaut : activé).</td></tr>
+<tr><td><code>--ignore BT-9,BT-112</code></td><td>Exclure des termes de la comparaison.</td></tr>
+<tr><td><code>--ignore-formatting</code></td><td>Normaliser nombres et dates avant comparaison.</td></tr>
+</table>
+<pre><code>$ kanjo diff facture.pdf facture.ubl.xml
+$ kanjo diff avant.xml apres.xml --ignore-formatting --ignore BT-9</code></pre>
+
+<h3 id="cmd-repair">5.7 <code>repair</code> — corriger les anomalies sûres</h3>
+<p>Applique des corrections <strong>sûres</strong> (jamais d'invention de donnée métier) : le
+document reste fidèle, seules les anomalies non ambiguës sont réparées.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--dry-run</code></td><td>Lister les corrections sans les appliquer.</td></tr>
+<tr><td><code>--fixes …</code></td><td>Restreindre aux corrections nommées (défaut : toutes les sûres).</td></tr>
+<tr><td><code>--backup</code></td><td>Conserver l'original en <code>.bak</code> (défaut : activé).</td></tr>
+</table>
+<pre><code>$ kanjo repair facture.xml --dry-run   # aperçu
+$ kanjo repair facture.xml             # applique + .bak</code></pre>
+
+<h3 id="cmd-anonymize">5.8 <code>anonymize</code> — anonymiser (RGPD)</h3>
+<p>Remplace de façon déterministe les données personnelles pour produire un fichier partageable
+(support, tickets, corpus de test) sans donnée réelle.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--seed graine</code></td><td>Graine pour un remplacement déterministe et reproductible.</td></tr>
+<tr><td><code>--keep amounts</code></td><td>Préserver certains aspects (ex. montants) — répétable.</td></tr>
+<tr><td><code>--out dossier</code></td><td>Sortie (défaut : à côté, suffixe <code>.anon</code>).</td></tr>
+</table>
+<pre><code>$ kanjo anonymize facture.xml --seed demo --keep amounts</code></pre>
+
+<h3 id="cmd-render">5.9 <code>render</code> — face lisible (HTML)</h3>
+<p>Produit une représentation lisible d'une facture, dans le design de l'application, éventuellement
+scellée d'un cachet reflétant le résultat de validation.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--lang fr|en|de</code></td><td>Langue de rendu (défaut : <code>fr</code>).</td></tr>
+<tr><td><code>--seal</code></td><td>Apposer un sceau reflétant la validation.</td></tr>
+<tr><td><code>--out dossier</code></td><td>Dossier de sortie.</td></tr>
+</table>
+<pre><code>$ kanjo render facture.xml --lang fr --seal</code></pre>
+<figure>
+<img src="assets/img/invoice.png" alt="Facture rendue en HTML lisible">
+<figcaption>La face lisible générée par <code>render</code> — imprimable, fidèle aux données du pivot.</figcaption>
+</figure>
+
+<h3 id="cmd-generate">5.10 <code>generate</code> — corpus synthétique</h3>
+<p>Génère des factures synthétiques cohérentes et reproductibles, pour tester une chaîne sans
+donnée réelle.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--count N</code></td><td>Nombre de factures (défaut : 10).</td></tr>
+<tr><td><code>--scenario …</code></td><td><code>simple</code>, <code>multi-tva</code>, <code>avoir</code>, <code>autoliquidation</code>, <code>intracommunautaire</code>, <code>acompte</code>.</td></tr>
+<tr><td><code>--format cii|ubl|xrechnung|peppol|json|csv</code></td><td>Format de sortie (défaut : <code>cii</code>).</td></tr>
+<tr><td><code>--invalid</code></td><td>Produire des cas volontairement non conformes.</td></tr>
+<tr><td><code>--seed N</code></td><td>Graine (reproductibilité).</td></tr>
+<tr><td><code>--out dossier</code></td><td>Dossier de sortie (<strong>requis</strong>).</td></tr>
+</table>
+<pre><code>$ kanjo generate --count 50 --scenario multi-tva --out ./corpus</code></pre>
+
+<h3 id="cmd-watch">5.11 <code>watch</code> — surveiller un dossier</h3>
+<p>Surveille un dossier « boîte de réception » et traite automatiquement les fichiers déposés selon
+un preset.</p>
+<table>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>--preset nom</code></td><td>Preset à appliquer (<strong>requis</strong>).</td></tr>
+<tr><td><code>--out</code>, <code>--done</code>, <code>--failed</code></td><td>Dossiers de sortie, des fichiers traités et des échecs.</td></tr>
+<tr><td><code>--poll 2s</code></td><td>Intervalle de scrutation.</td></tr>
+<tr><td><code>--once</code></td><td>Traiter l'existant puis sortir.</td></tr>
+</table>
+<pre><code>$ kanjo watch ./inbox --preset vers-ubl --out ./inbox/out</code></pre>
+
+<h3 id="cmd-preset">5.12 <code>preset</code> — réglages réutilisables</h3>
+<p>Enregistre des combinaisons d'options réutilisables (par <code>convert</code>, <code>watch</code>…).</p>
+<pre><code>$ kanjo preset list
+$ kanjo preset save vers-ubl --to ubl --profile en16931
+$ kanjo preset show vers-ubl
+$ kanjo preset export vers-ubl &gt; vers-ubl.json
+$ kanjo preset import vers-ubl.json
+$ kanjo preset delete vers-ubl</code></pre>
+
+<h3 id="cmd-library">5.13 <code>library</code> — bibliothèque locale</h3>
+<p>Indexe les documents traités dans une base <strong>SQLite locale</strong> pour les retrouver
+(rétention, droit à l'effacement RGPD).</p>
+<pre><code>$ kanjo library index ./factures --recursive
+$ kanjo library list
+$ kanjo library forget &lt;id&gt;     # droit à l'effacement
+$ kanjo library purge --before 2025-01-01</code></pre>
+
+<h3 id="cmd-audit">5.14 <code>audit</code> — journal d'audit</h3>
+<p>Consulte le journal d'audit horodaté et <strong>chaîné</strong> (tamper-evident) : chaque entrée
+référence l'empreinte de la précédente, ce qui permet de détecter toute modification. Le journal ne
+contient <strong>aucune donnée personnelle</strong>.</p>
+<pre><code>$ kanjo audit list
+$ kanjo audit verify                       # contrôle d'intégrité de la chaîne
+$ kanjo audit export --from 2026-01-01 --to 2026-06-30 --format html --out audit.html
+$ kanjo audit path                         # emplacement du journal</code></pre>
+
+<h3 id="cmd-doctor">5.15 <code>doctor</code> &amp; <code>version</code></h3>
+<p><code>doctor</code> diagnostique l'environnement (OS, capacités optionnelles : Ghostscript, Java,
+veraPDF). <code>version</code> affiche les trois versions suivies : outil, jeu de règles, schéma de sortie.</p>
+<pre><code>$ kanjo version
+{
+  "tool": "v0.1.0",
+  "rules": "2026.3",
+  "schema": "github.com/cyprienbrisset/kanjo/1"
+}
+
+$ kanjo doctor
+  os / arch        darwin / arm64
+  java             ✓ /usr/bin/java   (validateurs externes optionnels)
+  ghostscript      ·  (conversion PDF/A optionnelle)
+  verapdf          ·  (validation PDF/A optionnelle)</code></pre>
+
+<!-- ============================ TUI ============================ -->
+<h2 id="tui">6. Interface texte (TUI)</h2>
+<p>La TUI offre une inspection interactive sans quitter le clavier. Lancez-la sur un dossier ou un
+fichier :</p>
+<pre><code>kanjo tui ./factures      # ou simplement : kanjo</code></pre>
+<figure>
+<img src="assets/img/tui.png" alt="Interface texte de Kanjō">
+<figcaption>La TUI : liste des documents, aperçu du contenu et verdict de validation, au terminal.</figcaption>
+</figure>
+<h3>Navigation</h3>
+<table>
+<tr><th>Touche</th><th>Action</th></tr>
+<tr><td><kbd>↑</kbd> / <kbd>↓</kbd> (ou <kbd>k</kbd> / <kbd>j</kbd>)</td><td>Se déplacer dans la liste des documents.</td></tr>
+<tr><td><kbd>Entrée</kbd></td><td>Ouvrir le document sélectionné (synthèse + termes).</td></tr>
+<tr><td><kbd>Tab</kbd></td><td>Basculer entre les panneaux (liste ↔ détail).</td></tr>
+<tr><td><kbd>/</kbd></td><td>Filtrer / rechercher dans la liste.</td></tr>
+<tr><td><kbd>v</kbd></td><td>Valider le document affiché.</td></tr>
+<tr><td><kbd>?</kbd></td><td>Afficher l'aide contextuelle.</td></tr>
+<tr><td><kbd>q</kbd></td><td>Quitter.</td></tr>
+</table>
+<div class="note">La TUI est idéale pour trier rapidement un lot reçu : on parcourt, on inspecte,
+on valide, sans écrire une seule commande.</div>
+
+<!-- ============================ STUDIO ============================ -->
+<h2 id="studio">7. Studio (application de bureau)</h2>
+<p>Studio est l'interface graphique locale, pensée pour un usage quotidien par un comptable, sans
+terminal. Lancez :</p>
+<pre><code>kanjo studio      # ouvre l'application (client lourd natif ou dans le navigateur)</code></pre>
+<figure>
+<img src="assets/img/studio-inspector.png" alt="Kanjō Studio — Inspecteur">
+<figcaption>Studio — l'inspecteur : synthèse de la facture, termes métier et aperçu, côte à côte.</figcaption>
+</figure>
+<h3>Ce que permet Studio</h3>
+<table>
+<tr><th>Écran</th><th>Usage</th></tr>
+<tr><td><strong>Inspecteur</strong></td><td>Ouvrir une facture (glisser-déposer), lire sa synthèse, ses termes BT et sa face lisible.</td></tr>
+<tr><td><strong>Validation</strong></td><td>Lancer la validation EN 16931 / CIUS et parcourir les anomalies, avec explication règle par règle.</td></tr>
+<tr><td><strong>Conversion</strong></td><td>Convertir vers un autre format avec aperçu du rapport de perte avant écriture.</td></tr>
+<tr><td><strong>Comparaison</strong></td><td>Comparer deux documents (diff sémantique) pour prouver une conversion sans perte.</td></tr>
+<tr><td><strong>Bibliothèque</strong></td><td>Retrouver les documents déjà traités (base locale), avec rétention et effacement RGPD.</td></tr>
+<tr><td><strong>Journal d'audit</strong></td><td>Consulter et exporter le journal chaîné, sans donnée personnelle.</td></tr>
+</table>
+<h3>Flux type dans Studio</h3>
+<ol>
+<li>Glissez une facture (PDF Factur-X, XML UBL/CII…) dans la fenêtre.</li>
+<li>Lisez la synthèse et la face lisible dans l'inspecteur.</li>
+<li>Lancez la validation : les anomalies s'affichent avec leur explication.</li>
+<li>Si besoin, convertissez vers le format attendu ; vérifiez le rapport de perte.</li>
+<li>Le traitement est journalisé dans l'audit ; le document rejoint la bibliothèque.</li>
+</ol>
+<div class="note ok">Comme la CLI et la TUI, Studio est <strong>100 % local</strong> : vos factures
+ne quittent jamais votre poste.</div>
+
+<!-- ============================ ANNEXES ============================ -->
+<h2 id="formats">8. Formats pris en charge</h2>
+<table>
+<tr><th>Format</th><th>Lecture</th><th>Écriture</th><th>Validation</th></tr>
+<tr><td>Factur-X (PDF/A-3, tous profils)</td><td>✅</td><td>✅ (embed)</td><td>✅</td></tr>
+<tr><td>CII D16B</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>UBL 2.1 (Invoice + CreditNote)</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>XRechnung (UBL &amp; CII)</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>Peppol BIS Billing 3.0</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>FatturaPA (v1.2)</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>UN/EDIFACT INVOIC (D.96A)</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>Order-X (CrossIndustryOrder)</td><td>✅</td><td>✅</td><td>✅ (structure)</td></tr>
+<tr><td>ZUGFeRD 1.0 (hérité)</td><td>✅</td><td>—</td><td>✅</td></tr>
+<tr><td>JSON pivot · CSV</td><td>✅ / —</td><td>✅ / ✅</td><td>✅</td></tr>
+</table>
+
+<h2 id="conformite">9. Conformité EN 16931</h2>
+<p>Kanjō couvre <strong>100 % des 223 règles</strong> du Schematron officiel du CEN, mesurées à
+chaque commit (aucun stub, chaque règle réellement calculée et éprouvée sur un corpus réel). Le
+détail par famille est publié dans le
+<a href="CONFORMITE-EN16931.md">rapport de conformité</a>. La conformité n'est jamais déclarée sans
+avoir été calculée.</p>
+
+<h2 id="exit">10. Codes de sortie</h2>
+<p>Les commandes renvoient un code de sortie normalisé, pratique en CI :</p>
+<table>
+<tr><th>Code</th><th>Signification</th></tr>
+<tr><td><code>0</code></td><td>Succès.</td></tr>
+<tr><td><code>1</code></td><td>Erreur interne inattendue.</td></tr>
+<tr><td><code>2</code></td><td>Erreur d'usage (options invalides).</td></tr>
+<tr><td><code>3</code></td><td>Validation échouée (anomalie ≥ seuil).</td></tr>
+<tr><td><code>4</code></td><td>Fichier illisible / format non reconnu.</td></tr>
+<tr><td><code>5</code></td><td>Conversion dégradante refusée.</td></tr>
+<tr><td><code>6</code></td><td>Dépendance/capacité indisponible (XSD, Ghostscript, veraPDF).</td></tr>
+<tr><td><code>7</code></td><td>Interruption utilisateur.</td></tr>
+<tr><td><code>8</code></td><td>Quota / limite dépassée.</td></tr>
+</table>
+
+<h2 id="rgpd">11. Sécurité &amp; RGPD</h2>
+<ul>
+<li><strong>100 % hors-ligne</strong> — aucun appel réseau, aucune télémétrie ; vos factures restent sur votre poste.</li>
+<li><strong>XML durci</strong> — protection contre les attaques XXE et les bombes de décompression.</li>
+<li><strong>Écriture atomique</strong> — jamais d'écrasement partiel ; l'original n'est pas modifié en place.</li>
+<li><strong>Anonymisation</strong> — <code>anonymize</code> pour partager sans donnée personnelle.</li>
+<li><strong>Journal d'audit sans PII</strong> — horodaté, chaîné (tamper-evident), sans aucune donnée métier.</li>
+</ul>
+<div class="note">Pour toute question de sécurité ou de conformité impliquant des données sensibles,
+rapprochez-vous de votre RSSI.</div>
+
+<hr>
+<p class="toc-top">Kanjō — documentation utilisateur · éditée par Wakastellar · traitement 100 % local, hébergement France.
+<a href="#intro">↑ Haut de page</a></p>
+
+</main>
+</div>
+</body>
+</html>
