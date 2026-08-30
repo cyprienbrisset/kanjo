@@ -12,12 +12,17 @@ import (
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/edifact"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/facturx"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/fatturapa"
+	_ "github.com/cyprienbrisset/kanjo/pkg/read/orderx"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/ubl"
 	_ "github.com/cyprienbrisset/kanjo/pkg/read/zugferd1"
 	// Écrivains
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/cii"
+<<<<<<< HEAD
+	_ "github.com/cyprienbrisset/kanjo/pkg/write/orderx"
+=======
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/edifact"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/fatturapa"
+>>>>>>> origin/main
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/peppol"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/tabular"
 	_ "github.com/cyprienbrisset/kanjo/pkg/write/ubl"

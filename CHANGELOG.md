@@ -13,6 +13,14 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 ## [Non publié]
 
 <<<<<<< HEAD
+### Ajouté (nouveau format)
+- **Order-X (bon de commande hybride)** — lecture et écriture (`pkg/read/orderx`, `pkg/write/orderx`)
+  du format UN/CEFACT SCRDM `SCRDMCCBDACIOMESSAGE` (CrossIndustryOrder), profil comfort. Partage la
+  structure CII ; spécificités gérées : racine SCRDM, `OrderCurrencyCode`, `RequestedQuantity`,
+  TypeCode 220 (commande). Détection par le contenu. **Aller-retour pivot→Order-X→pivot testé** et
+  lecture d'un **échantillon Order-X réaliste**. Cible `orderx` (`kanjo convert --to orderx`).
+=======
+<<<<<<< HEAD
 ### Ajouté (audit & conformité)
 - **Journal d'audit chaîné (tamper-evident)** : chaque entrée porte un numéro de séquence, l'empreinte
   de la précédente (`prevHash`) et sa propre empreinte SHA-256 (`pkg/audit`). `kanjo audit verify`
@@ -49,6 +57,7 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 ### Sécurité
 - **Fuzzing Go natif** du durcissement XML (`internal/xmlsafe`) et des lecteurs (`pkg/read`) :
   aucune entrée aléatoire, tronquée ou malveillante ne provoque de panic (contrat testé en continu).
+>>>>>>> origin/main
 >>>>>>> origin/main
 
 ### Modifié (cohérence UI)
