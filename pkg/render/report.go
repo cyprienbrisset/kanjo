@@ -39,9 +39,14 @@ type reportView struct {
 	CSS          template.CSS
 }
 
-var reportTmpl = template.Must(template.New("report").Parse(`<!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><title>{{.Title}}</title><style>{{.CSS}}</style></head>
+var reportTmpl = template.Must(template.New("report").Funcs(assetFuncs).Parse(`<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>{{.Title}}</title>
+<link rel="icon" type="image/png" href="{{faviconURI}}"><style>{{.CSS}}</style></head>
 <body><div class="sheet">
+ <div class="masthead" style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+  <img src="{{logoURI}}" alt="Kanjō" width="40" height="40" style="border-radius:8px">
+  <span style="font-family:'Shippori Mincho B1',serif;font-size:1.15rem;color:var(--ink-700)">Kanjō</span>
+ </div>
  <h1>Rapport de validation</h1>
  <div class="meta">{{.Summary.Total}} documents · {{.StartedAt}} · jeu de règles {{.RulesVersion}}</div>
  <div class="summary">

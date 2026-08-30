@@ -12,6 +12,12 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (identité visuelle)
+- **Logo Kanjō intégré partout** : page d'accueil (favicon, OpenGraph/Twitter, nav, hero),
+  documentation utilisateur, README (bannière) et Studio (favicon + en-tête). Les **sorties HTML
+  générées** (rapport de validation `--report`, face lisible `render`) embarquent désormais le logo
+  et le favicon en **data-URI** — fichiers autonomes, imprimables, sans dépendance réseau.
+
 ### Ajouté (documentation)
 - **Documentation utilisateur complète** ([`docs/documentation.html`](docs/documentation.html)) —
   page autonome, stylée, **imprimable en PDF** et téléchargeable depuis la GitHub Page : présentation,
