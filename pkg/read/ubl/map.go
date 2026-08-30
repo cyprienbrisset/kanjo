@@ -52,6 +52,7 @@ func mapToPivot(x *ublDocument, sourceName string) (*model.Document, error) {
 		doc.Notes = append(doc.Notes, model.Note{Content: n})
 	}
 
+	doc.TaxPointDateCode = strings.TrimSpace(x.TaxPointCode)
 	doc.BuyerReference = strings.TrimSpace(x.BuyerReference)
 	doc.PurchaseOrderRef = strings.TrimSpace(x.OrderReference.ID)
 	doc.Seller = mapParty(x.SupplierParty.Party)

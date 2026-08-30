@@ -12,6 +12,16 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Conformité (jeu de règles → 100 %)
+- **BR-CL-06 activée — parité EN 16931 : 223 / 223 (100 %)** 🎯. Le code de date d'exigibilité de
+  la TVA (**BT-8**) est désormais modélisé (`Document.TaxPointDateCode`) et lu depuis CII
+  (`DueDateTypeCode`) et UBL (`InvoicePeriod/DescriptionCode`) ; la règle vérifie l'appartenance à
+  la restriction **UNTDID 2005** (3 / 35 / 432). Cliquet relevé à 223. **Couverture intégrale du
+  Schematron officiel CEN, sans aucun stub.**
+- **Rapport de conformité repensé** ([`docs/CONFORMITE-EN16931.md`](docs/CONFORMITE-EN16931.md)) :
+  structure professionnelle — synthèse chiffrée, **tableau de couverture par famille** avec libellés
+  métier, section méthode de mesure, détail des règles, feuille de route et annexe de reproductibilité.
+
 ### Conformité (jeu de règles → 99 %)
 - **5 règles activées : BR-B-01, BR-B-02, BR-CL-13, BR-CL-22, BR-CL-25** — parité EN 16931
   **217 → 222/223 (99 %)**, cliquet relevé à 222.

@@ -40,6 +40,7 @@ type ublDocument struct {
 	CreditNoteType  string   `xml:"CreditNoteTypeCode"`
 	Notes           []string `xml:"Note"`
 	CurrencyCode    string   `xml:"DocumentCurrencyCode"`
+	TaxPointCode    string   `xml:"InvoicePeriod>DescriptionCode"` // BT-8 code de date d'exigibilité TVA
 	BuyerReference  string   `xml:"BuyerReference"`
 	OrderReference  struct {
 		ID string `xml:"ID"`
