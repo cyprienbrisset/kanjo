@@ -4,10 +4,10 @@
 > (`testdata/en16931/canonical-rule-ids.txt`, extraite du Schematron officiel CEN).
 > Ne pas éditer à la main. Régénérer : `KANJO_REGEN=1 go test ./test/ -run TestParityReportInSync`.
 
-## Couverture : 134 / 223 règles canoniques (60 %)
+## Couverture : 146 / 223 règles canoniques (65 %)
 
-- Règles couvertes : **134**
-- Règles manquantes : **89**
+- Règles couvertes : **146**
+- Règles manquantes : **77**
 - Règles implémentées au-delà du Schematron CEN de référence : **1**
 
 ## Règles couvertes
@@ -15,8 +15,8 @@
 - **BR** (38) : BR-02, BR-03, BR-04, BR-05, BR-06, BR-07, BR-08, BR-09, BR-10, BR-11, BR-12, BR-13, BR-14, BR-15, BR-16, BR-21, BR-23, BR-24, BR-25, BR-26, BR-27, BR-28, BR-29, BR-30, BR-31, BR-32, BR-33, BR-36, BR-37, BR-38, BR-41, BR-42, BR-43, BR-44, BR-45, BR-46, BR-47, BR-55
 - **BR-AE** (10) : BR-AE-01, BR-AE-02, BR-AE-03, BR-AE-04, BR-AE-05, BR-AE-06, BR-AE-07, BR-AE-08, BR-AE-09, BR-AE-10
 - **BR-CL** (5) : BR-CL-01, BR-CL-03, BR-CL-04, BR-CL-14, BR-CL-17
-- **BR-CO** (14) : BR-CO-04, BR-CO-09, BR-CO-10, BR-CO-11, BR-CO-12, BR-CO-13, BR-CO-14, BR-CO-15, BR-CO-16, BR-CO-17, BR-CO-18, BR-CO-19, BR-CO-20, BR-CO-26
-- **BR-DEC** (12) : BR-DEC-01, BR-DEC-05, BR-DEC-09, BR-DEC-12, BR-DEC-13, BR-DEC-14, BR-DEC-18, BR-DEC-19, BR-DEC-20, BR-DEC-23, BR-DEC-24, BR-DEC-27
+- **BR-CO** (18) : BR-CO-04, BR-CO-09, BR-CO-10, BR-CO-11, BR-CO-12, BR-CO-13, BR-CO-14, BR-CO-15, BR-CO-16, BR-CO-17, BR-CO-18, BR-CO-19, BR-CO-20, BR-CO-21, BR-CO-22, BR-CO-23, BR-CO-24, BR-CO-26
+- **BR-DEC** (20) : BR-DEC-01, BR-DEC-02, BR-DEC-05, BR-DEC-06, BR-DEC-09, BR-DEC-10, BR-DEC-11, BR-DEC-12, BR-DEC-13, BR-DEC-14, BR-DEC-16, BR-DEC-17, BR-DEC-18, BR-DEC-19, BR-DEC-20, BR-DEC-23, BR-DEC-24, BR-DEC-25, BR-DEC-27, BR-DEC-28
 - **BR-E** (10) : BR-E-01, BR-E-02, BR-E-03, BR-E-04, BR-E-05, BR-E-06, BR-E-07, BR-E-08, BR-E-09, BR-E-10
 - **BR-G** (10) : BR-G-01, BR-G-02, BR-G-03, BR-G-04, BR-G-05, BR-G-06, BR-G-07, BR-G-08, BR-G-09, BR-G-10
 - **BR-IC** (10) : BR-IC-01, BR-IC-02, BR-IC-03, BR-IC-04, BR-IC-05, BR-IC-06, BR-IC-07, BR-IC-08, BR-IC-09, BR-IC-10
@@ -31,8 +31,8 @@
 - **BR-AG** (10) : BR-AG-01, BR-AG-02, BR-AG-03, BR-AG-04, BR-AG-05, BR-AG-06, BR-AG-07, BR-AG-08, BR-AG-09, BR-AG-10
 - **BR-B** (2) : BR-B-01, BR-B-02
 - **BR-CL** (18) : BR-CL-05, BR-CL-06, BR-CL-07, BR-CL-08, BR-CL-10, BR-CL-11, BR-CL-13, BR-CL-15, BR-CL-16, BR-CL-18, BR-CL-19, BR-CL-20, BR-CL-21, BR-CL-22, BR-CL-23, BR-CL-24, BR-CL-25, BR-CL-26
-- **BR-CO** (9) : BR-CO-03, BR-CO-05, BR-CO-06, BR-CO-07, BR-CO-08, BR-CO-21, BR-CO-22, BR-CO-23, BR-CO-24
-- **BR-DEC** (9) : BR-DEC-02, BR-DEC-06, BR-DEC-10, BR-DEC-11, BR-DEC-15, BR-DEC-16, BR-DEC-17, BR-DEC-25, BR-DEC-28
+- **BR-CO** (5) : BR-CO-03, BR-CO-05, BR-CO-06, BR-CO-07, BR-CO-08
+- **BR-DEC** (1) : BR-DEC-15
 - **BR-IC** (2) : BR-IC-11, BR-IC-12
 - **BR-O** (9) : BR-O-02, BR-O-03, BR-O-04, BR-O-06, BR-O-07, BR-O-11, BR-O-12, BR-O-13, BR-O-14
 

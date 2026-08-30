@@ -15,7 +15,7 @@ import (
 
 // parityFloor est un cliquet anti-régression : le nombre de règles canoniques EN 16931 couvertes
 // ne doit jamais repasser sous ce seuil. À relever au fil des lots (jamais à baisser).
-const parityFloor = 134
+const parityFloor = 146
 
 var (
 	canonicalPath = filepath.Join("..", "testdata", "en16931", "canonical-rule-ids.txt")
