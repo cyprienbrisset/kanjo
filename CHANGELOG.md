@@ -12,6 +12,13 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (conformité)
+- **Validation croisée** (`pkg/crossvalidate`, `kanjo validate --cross-check`) : confronte le verdict
+  de Kanjō à des validateurs externes de référence — **Mustangproject** (Factur-X/ZUGFeRD) et
+  **KoSIT** (XRechnung) — configurés par variables d'environnement (`KANJO_MUSTANG_JAR`,
+  `KANJO_KOSIT_JAR` + `KANJO_KOSIT_SCENARIOS`, `java` requis). Rapport d'accord/désaccord par outil.
+  **Aucun verdict externe simulé** : outil absent = « non exécuté », jamais « conforme » (§17.7).
+
 ### Modifié (cohérence UI)
 - **Suppression des idéogrammes de l'interface CLI** (comme déjà fait dans la GUI) : marqueurs de
   statut clairs et universels `✓` / `⚠` / `✗` / `·`, en-têtes `▸`, bandeaux sans idéogramme. Le
