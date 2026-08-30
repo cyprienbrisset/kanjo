@@ -74,6 +74,10 @@ func mapToPivot(x *ciiInvoice, sourceName string) (*model.Document, error) {
 			return nil, fmt.Errorf("lecture CII %s: ventilation TVA #%d: %w", sourceName, i+1, err)
 		}
 		doc.TaxBreakdown = append(doc.TaxBreakdown, ts)
+		// BT-8 (code de date d'exigibilité TVA) : porté par la ventilation en CII ; on retient le premier.
+		if doc.TaxPointDateCode == "" {
+			doc.TaxPointDateCode = strings.TrimSpace(tx.DueDateTypeCode)
+		}
 	}
 
 	for i := range x.Transaction.Lines {
