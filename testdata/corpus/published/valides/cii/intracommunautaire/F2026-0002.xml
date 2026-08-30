@@ -21,11 +21,37 @@
         <ram:LineID>1</ram:LineID>
       </ram:AssociatedDocumentLineDocument>
       <ram:SpecifiedTradeProduct>
-        <ram:Name>Développement logiciel</ram:Name>
+        <ram:Name>Formation</ram:Name>
       </ram:SpecifiedTradeProduct>
       <ram:SpecifiedLineTradeAgreement>
         <ram:NetPriceProductTradePrice>
-          <ram:ChargeAmount>270.31</ram:ChargeAmount>
+          <ram:ChargeAmount>331.66</ram:ChargeAmount>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedLineTradeAgreement>
+      <ram:SpecifiedLineTradeDelivery>
+        <ram:BilledQuantity unitCode="C62">2</ram:BilledQuantity>
+      </ram:SpecifiedLineTradeDelivery>
+      <ram:SpecifiedLineTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>K</ram:CategoryCode>
+          <ram:RateApplicablePercent>0</ram:RateApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:SpecifiedTradeSettlementLineMonetarySummation>
+          <ram:LineTotalAmount>663.32</ram:LineTotalAmount>
+        </ram:SpecifiedTradeSettlementLineMonetarySummation>
+      </ram:SpecifiedLineTradeSettlement>
+    </ram:IncludedSupplyChainTradeLineItem>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>2</ram:LineID>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedTradeProduct>
+        <ram:Name>Prestation de conseil</ram:Name>
+      </ram:SpecifiedTradeProduct>
+      <ram:SpecifiedLineTradeAgreement>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount>348.23</ram:ChargeAmount>
         </ram:NetPriceProductTradePrice>
       </ram:SpecifiedLineTradeAgreement>
       <ram:SpecifiedLineTradeDelivery>
@@ -38,59 +64,7 @@
           <ram:RateApplicablePercent>0</ram:RateApplicablePercent>
         </ram:ApplicableTradeTax>
         <ram:SpecifiedTradeSettlementLineMonetarySummation>
-          <ram:LineTotalAmount>810.93</ram:LineTotalAmount>
-        </ram:SpecifiedTradeSettlementLineMonetarySummation>
-      </ram:SpecifiedLineTradeSettlement>
-    </ram:IncludedSupplyChainTradeLineItem>
-    <ram:IncludedSupplyChainTradeLineItem>
-      <ram:AssociatedDocumentLineDocument>
-        <ram:LineID>2</ram:LineID>
-      </ram:AssociatedDocumentLineDocument>
-      <ram:SpecifiedTradeProduct>
-        <ram:Name>Hébergement</ram:Name>
-      </ram:SpecifiedTradeProduct>
-      <ram:SpecifiedLineTradeAgreement>
-        <ram:NetPriceProductTradePrice>
-          <ram:ChargeAmount>486.32</ram:ChargeAmount>
-        </ram:NetPriceProductTradePrice>
-      </ram:SpecifiedLineTradeAgreement>
-      <ram:SpecifiedLineTradeDelivery>
-        <ram:BilledQuantity unitCode="C62">1</ram:BilledQuantity>
-      </ram:SpecifiedLineTradeDelivery>
-      <ram:SpecifiedLineTradeSettlement>
-        <ram:ApplicableTradeTax>
-          <ram:TypeCode>VAT</ram:TypeCode>
-          <ram:CategoryCode>K</ram:CategoryCode>
-          <ram:RateApplicablePercent>0</ram:RateApplicablePercent>
-        </ram:ApplicableTradeTax>
-        <ram:SpecifiedTradeSettlementLineMonetarySummation>
-          <ram:LineTotalAmount>486.32</ram:LineTotalAmount>
-        </ram:SpecifiedTradeSettlementLineMonetarySummation>
-      </ram:SpecifiedLineTradeSettlement>
-    </ram:IncludedSupplyChainTradeLineItem>
-    <ram:IncludedSupplyChainTradeLineItem>
-      <ram:AssociatedDocumentLineDocument>
-        <ram:LineID>3</ram:LineID>
-      </ram:AssociatedDocumentLineDocument>
-      <ram:SpecifiedTradeProduct>
-        <ram:Name>Licence annuelle</ram:Name>
-      </ram:SpecifiedTradeProduct>
-      <ram:SpecifiedLineTradeAgreement>
-        <ram:NetPriceProductTradePrice>
-          <ram:ChargeAmount>385.67</ram:ChargeAmount>
-        </ram:NetPriceProductTradePrice>
-      </ram:SpecifiedLineTradeAgreement>
-      <ram:SpecifiedLineTradeDelivery>
-        <ram:BilledQuantity unitCode="C62">5</ram:BilledQuantity>
-      </ram:SpecifiedLineTradeDelivery>
-      <ram:SpecifiedLineTradeSettlement>
-        <ram:ApplicableTradeTax>
-          <ram:TypeCode>VAT</ram:TypeCode>
-          <ram:CategoryCode>K</ram:CategoryCode>
-          <ram:RateApplicablePercent>0</ram:RateApplicablePercent>
-        </ram:ApplicableTradeTax>
-        <ram:SpecifiedTradeSettlementLineMonetarySummation>
-          <ram:LineTotalAmount>1928.35</ram:LineTotalAmount>
+          <ram:LineTotalAmount>1044.69</ram:LineTotalAmount>
         </ram:SpecifiedTradeSettlementLineMonetarySummation>
       </ram:SpecifiedLineTradeSettlement>
     </ram:IncludedSupplyChainTradeLineItem>
@@ -123,14 +97,28 @@
         </ram:SpecifiedTaxRegistration>
       </ram:BuyerTradeParty>
     </ram:ApplicableHeaderTradeAgreement>
-    <ram:ApplicableHeaderTradeDelivery/>
+    <ram:ApplicableHeaderTradeDelivery>
+      <ram:ShipToTradeParty>
+        <ram:Name>Société Cliente</ram:Name>
+        <ram:PostalTradeAddress>
+          <ram:PostcodeCode>10115</ram:PostcodeCode>
+          <ram:CityName>Berlin</ram:CityName>
+          <ram:CountryID>DE</ram:CountryID>
+        </ram:PostalTradeAddress>
+      </ram:ShipToTradeParty>
+      <ram:ActualDeliverySupplyChainEvent>
+        <ram:OccurrenceDateTime>
+          <udt:DateTimeString format="102">20260912</udt:DateTimeString>
+        </ram:OccurrenceDateTime>
+      </ram:ActualDeliverySupplyChainEvent>
+    </ram:ApplicableHeaderTradeDelivery>
     <ram:ApplicableHeaderTradeSettlement>
       <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
       <ram:ApplicableTradeTax>
         <ram:CalculatedAmount>0.00</ram:CalculatedAmount>
         <ram:TypeCode>VAT</ram:TypeCode>
         <ram:ExemptionReason>Exonération TVA — art. 262 ter I du CGI.</ram:ExemptionReason>
-        <ram:BasisAmount>3225.60</ram:BasisAmount>
+        <ram:BasisAmount>1708.01</ram:BasisAmount>
         <ram:CategoryCode>K</ram:CategoryCode>
         <ram:RateApplicablePercent>0</ram:RateApplicablePercent>
       </ram:ApplicableTradeTax>
@@ -138,11 +126,11 @@
         <ram:Description>Paiement à 30 jours à réception de facture.</ram:Description>
       </ram:SpecifiedTradePaymentTerms>
       <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
-        <ram:LineTotalAmount>3225.60</ram:LineTotalAmount>
-        <ram:TaxBasisTotalAmount>3225.60</ram:TaxBasisTotalAmount>
+        <ram:LineTotalAmount>1708.01</ram:LineTotalAmount>
+        <ram:TaxBasisTotalAmount>1708.01</ram:TaxBasisTotalAmount>
         <ram:TaxTotalAmount currencyID="EUR">0.00</ram:TaxTotalAmount>
-        <ram:GrandTotalAmount>3225.60</ram:GrandTotalAmount>
-        <ram:DuePayableAmount>3225.60</ram:DuePayableAmount>
+        <ram:GrandTotalAmount>1708.01</ram:GrandTotalAmount>
+        <ram:DuePayableAmount>1708.01</ram:DuePayableAmount>
       </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
     </ram:ApplicableHeaderTradeSettlement>
   </rsm:SupplyChainTradeTransaction>
