@@ -40,4 +40,9 @@ func init() {
 		}
 		return s
 	}))
+
+	// BR-CL-06 : le code de date d'exigibilité de la TVA (BT-8) ∈ restriction UNTDID 2005 (3/35/432).
+	rules.Register(codeListRule("BR-CL-06", "BT-8", model.IsKnownVATPointDateCode, func(d *model.Document) []codeAt {
+		return []codeAt{{d.TaxPointDateCode, "taxPointDateCode"}}
+	}))
 }

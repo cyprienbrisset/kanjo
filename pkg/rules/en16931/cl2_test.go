@@ -78,3 +78,16 @@ func TestBRB02(t *testing.T) {
 }
 
 func catSplitPaymentTest() model.TaxCategoryCode { return model.TaxCategoryCode("B") }
+
+// TestBRCL06 : code de date d'exigibilité TVA (BT-8) hors {3,35,432} échoue ; valeur admise passe.
+func TestBRCL06(t *testing.T) {
+	d := validDoc()
+	d.TaxPointDateCode = "99" // hors UNTDID 2005 restreint
+	if rep := rules.Validate(d, "en16931"); !hasFinding(rep, "BR-CL-06") {
+		t.Error("un code BT-8 hors {3,35,432} doit déclencher BR-CL-06")
+	}
+	d.TaxPointDateCode = "35" // admis (date de livraison)
+	if rep := rules.Validate(d, "en16931"); hasFinding(rep, "BR-CL-06") {
+		t.Error("le code BT-8 « 35 » (admis) ne doit pas déclencher BR-CL-06")
+	}
+}

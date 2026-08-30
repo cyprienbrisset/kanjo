@@ -180,6 +180,7 @@ type ciiHeaderTax struct {
 	CalculatedAmount    string `xml:"CalculatedAmount"`
 	BasisAmount         string `xml:"BasisAmount"`
 	CategoryCode        string `xml:"CategoryCode"`
+	DueDateTypeCode     string `xml:"DueDateTypeCode"` // BT-8 code de date d'exigibilité TVA
 	Rate                string `xml:"RateApplicablePercent"`
 	ExemptionReason     string `xml:"ExemptionReason"`
 	ExemptionReasonCode string `xml:"ExemptionReasonCode"`
