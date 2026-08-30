@@ -112,7 +112,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   ajouter un format, c'est un lecteur et un écrivain — pas une explosion de convertisseurs. Le cœur
   ne dépend que de la bibliothèque standard, et rien ne sort du poste sans action explicite.</p>
  <div class="grid">
-  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>Lire &amp; inspecter</h3><p>Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, JSON pivot. Détection par le contenu, jamais par l'extension.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>Lire &amp; inspecter</h3><p>Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, FatturaPA, UN/EDIFACT INVOIC, JSON pivot. Détection par le contenu, jamais par l'extension.</p></div>
   <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Valider</h3><p>Moteur EN 16931 natif (BR / BR-CO / BR-CL / BR-DEC / BR-S/Z/E/AE/K/G/O), CIUS française et règles maison. Calculé, jamais simulé.</p></div>
   <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>Convertir</h3><p>CII ⇄ UBL, Factur-X, XRechnung (UBL/CII), Peppol BIS 3.0, JSON, CSV — avec rapport de perte explicite.</p></div>
   <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Traiter en lot</h3><p>Découverte récursive, pool de workers, reprise sur incident, quarantaine, surveillance de dossier.</p></div>
@@ -183,7 +183,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
  <p class="intro">Le socle réglementaire français (Factur-X / UBL 2.1 / CII) est au cœur. La validation
   est réellement calculée — jamais un verdict de complaisance.</p>
  <div class="metrics">
-  <div class="metric"><div class="n">218</div><div class="l">règles de validation (EN 16931 + CIUS FR + Kanjō)</div></div>
+  <div class="metric"><div class="n">219</div><div class="l">règles de validation (EN 16931 + CIUS FR + Kanjō)</div></div>
   <div class="metric"><div class="n">6/6</div><div class="l">cibles cross-compilées (Linux, macOS, Windows)</div></div>
   <div class="metric"><div class="n">0</div><div class="l">appel réseau · 0 télémétrie · traitement local</div></div>
  </div>
@@ -203,7 +203,24 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   <tr><td>ZUGFeRD 1.0 (hérité, CII D14B)</td><td class="ok">✓</td><td class="later">roadmap</td><td class="ok">✓</td></tr>
   <tr><td>FatturaPA (FatturaElettronica v1.2)</td><td class="ok">✓ lecture</td><td class="ok">✓ écriture</td><td class="ok">✓</td></tr>
   <tr><td>Order-X · EDIFACT</td><td class="later">roadmap</td><td class="later">roadmap</td><td class="later">roadmap</td></tr>
+  <tr><td>FatturaPA (FatturaElettronica v1.2)</td><td class="ok">✓ lecture</td><td class="later">roadmap</td><td class="ok">✓</td></tr>
+  <tr><td>UN/EDIFACT INVOIC (D.96A)</td><td class="ok">✓ lecture</td><td class="ok">✓ écriture</td><td class="ok">✓</td></tr>
+  <tr><td>Order-X</td><td class="later">roadmap</td><td class="later">roadmap</td><td class="later">roadmap</td></tr>
  </table>
+
+ <h3 style="margin-top:40px">Conformité PDF/A (Factur-X) — mesurée par veraPDF</h3>
+ <p class="intro">La conformité PDF/A n'est jamais <em>déclarée</em> : elle est <strong>validée par veraPDF</strong>,
+ le validateur PDF/A de référence, dans un <strong>job d'intégration continue dédié</strong>.</p>
+ <table class="matrix">
+  <tr><th>Élément</th><th>État</th><th>Preuve</th></tr>
+  <tr><td>Lecture Factur-X / ZUGFeRD (XML embarqué)</td><td class="ok">✓</td><td>extraction + relecture testées</td></tr>
+  <tr><td>Association Factur-X à l'<code>embed</code> (<code>/AF</code>, <code>/AFRelationship</code>, <code>text/xml</code>)</td><td class="ok">✓</td><td>vérifiée par relecture du PDF produit</td></tr>
+  <tr><td>Validation PDF/A-3b effective (veraPDF)</td><td class="ok">✓</td><td>job CI sur un Factur-X EN 16931 <strong>réel</strong> (akretion, BSD)</td></tr>
+  <tr><td>Préservation PDF/A-3b après réécriture d'un PDF</td><td class="later">roadmap</td><td><strong>mesurée non conforme</strong> (limite pdfcpu) — jamais masquée</td></tr>
+ </table>
+ <p class="intro" style="margin-top:16px"><code>PDFAChecked</code> ne passe à <code>true</code> que si veraPDF confirme.
+ Le job CI mesure la sortie d'<code>embed</code> : l'association est correcte, mais la réécriture pdfcpu ne
+ préserve pas encore la conformité globale — un constat <strong>prouvé</strong>, jamais un faux verdict (§17.7).</p>
 </section>
 
 <section id="parite">
@@ -215,17 +232,17 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
 
  <div class="detail">
   <div class="gauge">
-   <svg width="140" height="140" viewBox="0 0 120 120" role="img" aria-label="95 % de couverture">
+   <svg width="140" height="140" viewBox="0 0 120 120" role="img" aria-label="96 % de couverture">
     <circle cx="60" cy="60" r="54" fill="none" stroke="var(--rule-firm)" stroke-width="12"></circle>
     <circle cx="60" cy="60" r="54" fill="none" stroke="var(--koke)" stroke-width="12"
-            stroke-dasharray="324.0 339.3" stroke-linecap="butt"></circle>
+            stroke-dasharray="325.7 339.3" stroke-linecap="butt"></circle>
    </svg>
-   <div class="pct">95&nbsp;%</div>
-   <div class="cap"><strong>213 / 223</strong> règles<br>du Schematron officiel</div>
+   <div class="pct">96&nbsp;%</div>
+   <div class="cap"><strong>214 / 223</strong> règles<br>du Schematron officiel</div>
   </div>
 
   <div class="bars">
-   <div class="barrow"><span class="fam">Présence &amp; structure</span><span class="bar"><span style="width:93%"></span></span><span class="n">54/58</span></div>
+   <div class="barrow"><span class="fam">Présence &amp; structure</span><span class="bar"><span style="width:95%"></span></span><span class="n">55/58</span></div>
    <div class="barrow"><span class="fam">Calculs (BR-CO)</span><span class="bar"><span style="width:100%"></span></span><span class="n">23/23</span></div>
    <div class="barrow"><span class="fam">Décimales (BR-DEC)</span><span class="bar"><span style="width:100%"></span></span><span class="n">21/21</span></div>
    <div class="barrow"><span class="fam">Listes de codes (BR-CL)</span><span class="bar partial"><span style="width:83%"></span></span><span class="n">19/23</span></div>

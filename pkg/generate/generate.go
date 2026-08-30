@@ -126,6 +126,8 @@ func Generate(index int, opts Options) (*model.Document, error) {
 		// Casser volontairement le total TTC (BR-CO-15) pour tester les validateurs.
 		doc.Totals.TaxInclusiveAmount, _ = doc.Totals.TaxInclusiveAmount.Add(model.MustParseAmount("10.00", "EUR"))
 	}
+	doc.Provenance = model.NewProvenance("", "generated", "en16931")
+	doc.Provenance.SpecIdentifier = "urn:cen.eu:en16931:2017"
 	return doc, nil
 }
 
