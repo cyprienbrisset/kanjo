@@ -5,10 +5,11 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (214 règles)
+## en16931 (215 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
+| BR-01 | error | BT-24 | La facture doit porter un identifiant de spécification (BT-24). |
 | BR-02 | error | BT-1 | Le numéro de facture est obligatoire. |
 | BR-03 | error | BT-2 | La date d'émission est obligatoire. |
 | BR-04 | error | BT-3 | Le code type de facture est obligatoire. |

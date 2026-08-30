@@ -12,6 +12,16 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Conformité (jeu de règles)
+- **BR-01 activée** — la présence de l'identifiant de spécification (BT-24) est désormais vérifiée.
+  Il est tracé dans la provenance à la lecture : `CustomizationID` (UBL), `GuidelineSpecifiedDocumentContextParameter` (CII),
+  attribut racine `versione`/`FormatoTrasmissione` (FatturaPA). Les factures produites par `generate`
+  portent l'URN EN 16931. **Parité EN 16931 : 213 → 214 / 223 (96 %)** ; cliquet relevé à 214.
+
+### Sécurité
+- **Fuzzing Go natif** du durcissement XML (`internal/xmlsafe`) et des lecteurs (`pkg/read`) :
+  aucune entrée aléatoire, tronquée ou malveillante ne provoque de panic (contrat testé en continu).
+
 ### Modifié (cohérence UI)
 - **Suppression des idéogrammes de l'interface CLI** (comme déjà fait dans la GUI) : marqueurs de
   statut clairs et universels `✓` / `⚠` / `✗` / `·`, en-têtes `▸`, bandeaux sans idéogramme. Le
