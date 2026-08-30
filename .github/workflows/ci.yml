@@ -54,4 +54,36 @@ jobs:
       - name: Vérifier docs/rules.md
         run: go test ./pkg/rules/ -run TestRulesDocInSync
 
+  pdfa-verapdf:
+    name: Conformité PDF/A (veraPDF)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Installer veraPDF (validateur PDF/A de référence, open source)
+        run: |
+          set -euo pipefail
+          curl -sL -o verapdf-installer.zip \
+            https://software.verapdf.org/releases/verapdf-installer.zip
+          unzip -q verapdf-installer.zip -d verapdf-installer
+          installer=$(find verapdf-installer -name 'verapdf-install' | head -1)
+          # Fichier de réponses AutomatedInstallation encodé en base64 (installpath = /home/runner/verapdf,
+          # chemin standard des runners GitHub) : évite toute fragilité de heredoc/indentation en YAML.
+          echo 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxBdXRvbWF0ZWRJbnN0YWxsYXRpb24gbGFuZ3BhY2s9ImVuZyI+CiAgICA8Y29tLml6Zm9yZ2UuaXpwYWNrLnBhbmVscy5odG1saGVsbG8uSFRNTEhlbGxvUGFuZWwgaWQ9IndlbGNvbWUiLz4KICAgIDxjb20uaXpmb3JnZS5penBhY2sucGFuZWxzLnRhcmdldC5UYXJnZXRQYW5lbCBpZD0iaW5zdGFsbF9kaXIiPgogICAgICAgIDxpbnN0YWxscGF0aD4vaG9tZS9ydW5uZXIvdmVyYXBkZjwvaW5zdGFsbHBhdGg+CiAgICA8L2NvbS5pemZvcmdlLml6cGFjay5wYW5lbHMudGFyZ2V0LlRhcmdldFBhbmVsPgogICAgPGNvbS5pemZvcmdlLml6cGFjay5wYW5lbHMucGFja3MuUGFja3NQYW5lbCBpZD0ic2RrX3BhY2tfc2VsZWN0Ij4KICAgICAgICA8cGFjayBpbmRleD0iMCIgbmFtZT0idmVyYVBERiBHVUkiIHNlbGVjdGVkPSJ0cnVlIi8+CiAgICAgICAgPHBhY2sgaW5kZXg9IjEiIG5hbWU9InZlcmFQREYgTWFjIGFuZCAqbml4IFN0YXJ0dXAgU2NyaXB0cyIgc2VsZWN0ZWQ9InRydWUiLz4KICAgICAgICA8cGFjayBpbmRleD0iMiIgbmFtZT0idmVyYVBERiBCYXRjaCBmaWxlcyIgc2VsZWN0ZWQ9ImZhbHNlIi8+CiAgICAgICAgPHBhY2sgaW5kZXg9IjMiIG5hbWU9InZlcmFQREYgRG9jdW1lbnRhdGlvbiIgc2VsZWN0ZWQ9ImZhbHNlIi8+CiAgICAgICAgPHBhY2sgaW5kZXg9IjQiIG5hbWU9InZlcmFQREYgU2FtcGxlIEZpbGVzIiBzZWxlY3RlZD0iZmFsc2UiLz4KICAgIDwvY29tLml6Zm9yZ2UuaXpwYWNrLnBhbmVscy5wYWNrcy5QYWNrc1BhbmVsPgogICAgPGNvbS5pemZvcmdlLml6cGFjay5wYW5lbHMuaW5zdGFsbC5JbnN0YWxsUGFuZWwgaWQ9Imluc3RhbGwiLz4KICAgIDxjb20uaXpmb3JnZS5penBhY2sucGFuZWxzLmZpbmlzaC5GaW5pc2hQYW5lbCBpZD0iZmluaXNoIi8+CjwvQXV0b21hdGVkSW5zdGFsbGF0aW9uPgo=' | base64 -d > "$PWD/auto-install.xml"
+          ls -l "$PWD/auto-install.xml"
+          # Chemin ABSOLU : le script verapdf-install change de répertoire avant de lancer la JVM,
+          # qui résout sinon auto-install.xml depuis un autre CWD (FileNotFound).
+          "$installer" "$PWD/auto-install.xml"
+          echo "/home/runner/verapdf" >> "$GITHUB_PATH"
+      - name: Vérifier veraPDF
+        run: verapdf --version
+      - name: Valider le corpus PDF/A réel + la sortie d'embed
+        run: go test ./pkg/pdfa/ -run 'VeraPDF' -v
+
 # La GitHub Page est servie directement depuis le dossier /docs (Settings → Pages).
