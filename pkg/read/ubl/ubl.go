@@ -182,6 +182,10 @@ type ublLine struct {
 			Value  string `xml:",chardata"`
 			Scheme string `xml:"schemeID,attr"`
 		} `xml:"StandardItemIdentification>ID"`
+		Classification struct {
+			ListID string `xml:"listID,attr"`
+			Value  string `xml:",chardata"`
+		} `xml:"CommodityClassification>ItemClassificationCode"` // BT-158
 		ClassifiedTaxCategory struct {
 			ID      string `xml:"ID"`
 			Percent string `xml:"Percent"`
