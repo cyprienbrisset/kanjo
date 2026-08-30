@@ -15,6 +15,7 @@ func sample() *model.Document {
 	d.Seller.Name = "SAS Martin Réel"
 	d.Seller.VATID = "FR12501234567"
 	d.PaymentInstructions = &model.PaymentInstructions{
+		MeansCode:       model.PayCredit, // BT-81 requis (BR-49)
 		CreditTransfers: []model.CreditTransfer{{IBAN: "FR7630006000011234567890189", AccountName: "Compte Réel"}},
 	}
 	return d

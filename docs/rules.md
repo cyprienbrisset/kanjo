@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (181 règles)
+## en16931 (202 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -25,6 +25,9 @@ Version du jeu de règles : **2026.3**
 | BR-15 | error | BT-115 | Le net à payer est obligatoire. |
 | BR-16 | error | BG-25 | Une facture doit comporter au moins une ligne. |
 | BR-17 | error | BT-59 | Le nom du bénéficiaire est obligatoire si un bénéficiaire est indiqué. |
+| BR-18 | error | BT-62 | Le nom du représentant fiscal est obligatoire. |
+| BR-19 | error | BG-12 | L'adresse postale du représentant fiscal est obligatoire. |
+| BR-20 | error | BT-69 | Le code pays du représentant fiscal est obligatoire. |
 | BR-21 | error | BT-126 | Chaque ligne doit avoir un identifiant. |
 | BR-23 | error | BT-130 | Chaque ligne doit indiquer une unité de mesure. |
 | BR-24 | error | BT-131 | Chaque ligne doit porter un montant net. |
@@ -47,7 +50,15 @@ Version du jeu de règles : **2026.3**
 | BR-45 | error | BT-116 | Chaque ventilation de TVA doit porter un montant imposable. |
 | BR-46 | error | BT-117 | Chaque ventilation de TVA doit porter un montant de TVA. |
 | BR-47 | error | BT-118 | Chaque ventilation de TVA doit indiquer une catégorie. |
+| BR-49 | error | BT-81 | Une instruction de paiement doit préciser un moyen de paiement. |
+| BR-50 | error | BT-84 | Un virement doit indiquer un identifiant de compte. |
+| BR-51 | warning | BT-87 | Le numéro de carte doit être masqué (au plus 10 caractères). |
+| BR-52 | error | BT-122 | Chaque document additionnel doit porter une référence. |
+| BR-53 | error | BT-111 | Une devise de comptabilisation de la TVA impose le total de TVA correspondant. |
+| BR-54 | error | BT-160, BT-161 | Chaque attribut d'article doit porter un nom et une valeur. |
 | BR-55 | error | BT-25 | Une référence de facture antérieure doit porter un identifiant. |
+| BR-56 | error | BT-63 | L'identifiant de TVA du représentant fiscal est obligatoire. |
+| BR-57 | error | BT-80 | Une adresse de livraison doit porter un code pays. |
 | BR-61 | error | BT-84 | Un paiement par virement impose un identifiant de compte. |
 | BR-62 | error | BT-34 | Une adresse électronique doit porter un identifiant de schéma. |
 | BR-63 | error | BT-49 | Une adresse électronique doit porter un identifiant de schéma. |
@@ -85,8 +96,15 @@ Version du jeu de règles : **2026.3**
 | BR-CL-01 | error | BT-3 | Le code type de facture doit appartenir à la liste UNTDID 1001. |
 | BR-CL-03 | error | BT-5 | La devise des montants doit être un code ISO 4217. |
 | BR-CL-04 | error | BT-5 | Le code devise de la facture doit être un code ISO 4217. |
+| BR-CL-05 | error | BT-6 | La devise de comptabilisation de la TVA doit être un code ISO 4217. |
 | BR-CL-14 | error | BT-40, BT-55, BT-80 | Les codes pays doivent appartenir à la liste ISO 3166-1. |
+| BR-CL-15 | error | BT-40, BT-55, BT-80 | Les codes pays doivent appartenir à la liste ISO 3166-1. |
+| BR-CL-16 | error | BT-81 | Le moyen de paiement doit appartenir à la liste UNCL 4461. |
 | BR-CL-17 | error | BT-118, BT-151 | Le code catégorie de TVA doit appartenir à la liste UNTDID 5305. |
+| BR-CL-18 | error | BT-118, BT-151 | Le code catégorie de TVA doit appartenir à la liste UNCL 5305. |
+| BR-CL-19 | error | BT-98 | Le code motif de remise/charge doit appartenir à sa liste officielle. |
+| BR-CL-20 | error | BT-105 | Le code motif de remise/charge doit appartenir à sa liste officielle. |
+| BR-CL-25 | error | BT-34, BT-49 | Le schéma d'une adresse électronique doit appartenir à la liste CEF EAS. |
 | BR-CO-04 | error | BT-151 | Chaque ligne doit porter une catégorie de TVA. |
 | BR-CO-09 | error | BT-31 | Le n° de TVA du vendeur doit commencer par un préfixe pays à deux lettres. |
 | BR-CO-10 | error | BT-106, BT-131 | La somme des montants nets de ligne doit être égale au total des lignes (BT-106). |
@@ -116,6 +134,7 @@ Version du jeu de règles : **2026.3**
 | BR-DEC-12 | error | BT-109 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
 | BR-DEC-13 | error | BT-110 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
 | BR-DEC-14 | error | BT-112 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
+| BR-DEC-15 | error | BT-111 | Le total de TVA en devise de comptabilisation ne doit pas avoir plus de deux décimales. |
 | BR-DEC-16 | error | BT-113 | Un montant total ne doit pas avoir plus de deux décimales. |
 | BR-DEC-17 | error | BT-114 | Un montant total ne doit pas avoir plus de deux décimales. |
 | BR-DEC-18 | error | BT-115 | Un montant monétaire ne doit pas avoir plus de deux décimales. |
@@ -163,6 +182,8 @@ Version du jeu de règles : **2026.3**
 | BR-O-03 | error | BT-95, BT-31, BT-48 | Une catégorie « hors champ de la TVA » interdit les identifiants de TVA. |
 | BR-O-04 | error | BT-102, BT-31, BT-48 | Une catégorie « hors champ de la TVA » interdit les identifiants de TVA. |
 | BR-O-05 | error | BT-119, BT-152 | Une TVA hors champ doit avoir un taux de zéro. |
+| BR-O-06 | error | BT-96, BT-103 | Le taux de TVA d'une remise hors champ est invalide. |
+| BR-O-07 | error | BT-96, BT-103 | Le taux de TVA d'une charge hors champ est invalide. |
 | BR-O-08 | error | BT-116 | La base d'imposition d'une ventilation hors champ doit égaler la somme des montants de cette catégorie. |
 | BR-O-09 | error | BT-117 | Le montant de TVA d'une ventilation hors champ doit être nul. |
 | BR-O-10 | error | BT-120, BT-121 | Une TVA hors champ doit indiquer un motif d'exonération. |
