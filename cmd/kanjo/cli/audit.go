@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/cyprienbrisset/kanjo/internal/fsatomic"
 	"github.com/cyprienbrisset/kanjo/pkg/api"
@@ -12,7 +14,7 @@ import (
 
 func runAudit(args []string) int {
 	if len(args) == 0 {
-		errf("audit : sous-commande requise (list|export|path)")
+		errf("audit : sous-commande requise (list|export|verify|path)")
 		return ExitUsage
 	}
 	sub, rest := args[0], args[1:]
@@ -21,6 +23,8 @@ func runAudit(args []string) int {
 		return auditList(rest)
 	case "export":
 		return auditExport(rest)
+	case "verify":
+		return auditVerify(rest)
 	case "path":
 		p, _ := audit.DefaultPath()
 		fmt.Fprintln(os.Stdout, p)
@@ -29,6 +33,39 @@ func runAudit(args []string) int {
 		errf("audit : sous-commande inconnue %q", sub)
 		return ExitUsage
 	}
+}
+
+// auditVerify vérifie la chaîne d'intégrité du journal (tamper-evident).
+func auditVerify(args []string) int {
+	fs := flag.NewFlagSet("audit verify", flag.ContinueOnError)
+	format := fs.String("format", "", "table|json")
+	if _, err := parseInterspersed(fs, args); err != nil {
+		return ExitUsage
+	}
+	path, _ := audit.DefaultPath()
+	entries, err := audit.Read(path)
+	if err != nil {
+		errf("audit verify : %v", err)
+		return ExitInternal
+	}
+	rep := audit.VerifyChain(entries)
+	if outputFormat(*format) == "json" {
+		printJSON(rep)
+	} else {
+		fmt.Fprintf(os.Stdout, "▸ %d entrées · %d chaînées · %d héritées\n", rep.Total, rep.Chained, rep.Unchained)
+		if rep.OK {
+			fmt.Fprintln(os.Stdout, "✓ intégrité vérifiée : chaîne intacte.")
+		} else {
+			fmt.Fprintf(os.Stdout, "✗ RUPTURE : %d anomalie(s) détectée(s).\n", len(rep.Issues))
+			for _, is := range rep.Issues {
+				fmt.Fprintf(os.Stdout, "   · entrée #%d (seq %d) : %s\n", is.Index, is.Seq, is.Problem)
+			}
+		}
+	}
+	if !rep.OK {
+		return ExitValidation
+	}
+	return ExitOK
 }
 
 func auditList(args []string) int {
@@ -63,12 +100,25 @@ func auditList(args []string) int {
 
 func auditExport(args []string) int {
 	fs := flag.NewFlagSet("audit export", flag.ContinueOnError)
-	out := fs.String("out", "", "fichier de sortie (.csv|.jsonl) (requis)")
+	out := fs.String("out", "", "fichier de sortie (.csv|.jsonl|.html) (requis)")
+	format := fs.String("format", "", "csv|jsonl|html (déduit de l'extension par défaut)")
+	from := fs.String("from", "", "borne de début (YYYY-MM-DD ou RFC3339)")
+	to := fs.String("to", "", "borne de fin (YYYY-MM-DD ou RFC3339)")
 	if _, err := parseInterspersed(fs, args); err != nil {
 		return ExitUsage
 	}
 	if *out == "" {
 		errf("audit export : --out est requis")
+		return ExitUsage
+	}
+	fromT, err := parseAuditDate(*from, false)
+	if err != nil {
+		errf("audit export : --from %v", err)
+		return ExitUsage
+	}
+	toT, err := parseAuditDate(*to, true)
+	if err != nil {
+		errf("audit export : --to %v", err)
 		return ExitUsage
 	}
 	path, _ := audit.DefaultPath()
@@ -77,18 +127,61 @@ func auditExport(args []string) int {
 		errf("audit export : %v", err)
 		return ExitInternal
 	}
-	if hasSuffixFold(*out, ".csv") {
-		if err := fsatomic.WriteFile(*out, audit.ExportCSV(entries), 0o600); err != nil {
-			errf("audit export : %v", err)
-			return ExitInternal
+	entries = audit.FilterByPeriod(entries, fromT, toT)
+
+	kind := *format
+	if kind == "" {
+		switch {
+		case hasSuffixFold(*out, ".csv"):
+			kind = "csv"
+		case hasSuffixFold(*out, ".html"), hasSuffixFold(*out, ".htm"):
+			kind = "html"
+		default:
+			kind = "jsonl"
 		}
-	} else if err := audit.WriteJSONL(*out, entries); err != nil {
+	}
+	switch kind {
+	case "csv":
+		err = fsatomic.WriteFile(*out, audit.ExportCSV(entries), 0o600)
+	case "html":
+		err = fsatomic.WriteFile(*out, audit.ExportHTML(entries, "Journal d'audit Kanjō"), 0o600)
+	default:
+		err = audit.WriteJSONL(*out, entries)
+	}
+	if err != nil {
 		errf("audit export : %v", err)
 		return ExitInternal
 	}
-	fmt.Fprintf(os.Stdout, "%d entrées exportées vers %s\n", len(entries), *out)
+	rep := audit.VerifyChain(entries)
+	integ := "intègre"
+	if !rep.OK {
+		integ = fmt.Sprintf("RUPTURE (%d anomalie(s))", len(rep.Issues))
+	}
+	fmt.Fprintf(os.Stdout, "%d entrées exportées vers %s (%s) — intégrité : %s\n", len(entries), *out, kind, integ)
 	return ExitOK
 }
+
+// parseAuditDate accepte une date « YYYY-MM-DD » (bornée à minuit, ou fin de journée si endOfDay)
+// ou un horodatage RFC3339 complet. Une chaîne vide renvoie le temps zéro (borne ignorée).
+func parseAuditDate(s string, endOfDay bool) (time.Time, error) {
+	s = trimSpace(s)
+	if s == "" {
+		return time.Time{}, nil
+	}
+	if t, err := time.Parse(time.RFC3339, s); err == nil {
+		return t, nil
+	}
+	t, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("date invalide %q (attendu YYYY-MM-DD ou RFC3339)", s)
+	}
+	if endOfDay {
+		t = t.Add(24*time.Hour - time.Nanosecond)
+	}
+	return t, nil
+}
+
+func trimSpace(s string) string { return strings.TrimSpace(s) }
 
 func filterAction(entries []audit.Entry, action string) []audit.Entry {
 	var out []audit.Entry
