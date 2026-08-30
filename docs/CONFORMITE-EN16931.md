@@ -4,10 +4,10 @@
 > (`testdata/en16931/canonical-rule-ids.txt`, extraite du Schematron officiel CEN).
 > Ne pas éditer à la main. Régénérer : `KANJO_REGEN=1 go test ./test/ -run TestParityReportInSync`.
 
-## Couverture : 146 / 223 règles canoniques (65 %)
+## Couverture : 153 / 223 règles canoniques (68 %)
 
-- Règles couvertes : **146**
-- Règles manquantes : **77**
+- Règles couvertes : **153**
+- Règles manquantes : **70**
 - Règles implémentées au-delà du Schematron CEN de référence : **1**
 
 ## Règles couvertes
@@ -20,7 +20,7 @@
 - **BR-E** (10) : BR-E-01, BR-E-02, BR-E-03, BR-E-04, BR-E-05, BR-E-06, BR-E-07, BR-E-08, BR-E-09, BR-E-10
 - **BR-G** (10) : BR-G-01, BR-G-02, BR-G-03, BR-G-04, BR-G-05, BR-G-06, BR-G-07, BR-G-08, BR-G-09, BR-G-10
 - **BR-IC** (10) : BR-IC-01, BR-IC-02, BR-IC-03, BR-IC-04, BR-IC-05, BR-IC-06, BR-IC-07, BR-IC-08, BR-IC-09, BR-IC-10
-- **BR-O** (5) : BR-O-01, BR-O-05, BR-O-08, BR-O-09, BR-O-10
+- **BR-O** (12) : BR-O-01, BR-O-02, BR-O-03, BR-O-04, BR-O-05, BR-O-08, BR-O-09, BR-O-10, BR-O-11, BR-O-12, BR-O-13, BR-O-14
 - **BR-S** (10) : BR-S-01, BR-S-02, BR-S-03, BR-S-04, BR-S-05, BR-S-06, BR-S-07, BR-S-08, BR-S-09, BR-S-10
 - **BR-Z** (10) : BR-Z-01, BR-Z-02, BR-Z-03, BR-Z-04, BR-Z-05, BR-Z-06, BR-Z-07, BR-Z-08, BR-Z-09, BR-Z-10
 
@@ -34,7 +34,7 @@
 - **BR-CO** (5) : BR-CO-03, BR-CO-05, BR-CO-06, BR-CO-07, BR-CO-08
 - **BR-DEC** (1) : BR-DEC-15
 - **BR-IC** (2) : BR-IC-11, BR-IC-12
-- **BR-O** (9) : BR-O-02, BR-O-03, BR-O-04, BR-O-06, BR-O-07, BR-O-11, BR-O-12, BR-O-13, BR-O-14
+- **BR-O** (2) : BR-O-06, BR-O-07
 
 ## Au-delà du référentiel CEN
 
