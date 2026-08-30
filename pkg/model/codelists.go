@@ -144,3 +144,11 @@ func IsKnownVATEX(code string) bool { return knownVATEX[strings.ToUpper(code)] }
 
 // IsKnownClassScheme indique si le schéma de classification d'article appartient à UNTDID 7143 (BR-CL-13).
 func IsKnownClassScheme(code string) bool { return knownClassScheme[code] }
+
+// vatPointDateCode : restriction de UNTDID 2005 pour le code de date d'exigibilité de la TVA (BT-8).
+// Seules trois valeurs sont admises : 3 (date de la facture), 35 (date de livraison), 432 (date de paiement).
+var knownVATPointDateCode = fieldSet("3 35 432")
+
+// IsKnownVATPointDateCode indique si le code de date d'exigibilité TVA (BT-8) appartient à la
+// restriction UNTDID 2005 admise par EN 16931 (BR-CL-06).
+func IsKnownVATPointDateCode(code string) bool { return knownVATPointDateCode[code] }

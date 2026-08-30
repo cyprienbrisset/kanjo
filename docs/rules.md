@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (223 règles)
+## en16931 (224 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -103,6 +103,7 @@ Version du jeu de règles : **2026.3**
 | BR-CL-03 | error | BT-5 | La devise des montants doit être un code ISO 4217. |
 | BR-CL-04 | error | BT-5 | Le code devise de la facture doit être un code ISO 4217. |
 | BR-CL-05 | error | BT-6 | La devise de comptabilisation de la TVA doit être un code ISO 4217. |
+| BR-CL-06 | error | BT-8 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-07 | error | BT-128-1 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-08 | error | BT-21 | Le code doit appartenir à sa liste officielle. |
 | BR-CL-10 | error | BT-29 | Un identifiant de schéma doit appartenir à la liste ISO 6523 ICD. |

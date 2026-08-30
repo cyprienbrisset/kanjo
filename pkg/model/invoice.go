@@ -16,6 +16,7 @@ type Document struct {
 	CurrencyCode       string   `json:"currencyCode"`                       // BT-5  ISO 4217
 	TaxCurrencyCode    string   `json:"taxCurrencyCode,omitempty"`          // BT-6
 	TaxPointDate       *Date    `json:"taxPointDate,omitempty"`             // BT-7
+	TaxPointDateCode   string   `json:"taxPointDateCode,omitempty"`         // BT-8 code de date d'exigibilité (UNTDID 2005 restreint)
 	Notes              []Note   `json:"notes,omitempty"`                    // BG-1
 	BuyerReference     string   `json:"buyerReference,omitempty"`           // BT-10
 	ProjectRef         string   `json:"projectReference,omitempty"`         // BT-11
