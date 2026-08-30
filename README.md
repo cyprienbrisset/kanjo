@@ -17,7 +17,7 @@ Factur-X · UBL 2.1 · CII · XRechnung · Peppol — une seule implémentation,
 [![Façades](https://img.shields.io/badge/interfaces-CLI%20·%20TUI%20·%20Studio-B8862F)](#trois-interfaces-un-seul-cœur)
 [![Licence](https://img.shields.io/badge/licence-BSL%201.1-8E9AA6)](LICENSE)
 
-📖 **[Site web / démonstration →](https://cyprienbrisset.github.io/kanjo/)** &nbsp;·&nbsp; [Changelog](CHANGELOG.md)
+📖 **[Site web / démonstration →](https://cyprienbrisset.github.io/kanjo/)** &nbsp;·&nbsp; 📘 **[Documentation utilisateur →](https://cyprienbrisset.github.io/kanjo/documentation.html)** &nbsp;·&nbsp; [Changelog](CHANGELOG.md)
 
 </div>
 
