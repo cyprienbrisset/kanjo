@@ -183,7 +183,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
  <p class="intro">Le socle réglementaire français (Factur-X / UBL 2.1 / CII) est au cœur. La validation
   est réellement calculée — jamais un verdict de complaisance.</p>
  <div class="metrics">
-  <div class="metric"><div class="n">151</div><div class="l">règles de validation (EN 16931 + CIUS FR + Kanjō)</div></div>
+  <div class="metric"><div class="n">158</div><div class="l">règles de validation (EN 16931 + CIUS FR + Kanjō)</div></div>
   <div class="metric"><div class="n">6/6</div><div class="l">cibles cross-compilées (Linux, macOS, Windows)</div></div>
   <div class="metric"><div class="n">0</div><div class="l">appel réseau · 0 télémétrie · traitement local</div></div>
  </div>
@@ -215,13 +215,13 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
 
  <div class="detail">
   <div class="gauge">
-   <svg width="140" height="140" viewBox="0 0 120 120" role="img" aria-label="65 % de couverture">
+   <svg width="140" height="140" viewBox="0 0 120 120" role="img" aria-label="68 % de couverture">
     <circle cx="60" cy="60" r="54" fill="none" stroke="var(--rule-firm)" stroke-width="12"></circle>
     <circle cx="60" cy="60" r="54" fill="none" stroke="var(--koke)" stroke-width="12"
-            stroke-dasharray="220.5 339.3" stroke-linecap="butt"></circle>
+            stroke-dasharray="230.7 339.3" stroke-linecap="butt"></circle>
    </svg>
-   <div class="pct">65&nbsp;%</div>
-   <div class="cap"><strong>146 / 223</strong> règles<br>du Schematron officiel</div>
+   <div class="pct">68&nbsp;%</div>
+   <div class="cap"><strong>153 / 223</strong> règles<br>du Schematron officiel</div>
   </div>
 
   <div class="bars">
@@ -235,7 +235,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
    <div class="barrow"><span class="fam">Autoliquidation</span><span class="bar"><span style="width:100%"></span></span><span class="n">10/10</span></div>
    <div class="barrow"><span class="fam">Export hors UE</span><span class="bar"><span style="width:100%"></span></span><span class="n">10/10</span></div>
    <div class="barrow"><span class="fam">Intracommunautaire</span><span class="bar partial"><span style="width:83%"></span></span><span class="n">10/12</span></div>
-   <div class="barrow"><span class="fam">Hors champ TVA</span><span class="bar low"><span style="width:36%"></span></span><span class="n">5/14</span></div>
+   <div class="barrow"><span class="fam">Hors champ TVA</span><span class="bar partial"><span style="width:86%"></span></span><span class="n">12/14</span></div>
    <div class="barrow"><span class="fam">Régional ES / IT</span><span class="bar low"><span style="width:2%"></span></span><span class="n">0/22</span></div>
    <div class="legend">
     <span><i style="background:var(--koke)"></i>complet</span>
@@ -246,7 +246,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
  </div>
 
  <div class="grid" style="margin-top:40px">
-  <div class="card"><h3>Mesurée, jamais affirmée</h3><p>La liste de référence vient du Schematron CEN. Le test <code>parity_test.go</code> calcule la couverture réelle et échoue si elle régresse. Le chiffre « 65&nbsp;% » est donc vérifiable, pas marketing.</p></div>
+  <div class="card"><h3>Mesurée, jamais affirmée</h3><p>La liste de référence vient du Schematron CEN. Le test <code>parity_test.go</code> calcule la couverture réelle et échoue si elle régresse. Le chiffre « 68&nbsp;% » est donc vérifiable, pas marketing.</p></div>
   <div class="card"><h3>Le cœur métier est complet</h3><p>Toutes les familles de TVA usuelles (taux normal, zéro, exonéré, autoliquidation, export) sont couvertes à <strong>100&nbsp;%</strong>, calculs de base et cohérence des montants inclus.</p></div>
   <div class="card"><h3>Jamais de verdict inventé</h3><p>Chaque règle est réellement exécutée ; aucun sceau « conforme » n'est apposé sans calcul, aucune conformité PDF/A sans validation veraPDF effective (§17.7).</p></div>
   <div class="card"><h3>Éprouvé sur le réel</h3><p>7&nbsp;365 factures réelles open-source (CEN, Peppol, XRechnung, ZUGFeRD) lues sans jamais faire planter un lecteur ; exemples CEN validés conformes.</p></div>

@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (147 règles)
+## en16931 (154 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -132,10 +132,17 @@ Version du jeu de règles : **2026.3**
 | BR-IC-09 | error | BT-117 | Le montant de TVA d'une ventilation intracommunautaire doit être nul. |
 | BR-IC-10 | error | BT-120, BT-121 | Une TVA intracommunautaire doit indiquer un motif d'exonération. |
 | BR-O-01 | error | BT-118 | Une catégorie hors champ employée impose une ventilation de TVA correspondante. |
+| BR-O-02 | error | BT-151, BT-31, BT-48 | Une catégorie « hors champ de la TVA » interdit les identifiants de TVA. |
+| BR-O-03 | error | BT-95, BT-31, BT-48 | Une catégorie « hors champ de la TVA » interdit les identifiants de TVA. |
+| BR-O-04 | error | BT-102, BT-31, BT-48 | Une catégorie « hors champ de la TVA » interdit les identifiants de TVA. |
 | BR-O-05 | error | BT-119, BT-152 | Une TVA hors champ doit avoir un taux de zéro. |
 | BR-O-08 | error | BT-116 | La base d'imposition d'une ventilation hors champ doit égaler la somme des montants de cette catégorie. |
 | BR-O-09 | error | BT-117 | Le montant de TVA d'une ventilation hors champ doit être nul. |
 | BR-O-10 | error | BT-120, BT-121 | Une TVA hors champ doit indiquer un motif d'exonération. |
+| BR-O-11 | error | BT-118 | Une ventilation « hors champ » interdit toute autre ventilation de TVA. |
+| BR-O-12 | error | BT-151 | Une ventilation « hors champ » interdit les lignes d'une autre catégorie. |
+| BR-O-13 | error | BT-95 | Une ventilation « hors champ » interdit les remises/charges d'une autre catégorie. |
+| BR-O-14 | error | BT-102 | Une ventilation « hors champ » interdit les remises/charges d'une autre catégorie. |
 | BR-S-01 | error | BT-151, BT-118 | Une ligne au taux normal impose une ventilation de TVA de catégorie « S ». |
 | BR-S-02 | error | BT-31, BT-32 | Une catégorie au taux normal exige un identifiant TVA ou fiscal du vendeur. |
 | BR-S-03 | error | BT-31, BT-32 | Une remise au taux normal exige un identifiant TVA/fiscal du vendeur. |
