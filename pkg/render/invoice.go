@@ -71,7 +71,7 @@ var invoiceTmpl = template.Must(template.New("invoice").Funcs(invoiceFuncs).Func
 <link rel="icon" type="image/png" href="{{faviconURI}}"><style>{{.CSS}}</style></head>
 <body><div class="sheet">
  {{if .Seal}}<div class="seal{{if .SealErr}} err{{else if .SealWarn}} warn{{end}}" role="img" aria-label="{{.SealLabel}}" title="{{.SealLabel}}">{{.Seal}}</div>{{end}}
- <img src="{{logoURI}}" alt="Kanjō" width="34" height="34" style="border-radius:7px;margin-bottom:6px">
+ <img src="{{logoURI}}" alt="Kanjō" width="36" height="36" style="margin-bottom:6px">
  <h1>{{.Title}}</h1>
  <div class="doc-id">{{.Doc.ID}}</div>
  <div class="meta">Émise le {{.Doc.IssueDate.ISO}}{{if .Doc.DueDate}} · échéance {{.Doc.DueDate.ISO}}{{end}}</div>
