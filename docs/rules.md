@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (161 règles)
+## en16931 (181 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -62,6 +62,26 @@ Version du jeu de règles : **2026.3**
 | BR-AE-08 | error | BT-116 | La base d'imposition d'une ventilation en autoliquidation doit égaler la somme des montants de cette catégorie. |
 | BR-AE-09 | error | BT-117 | Le montant de TVA d'une ventilation en autoliquidation doit être nul. |
 | BR-AE-10 | error | BT-120, BT-121 | Une TVA en autoliquidation doit indiquer un motif d'exonération. |
+| BR-AF-01 | error | BT-118 | Une catégorie IGIC (Canaries) employée impose une ventilation de TVA correspondante. |
+| BR-AF-02 | error | BT-31, BT-32 | Une ligne IGIC (Canaries) exige un identifiant TVA/fiscal du vendeur. |
+| BR-AF-03 | error | BT-31, BT-32 | Une remise IGIC (Canaries) exige un identifiant TVA/fiscal du vendeur. |
+| BR-AF-04 | error | BT-31, BT-32 | Une charge IGIC (Canaries) exige un identifiant TVA/fiscal du vendeur. |
+| BR-AF-05 | error | BT-152 | Le taux de TVA d'une ligne IGIC (Canaries) doit être supérieur à zéro. |
+| BR-AF-06 | error | BT-96, BT-103 | Le taux de TVA d'une remise IGIC (Canaries) est invalide. |
+| BR-AF-07 | error | BT-96, BT-103 | Le taux de TVA d'une charge IGIC (Canaries) est invalide. |
+| BR-AF-08 | error | BT-116 | La base d'une ventilation IGIC (Canaries) doit égaler la somme des montants de même catégorie et même taux. |
+| BR-AF-09 | error | BT-117 | Le montant de TVA d'une ventilation IGIC (Canaries) doit égaler la base multipliée par le taux. |
+| BR-AF-10 | error | BT-120, BT-121 | Une ventilation IGIC (Canaries) ne doit pas porter de motif d'exonération. |
+| BR-AG-01 | error | BT-118 | Une catégorie IPSI (Ceuta/Melilla) employée impose une ventilation de TVA correspondante. |
+| BR-AG-02 | error | BT-31, BT-32 | Une ligne IPSI (Ceuta/Melilla) exige un identifiant TVA/fiscal du vendeur. |
+| BR-AG-03 | error | BT-31, BT-32 | Une remise IPSI (Ceuta/Melilla) exige un identifiant TVA/fiscal du vendeur. |
+| BR-AG-04 | error | BT-31, BT-32 | Une charge IPSI (Ceuta/Melilla) exige un identifiant TVA/fiscal du vendeur. |
+| BR-AG-05 | error | BT-152 | Le taux de TVA d'une ligne IPSI (Ceuta/Melilla) doit être supérieur à zéro. |
+| BR-AG-06 | error | BT-96, BT-103 | Le taux de TVA d'une remise IPSI (Ceuta/Melilla) est invalide. |
+| BR-AG-07 | error | BT-96, BT-103 | Le taux de TVA d'une charge IPSI (Ceuta/Melilla) est invalide. |
+| BR-AG-08 | error | BT-116 | La base d'une ventilation IPSI (Ceuta/Melilla) doit égaler la somme des montants de même catégorie et même taux. |
+| BR-AG-09 | error | BT-117 | Le montant de TVA d'une ventilation IPSI (Ceuta/Melilla) doit égaler la base multipliée par le taux. |
+| BR-AG-10 | error | BT-120, BT-121 | Une ventilation IPSI (Ceuta/Melilla) ne doit pas porter de motif d'exonération. |
 | BR-CL-01 | error | BT-3 | Le code type de facture doit appartenir à la liste UNTDID 1001. |
 | BR-CL-03 | error | BT-5 | La devise des montants doit être un code ISO 4217. |
 | BR-CL-04 | error | BT-5 | Le code devise de la facture doit être un code ISO 4217. |
