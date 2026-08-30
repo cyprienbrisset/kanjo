@@ -31,6 +31,8 @@ func Detect(data []byte) Format {
 	switch root {
 	case "CrossIndustryInvoice":
 		return FormatCII
+	case "SCRDMCCBDACIOMESSAGE", "CrossIndustryOrder":
+		return FormatOrderX
 	case "CrossIndustryDocument":
 		return FormatZUGFeRD1 // ZUGFeRD 1.0 (CII D14B)
 	case "FatturaElettronica":

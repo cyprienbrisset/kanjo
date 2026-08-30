@@ -25,6 +25,7 @@ const (
 	FormatUBLCreditNote Format = "ubl-creditnote" // UBL 2.1 CreditNote
 	FormatFacturX       Format = "facturx"        // PDF/A-3 + XML CII embarqué
 	FormatFatturaPA     Format = "fatturapa"      // FatturaPA italienne (FatturaElettronica v1.2)
+	FormatOrderX        Format = "orderx"         // Order-X (bon de commande, CrossIndustryOrder)
 	FormatKanjoJSON     Format = "json"           // pivot Kanjō sérialisé
 )
 
