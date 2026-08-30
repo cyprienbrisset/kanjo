@@ -57,9 +57,13 @@ type Finding struct {
 }
 
 // Rule est une règle de validation (§8.1).
+// SetOrderX est le jeu de règles applicable aux bons de commande Order-X (Kind=order). Il est
+// mutuellement exclusif des jeux facture : le moteur applique l'un OU l'autre selon le type du document.
+const SetOrderX = "orderx"
+
 type Rule struct {
 	ID       string
-	Set      string // "en16931" | "cius.fr" | "xrechnung" | "peppol" | "kanjo"
+	Set      string // "en16931" | "cius.fr" | "xrechnung" | "peppol" | "kanjo" | "orderx"
 	Severity Severity
 	Terms    []string
 	Message  map[string]string // "fr", "en"
@@ -144,8 +148,16 @@ func Validate(doc *model.Document, sets ...string) Report {
 	rep := Report{}
 	setSeen := map[string]bool{}
 
+	// Sélection consciente du type de document : une commande (Order-X) est validée par le jeu
+	// « orderx » uniquement ; les règles facture EN 16931 (TVA, totaux…) ne s'y appliquent pas et
+	// produiraient des faux positifs. Réciproquement, une facture n'exécute jamais les règles Order-X.
+	isOrder := doc.Kind == model.KindOrder
+
 	for _, r := range All() {
 		if len(want) > 0 && !want[r.Set] {
+			continue
+		}
+		if isOrder != (r.Set == SetOrderX) {
 			continue
 		}
 		setSeen[r.Set] = true

@@ -248,3 +248,17 @@ Version du jeu de règles : **2026.3**
 | KANJO-DATE-01 | warning | BT-9, BT-2 | La date d'échéance ne doit pas précéder la date d'émission. |
 | KANJO-IBAN-01 | warning | BT-84 | L'IBAN doit satisfaire la vérification modulo 97 (ISO 13616). |
 
+## orderx (9 règles)
+
+| ID | Gravité | Termes | Message |
+|----|---------|--------|---------|
+| OX-01 | error | BT-1 | Une commande doit porter un identifiant. |
+| OX-02 | error | BT-2 | Une commande doit porter une date d'émission. |
+| OX-03 | error | BT-3 | Une commande doit porter un code de type de document. |
+| OX-04 | error | BT-5 | Une commande doit porter une devise. |
+| OX-05 | error | BG-4 | Une commande doit désigner un vendeur. |
+| OX-06 | error | BG-7 | Une commande doit désigner un acheteur. |
+| OX-07 | error | BG-25 | Une commande doit comporter au moins une ligne. |
+| OX-08 | error | BT-153 | Chaque ligne de commande doit désigner un article. |
+| OX-09 | error | BT-129 | Chaque ligne de commande doit porter une quantité. |
+
