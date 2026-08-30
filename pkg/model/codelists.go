@@ -99,3 +99,22 @@ var knownICD = fieldSet(icdData)
 
 // IsKnownICD indique si le schéma d'identifiant appartient au registre ISO 6523 ICD (inclut EAS).
 func IsKnownICD(code string) bool { return knownICD[code] }
+
+//go:embed codelists_data/units.txt
+var unitsData string
+
+//go:embed codelists_data/notesubject.txt
+var noteSubjectData string
+
+//go:embed codelists_data/objectscheme.txt
+var objectSchemeData string
+
+var (
+	knownUnits         = fieldSet(unitsData)
+	knownNoteSubjects  = fieldSet(noteSubjectData)
+	knownObjectSchemes = fieldSet(objectSchemeData)
+)
+
+func IsKnownUnit(code string) bool         { return knownUnits[code] }
+func IsKnownNoteSubject(code string) bool  { return knownNoteSubjects[code] }
+func IsKnownObjectScheme(code string) bool { return knownObjectSchemes[code] }
