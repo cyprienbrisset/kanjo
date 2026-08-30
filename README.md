@@ -60,7 +60,7 @@ jusqu'aux plateformes SaaS.
 - **Traiter en lot** — découverte récursive, pool de workers, **reprise `--resume`**, quarantaine, **surveillance de dossier** (`watch`).
 - **Comparer** — `diff` sémantique entre deux factures quels que soient leurs formats (distingue **pertes** et **divergences**).
 - **Rendre lisible** — facture **HTML autonome** et **rapport de validation** imprimable, dans le design de l'application.
-- **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle.
+- **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle, **chaîné (tamper-evident)** : `audit verify` détecte toute modification/suppression, `audit export --from/--to --format html` produit un **rapport consolidé signé de son empreinte**.
 - **Extraire / embarquer** — `extract` le XML d'une Factur-X, `embed` un XML dans un PDF.
 - **Générer** — `generate` un corpus synthétique (scénarios TVA variés, cas volontairement invalides).
 
