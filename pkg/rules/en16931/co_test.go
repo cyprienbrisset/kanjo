@@ -40,6 +40,8 @@ func validDoc() *model.Document {
 		TaxInclusiveAmount:  model.MustParseAmount("1499.88", "EUR"),
 		DuePayableAmount:    model.MustParseAmount("1499.88", "EUR"),
 	}
+	d.Provenance = model.NewProvenance("", "test", "en16931")
+	d.Provenance.SpecIdentifier = "urn:cen.eu:en16931:2017"
 	return d
 }
 

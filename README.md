@@ -11,7 +11,7 @@ Factur-X · UBL 2.1 · CII · XRechnung · Peppol — une seule implémentation,
 [![CGO disabled](https://img.shields.io/badge/CGO-disabled-5E7A4A)](#architecture)
 [![OS](https://img.shields.io/badge/OS-Linux%20·%20macOS%20·%20Windows-24405E)](#démarrer)
 [![Tests](https://img.shields.io/badge/tests-199%20·%20passing-5E7A4A)](docs/RAPPORT-QUALITE.md)
-[![EN 16931](https://img.shields.io/badge/EN%2016931-218%20règles-24405E)](#conformité)
+[![EN 16931](https://img.shields.io/badge/EN%2016931-219%20règles-24405E)](#conformité)
 [![Qualité](https://img.shields.io/badge/rapport-qualité%20%26%20conformité-B8862F)](docs/RAPPORT-QUALITE.md)
 [![RGPD](https://img.shields.io/badge/RGPD-100%25%20hors--ligne-9E2B32)](#sécurité--rgpd)
 [![Façades](https://img.shields.io/badge/interfaces-CLI%20·%20TUI%20·%20Studio-B8862F)](#trois-interfaces-un-seul-cœur)
@@ -54,8 +54,8 @@ jusqu'aux plateformes SaaS.
 
 ## Fonctionnalités
 
-- **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, JSON pivot. Détection **par le contenu**, jamais par l'extension.
-- **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **218 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.**
+- **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL Invoice/CreditNote, CII D16B, FatturaPA, **UN/EDIFACT INVOIC**, JSON pivot. Détection **par le contenu**, jamais par l'extension.
+- **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **219 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.**
 - **Convertir** — CII ⇄ UBL, Factur-X, XRechnung (UBL/CII), Peppol BIS 3.0, JSON, CSV — avec **rapport de perte explicite** et politique `--max-loss`.
 - **Traiter en lot** — découverte récursive, pool de workers, **reprise `--resume`**, quarantaine, **surveillance de dossier** (`watch`).
 - **Comparer** — `diff` sémantique entre deux factures quels que soient leurs formats (distingue **pertes** et **divergences**).
@@ -99,7 +99,8 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 | JSON pivot · CSV | ✅ / — | ✅ / ✅ | ✅ |
 | ZUGFeRD 1.0 (CII D14B, hérité) | ✅ | 🗺️ | ✅ |
 | FatturaPA (FatturaElettronica v1.2) | ✅ *(lecture)* | 🗺️ | ✅ |
-| Order-X · EDIFACT | 🗺️ roadmap | 🗺️ | 🗺️ |
+| UN/EDIFACT INVOIC (D.96A) | ✅ *(lecture)* | ✅ *(écriture)* | ✅ |
+| Order-X | 🗺️ roadmap | 🗺️ | 🗺️ |
 
 ## Conformité
 
@@ -107,11 +108,11 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 > canonique des **223 règles** depuis le **Schematron officiel du CEN** et un test compare, à chaque
 > commit, ce que Kanjō valide réellement. Un **cliquet anti-régression** interdit toute baisse.
 
-### Parité mesurée : **213 / 223 règles EN 16931 (95 %)**
+### Parité mesurée : **214 / 223 règles EN 16931 (96 %)**
 
 | Famille | Couverture | | Famille | Couverture |
 |---|---|---|---|---|
-| Présence & structure (`BR`) | 54 / 58 | | TVA taux normal (`BR-S`) | **10 / 10** |
+| Présence & structure (`BR`) | 55 / 58 | | TVA taux normal (`BR-S`) | **10 / 10** |
 | Calculs (`BR-CO`) | **23 / 23** | | TVA taux zéro (`BR-Z`) | **10 / 10** |
 | Décimales (`BR-DEC`) | **21 / 21** | | TVA exonérée (`BR-E`) | **10 / 10** |
 | Listes de codes (`BR-CL`) | 19 / 23 | | Autoliquidation (`BR-AE`) | **10 / 10** |
@@ -119,7 +120,7 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 | Intracommunautaire (`BR-IC`) | **12 / 12** | | Régional IGIC/IPSI (`BR-AF/AG`) | **20 / 20** |
 
 Suivie par [`test/parity_test.go`](test/parity_test.go) ; détail couvert/manquant par famille dans
-[`docs/CONFORMITE-EN16931.md`](docs/CONFORMITE-EN16931.md) (généré). Les ~22 règles restantes sont
+[`docs/CONFORMITE-EN16931.md`](docs/CONFORMITE-EN16931.md) (généré). Les 9 règles restantes sont
 des cas de faible valeur métier (split-payment italien hors référentiel, schémas ISO 6523 non
 modélisés, règles « même type » non automatisables).
 
@@ -138,7 +139,7 @@ modélisés, règles « même type » non automatisables).
 
 - **Corpus publiable synthétique** ([`testdata/corpus/published`](testdata/corpus/published)) : **38/38** succès conformes et **12/12** erreurs rejetées — [`test/corpus_test.go`](test/corpus_test.go).
 - **Corpus réel open-source** ([`fetch.sh`](testdata/corpus/fetch.sh)) : **7 365 documents** (CEN, Peppol, XRechnung, phive-rules multi-juridictions, ZUGFeRD) lus **sans panic** ; exemples CEN 32/32.
-- **199 tests automatisés** ; **218 règles** au total (EN 16931 + CIUS FR + Kanjō), chacune avec un test passant et un test échouant.
+- **199 tests automatisés** ; **219 règles** au total (EN 16931 + CIUS FR + Kanjō), chacune avec un test passant et un test échouant.
 - 📊 **[Visualisation graphique par famille →](https://cyprienbrisset.github.io/kanjo/#parite)** &nbsp;·&nbsp; 👉 **[Rapport de qualité complet →](docs/RAPPORT-QUALITE.md)**
 
 ### Conformité PDF/A (Factur-X) — mesurée, jamais déclarée
