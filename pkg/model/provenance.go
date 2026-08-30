@@ -4,11 +4,12 @@ package model
 // sérialisée dans le JSON pivot ; elle sert au diagnostic, aux rapports de perte et à
 // la correspondance BT ↔ XPath dans l'inspecteur.
 type Provenance struct {
-	SourceFile    string
-	SourceFormat  string            // "facturx", "ubl", "cii", ...
-	SourceProfile string            // "en16931", "extended", ...
-	FieldOrigins  map[string]string // "BT-1" -> "/rsm:CrossIndustryInvoice/.../ram:ID"
-	Warnings      []ReadWarning
+	SourceFile     string
+	SourceFormat   string            // "facturx", "ubl", "cii", ...
+	SourceProfile  string            // "en16931", "extended", ...
+	SpecIdentifier string            // BT-24 identifiant de spécification (URN de personnalisation)
+	FieldOrigins   map[string]string // "BT-1" -> "/rsm:CrossIndustryInvoice/.../ram:ID"
+	Warnings       []ReadWarning
 }
 
 // NewProvenance initialise une provenance vide prête à recevoir des origines.

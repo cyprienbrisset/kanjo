@@ -100,6 +100,7 @@ func mapToPivot(x *ublDocument, sourceName string) (*model.Document, error) {
 	}
 
 	doc.Provenance = model.NewProvenance(sourceName, "ubl", profileFromURN(x.CustomizationID))
+	doc.Provenance.SpecIdentifier = strings.TrimSpace(x.CustomizationID)
 	doc.Provenance.Record("BT-1", "/Invoice/cbc:ID")
 	doc.Provenance.Record("BT-5", "/Invoice/cbc:DocumentCurrencyCode")
 	return doc, nil

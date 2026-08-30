@@ -89,6 +89,7 @@ func mapToPivot(x *ciiInvoice, sourceName string) (*model.Document, error) {
 	}
 
 	doc.Provenance = model.NewProvenance(sourceName, "cii", profileFromURN(x.Context.Guideline.ID))
+	doc.Provenance.SpecIdentifier = strings.TrimSpace(x.Context.Guideline.ID)
 	doc.Provenance.Record("BT-1", "/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:ID")
 	doc.Provenance.Record("BT-5", "/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode")
 	return doc, nil
