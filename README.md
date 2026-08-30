@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/assets/img/logo.png" alt="Kanjō — facturation électronique" width="640">
+
 # 勘定 Kanjō
 
 **Lire · valider · convertir · réparer · comparer · rendre lisibles vos factures électroniques**
