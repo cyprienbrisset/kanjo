@@ -212,7 +212,13 @@ func buildParityReport(t *testing.T) string {
 		}
 		fmt.Fprintf(&b, "| `%s` | %s | %s |\n", f, label(f), mark)
 	}
-	b.WriteString("\n")
+	total := "✅"
+	if len(missing) > 0 {
+		total = fmt.Sprintf("%d/%d", len(covered), len(canon))
+	} else {
+		total = fmt.Sprintf("**%d/%d** ✅", len(covered), len(canon))
+	}
+	fmt.Fprintf(&b, "| **Total** | **%d familles** | %s |\n\n", len(order), total)
 
 	// 3. Méthode
 	b.WriteString("## 3. Méthode de mesure\n\n")
@@ -226,33 +232,43 @@ func buildParityReport(t *testing.T) string {
 	b.WriteString("4. **Aucun stub** — chaque règle est réellement calculée, dotée d'un test **passant** et d'un test " +
 		"**échouant**, et éprouvée sur un corpus réel (exemples officiels CEN + corpus publié) **sans faux positif**.\n\n")
 
-	// 4. Détail des règles couvertes
-	b.WriteString("## 4. Détail des règles couvertes\n\n")
+	// Numérotation dynamique des sections suivantes (pas de trou si une section est vide).
+	sec := 4
+
+	// Détail des règles couvertes — replié par défaut (évite le mur de texte).
+	fmt.Fprintf(&b, "## %d. Détail des règles couvertes\n\n", sec)
+	sec++
+	b.WriteString("<details>\n")
+	fmt.Fprintf(&b, "<summary>Afficher les %d règles couvertes, par famille</summary>\n\n", len(covered))
 	for _, f := range order {
 		s := stats[f]
 		if len(s.coveredIDs) == 0 {
 			continue
 		}
-		fmt.Fprintf(&b, "**%s — %s** (%d)  \n", f, label(f), len(s.coveredIDs))
-		fmt.Fprintf(&b, "%s\n\n", strings.Join(s.coveredIDs, ", "))
+		fmt.Fprintf(&b, "#### `%s` — %s (%d)\n\n", f, label(f), len(s.coveredIDs))
+		fmt.Fprintf(&b, "```\n%s\n```\n\n", strings.Join(s.coveredIDs, ", "))
 	}
+	b.WriteString("</details>\n\n")
 
-	// 5. Règles manquantes
+	// Règles manquantes (uniquement s'il en reste).
 	if len(missing) > 0 {
-		b.WriteString("## 5. Règles manquantes (feuille de route)\n\n")
+		fmt.Fprintf(&b, "## %d. Règles manquantes (feuille de route)\n\n", sec)
+		sec++
+		b.WriteString("| Famille | Manquantes |\n|---|---|\n")
 		for _, f := range order {
 			s := stats[f]
 			if len(s.missingIDs) == 0 {
 				continue
 			}
-			fmt.Fprintf(&b, "- **%s** (%d) : %s\n", f, len(s.missingIDs), strings.Join(s.missingIDs, ", "))
+			fmt.Fprintf(&b, "| `%s` | %s |\n", f, strings.Join(s.missingIDs, ", "))
 		}
 		b.WriteString("\n")
 	}
 
-	// 6. Au-delà du référentiel
+	// Règles au-delà du référentiel.
 	if len(beyond) > 0 {
-		b.WriteString("## 6. Règles au-delà du référentiel CEN\n\n")
+		fmt.Fprintf(&b, "## %d. Règles au-delà du référentiel CEN\n\n", sec)
+		sec++
 		b.WriteString("Règles utiles implémentées par Kanjō mais absentes du Schematron CEN de référence :\n\n")
 		famBeyond := map[string][]string{}
 		var ob []string
@@ -264,8 +280,9 @@ func buildParityReport(t *testing.T) string {
 			famBeyond[f] = append(famBeyond[f], id)
 		}
 		sort.Strings(ob)
+		b.WriteString("| Famille | Règles |\n|---|---|\n")
 		for _, f := range ob {
-			fmt.Fprintf(&b, "- **%s** (%d) : %s\n", f, len(famBeyond[f]), strings.Join(famBeyond[f], ", "))
+			fmt.Fprintf(&b, "| `%s` | %s |\n", f, strings.Join(famBeyond[f], ", "))
 		}
 		b.WriteString("\n")
 	}
