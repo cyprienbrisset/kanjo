@@ -12,6 +12,13 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (nouveau format)
+- **Order-X (bon de commande hybride)** — lecture et écriture (`pkg/read/orderx`, `pkg/write/orderx`)
+  du format UN/CEFACT SCRDM `SCRDMCCBDACIOMESSAGE` (CrossIndustryOrder), profil comfort. Partage la
+  structure CII ; spécificités gérées : racine SCRDM, `OrderCurrencyCode`, `RequestedQuantity`,
+  TypeCode 220 (commande). Détection par le contenu. **Aller-retour pivot→Order-X→pivot testé** et
+  lecture d'un **échantillon Order-X réaliste**. Cible `orderx` (`kanjo convert --to orderx`).
+
 ### Modifié (cohérence UI)
 - **Suppression des idéogrammes de l'interface CLI** (comme déjà fait dans la GUI) : marqueurs de
   statut clairs et universels `✓` / `⚠` / `✗` / `·`, en-têtes `▸`, bandeaux sans idéogramme. Le

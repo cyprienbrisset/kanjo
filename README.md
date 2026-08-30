@@ -99,7 +99,8 @@ CGO_ENABLED=1 go build -o "Kanjō Studio" ./cmd/kanjo-studio
 | JSON pivot · CSV | ✅ / — | ✅ / ✅ | ✅ |
 | ZUGFeRD 1.0 (CII D14B, hérité) | ✅ | 🗺️ | ✅ |
 | FatturaPA (FatturaElettronica v1.2) | ✅ *(lecture)* | 🗺️ | ✅ |
-| Order-X · EDIFACT | 🗺️ roadmap | 🗺️ | 🗺️ |
+| Order-X (CrossIndustryOrder) | ✅ *(lecture)* | ✅ *(écriture)* | — |
+| EDIFACT INVOIC | 🗺️ roadmap | 🗺️ | 🗺️ |
 
 ## Conformité
 
