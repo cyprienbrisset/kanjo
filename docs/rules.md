@@ -5,7 +5,7 @@
 
 Version du jeu de règles : **2026.3**
 
-## en16931 (133 règles)
+## en16931 (135 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
@@ -57,8 +57,10 @@ Version du jeu de règles : **2026.3**
 | BR-AE-08 | error | BT-116 | La base d'imposition d'une ventilation en autoliquidation doit égaler la somme des montants de cette catégorie. |
 | BR-AE-09 | error | BT-117 | Le montant de TVA d'une ventilation en autoliquidation doit être nul. |
 | BR-AE-10 | error | BT-120, BT-121 | Une TVA en autoliquidation doit indiquer un motif d'exonération. |
-| BR-CL-01 | error | BT-5 | Le code devise doit être un code ISO 4217 valide. |
-| BR-CL-03 | error | BT-3 | Le code type de facture doit appartenir à la liste UNTDID 1001. |
+| BR-CL-01 | error | BT-3 | Le code type de facture doit appartenir à la liste UNTDID 1001. |
+| BR-CL-03 | error | BT-5 | La devise des montants doit être un code ISO 4217. |
+| BR-CL-04 | error | BT-5 | Le code devise de la facture doit être un code ISO 4217. |
+| BR-CL-14 | error | BT-40, BT-55, BT-80 | Les codes pays doivent appartenir à la liste ISO 3166-1. |
 | BR-CL-17 | error | BT-118, BT-151 | Le code catégorie de TVA doit appartenir à la liste UNTDID 5305. |
 | BR-CO-04 | error | BT-151 | Chaque ligne doit porter une catégorie de TVA. |
 | BR-CO-09 | error | BT-31 | Le n° de TVA du vendeur doit commencer par un préfixe pays à deux lettres. |

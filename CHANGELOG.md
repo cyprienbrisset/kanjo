@@ -74,6 +74,12 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   `kanjo embed --verify-pdfa`. Verdict réel quand veraPDF est installé ; **jamais de conformité
   déclarée sans validation** (§17.7) — en l'absence de l'outil, le rapport l'indique explicitement.
 
+### Conformité — listes de codes ISO (parité 60 %)
+- **Validation ISO effective** : devise ISO 4217 (**BR-CL-03**, **BR-CL-04**) et codes pays
+  ISO 3166-1 (**BR-CL-14**), avec listes embarquées (`pkg/model/codelists.go`).
+- **Correction d'ID mal étiquetés** : notre `BR-CL-03` validait le code type (c'est **BR-CL-01**)
+  et notre `BR-CL-01` la devise (c'est **BR-CL-04**) — réalignés sur le Schematron officiel.
+
 ### Conformité — remises/charges par catégorie (parité 52 %)
 - **24 règles TVA de niveau document** (remises BG-20 / charges BG-21) : identifiants requis
   `BR-S/Z/E/G-03/04` (vendeur), `BR-AE/IC-03/04` (vendeur + acheteur), et contraintes de taux
