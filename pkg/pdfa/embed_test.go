@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -88,6 +89,74 @@ func TestEmbedEstablishesFacturXAssociation(t *testing.T) {
 	if typ := fs.NameEntry("Type"); typ == nil || *typ != "Filespec" {
 		t.Errorf("/Type de la spécification de fichier incorrect : %v", typ)
 	}
+}
+
+// TestEmbedIncrementalObjectEOLBoundaries prouve, sans veraPDF (job CI dédié), que la section
+// incrémentale ajoutée respecte la règle PDF/A 6.1.9-1 : dans les octets appended, chaque en-tête
+// « N G obj » est précédé d'un EOL et suivi d'un EOL, et chaque « endobj » est précédé d'un EOL et
+// suivi d'un EOL. Régression du FAIL 6.1.9-1 mesuré par veraPDF sur l'embed incrémental.
+func TestEmbedIncrementalObjectEOLBoundaries(t *testing.T) {
+	base, err := os.ReadFile(filepath.Join("..", "..", "testdata", "corpus", "pdfa", "facturx_en16931.pdf"))
+	if err != nil {
+		t.Skipf("PDF de référence indisponible: %v", err)
+	}
+	res, err := EmbedXML(base, []byte(`<?xml version="1.0"?><rsm:CrossIndustryInvoice/>`), "factur-x.xml")
+	if err != nil {
+		t.Fatalf("embed: %v", err)
+	}
+	if len(res.PDF) <= len(base) || string(res.PDF[:len(base)]) != string(base) {
+		t.Fatal("les octets du PDF de base doivent être le préfixe exact du résultat")
+	}
+	app := res.PDF[len(base):] // section strictement ajoutée par la mise à jour incrémentale
+
+	isEOL := func(b byte) bool { return b == '\n' || b == '\r' }
+
+	// En-têtes d'objet « N G obj » : précédés et suivis d'un EOL.
+	reObj := regexp.MustCompile(`(?m)(\d+)\s+(\d+)\s+obj`)
+	locs := reObj.FindAllIndex(app, -1)
+	if len(locs) == 0 {
+		t.Fatal("aucun objet trouvé dans la section incrémentale")
+	}
+	for _, loc := range locs {
+		start, end := loc[0], loc[1]
+		// Précédé d'un EOL : soit c'est le tout premier octet (précédé par le \n final du PDF de base),
+		// soit l'octet juste avant est un EOL.
+		if start > 0 && !isEOL(app[start-1]) {
+			t.Errorf("6.1.9-1 : en-tête d'objet à l'offset %d non précédé d'un EOL (octet précédent %q)", start, app[start-1])
+		}
+		if start == 0 && !isEOL(base[len(base)-1]) {
+			t.Errorf("6.1.9-1 : premier objet ajouté non précédé d'un EOL (dernier octet du PDF de base %q)", base[len(base)-1])
+		}
+		// « obj » suivi d'un EOL.
+		if end < len(app) && !isEOL(app[end]) {
+			t.Errorf("6.1.9-1 : mot-clé « obj » à l'offset %d non suivi d'un EOL (octet suivant %q)", end, app[end])
+		}
+	}
+
+	// « endobj » : précédé et suivi d'un EOL.
+	for _, idx := range allIndices(app, []byte("endobj")) {
+		if idx > 0 && !isEOL(app[idx-1]) {
+			t.Errorf("6.1.9-1 : « endobj » à l'offset %d non précédé d'un EOL (octet précédent %q)", idx, app[idx-1])
+		}
+		after := idx + len("endobj")
+		if after < len(app) && !isEOL(app[after]) {
+			t.Errorf("6.1.9-1 : « endobj » à l'offset %d non suivi d'un EOL (octet suivant %q)", idx, app[after])
+		}
+	}
+}
+
+// allIndices renvoie tous les offsets d'apparition de sub dans b (sans chevauchement).
+func allIndices(b, sub []byte) []int {
+	var out []int
+	for off := 0; ; {
+		i := bytes.Index(b[off:], sub)
+		if i < 0 {
+			break
+		}
+		out = append(out, off+i)
+		off += i + len(sub)
+	}
+	return out
 }
 
 // TestEmbedIncrementalPreservesBytes vérifie que l'embed sur un vrai PDF/A (table xref classique)

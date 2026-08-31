@@ -98,8 +98,16 @@ func embedIncremental(orig, xml []byte, name, desc string, modTime time.Time) ([
 	base := len(orig)
 	offsets := map[int]int{}
 	for _, o := range objs {
+		// PDF/A 6.1.9-1 : le numéro d'objet et « endobj » doivent chacun être PRÉCÉDÉS d'un EOL, et
+		// « obj »/« endobj » chacun SUIVIS d'un EOL. Les corps issus d'objectBody() se terminent par
+		// « endobj » sans saut de ligne ; concaténés bruts, ils produiraient « endobjN 0 obj ». On
+		// force donc un unique EOL avant chaque objet et après chaque « endobj ».
+		if app.Len() > 0 && app.Bytes()[app.Len()-1] != '\n' {
+			app.WriteByte('\n')
+		}
 		offsets[o.num] = base + app.Len()
-		app.Write(o.body)
+		app.Write(bytes.TrimRight(o.body, "\r\n"))
+		app.WriteByte('\n')
 	}
 	xrefOffset := base + app.Len()
 

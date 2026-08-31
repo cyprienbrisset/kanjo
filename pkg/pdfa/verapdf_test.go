@@ -87,7 +87,7 @@ func veraPDFVerbose(t *testing.T, pdf []byte) string {
 	defer func() { _ = os.Remove(f.Name()) }()
 	_, _ = f.Write(pdf)
 	_ = f.Close()
-	// --format text -v : liste les contrôles échoués avec leur clause/test.
-	out, _ := exec.Command(bin, "--flavour", "3b", "-v", "--format", "text", f.Name()).CombinedOutput()
+	// --format xml : rapport détaillé (description de la règle + contexte de l'objet fautif).
+	out, _ := exec.Command(bin, "--flavour", "3b", "--format", "xml", f.Name()).CombinedOutput()
 	return string(out)
 }
