@@ -58,10 +58,15 @@ func TestVeraPDFEmbedOutput(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ValidatePDFA(sortie embed): %v", err)
 	}
-	// Mesure honnête : on journalise le résultat. La conformité globale après réécriture pdfcpu
-	// est une question ouverte tranchée par veraPDF, pas un acquis.
-	t.Logf("conformité PDF/A-3b après embed : compliant=%v — %s", val.Compliant, val.Details)
+	// L'embed procède désormais par mise à jour INCRÉMENTALE : les octets du PDF de base sont
+	// préservés (préfixe exact), donc sa conformité PDF/A-3b doit être conservée. veraPDF en est
+	// l'arbitre : la sortie doit rester conforme.
+	t.Logf("conformité PDF/A-3b après embed incrémental : compliant=%v — %s", val.Compliant, val.Details)
 	if !val.Compliant {
-		t.Log("LIMITE MESURÉE : la réécriture pdfcpu ne préserve pas (encore) la conformité PDF/A-3b globale ; l'association Factur-X (/AF, /AFRelationship) est en place mais la mise en conformité complète reste roadmap.")
+		t.Errorf("l'embed incrémental doit PRÉSERVER la conformité PDF/A-3b du PDF de base — veraPDF : %s", val.Details)
+	}
+	// Le PDF d'origine doit être le préfixe exact de la sortie (preuve de non-réécriture).
+	if len(res.PDF) < len(base) || string(res.PDF[:len(base)]) != string(base) {
+		t.Error("les octets du PDF de base ne sont pas préservés à l'identique (préfixe)")
 	}
 }

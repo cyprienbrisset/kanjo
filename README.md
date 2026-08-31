@@ -154,12 +154,14 @@ Même rigueur que pour EN 16931 : la conformité PDF/A n'est jamais affirmée sa
 | Lecture Factur-X / ZUGFeRD (XML embarqué) | ✅ | extraction + relecture testées |
 | Association Factur-X à l'`embed` (`/AF`, `/AFRelationship`, `text/xml`) | ✅ | vérifiée par relecture du PDF produit |
 | Validation PDF/A-3b effective (veraPDF) | ✅ | **job CI dédié** sur un Factur-X EN 16931 **réel** (corpus akretion, BSD) |
-| Préservation PDF/A-3b après réécriture d'un PDF | 🗺️ | **mesurée non conforme** (limite pdfcpu) — jamais masquée |
+| Préservation PDF/A-3b à l'`embed` | ✅ | **mise à jour incrémentale** : octets du PDF de base préservés (préfixe exact) → conformité conservée, **vérifiée par veraPDF en CI** |
 
-> **`PDFAChecked` ne passe à `true` que si veraPDF confirme.** Le job CI mesure la sortie d'`embed` :
-> l'association est correcte, mais la réécriture pdfcpu ne préserve pas encore la conformité globale —
-> constat **prouvé** (roadmap : embarquement incrémental préservant les octets du PDF de base), jamais
-> un faux verdict (règle 11 / §17.7).
+> **`embed` procède par mise à jour incrémentale** : au lieu de réécrire tout le PDF (ce qui cassait
+> la conformité), Kanjō **ajoute** seulement les objets Factur-X (fichier embarqué, `/AF`,
+> `/AFRelationship`) en fin de fichier, laissant les octets du PDF de base **bit-à-bit intacts**
+> (polices, couleurs, XMP, OutputIntent). Le PDF d'origine est le **préfixe exact** du résultat.
+> Le job CI veraPDF confirme que la sortie **reste conforme PDF/A-3b** — jamais un verdict non calculé
+> (règle 11 / §17.7).
 
 ## Architecture
 

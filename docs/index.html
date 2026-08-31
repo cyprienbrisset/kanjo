@@ -222,11 +222,13 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   <tr><td>Lecture Factur-X / ZUGFeRD (XML embarqué)</td><td class="ok">✓</td><td>extraction + relecture testées</td></tr>
   <tr><td>Association Factur-X à l'<code>embed</code> (<code>/AF</code>, <code>/AFRelationship</code>, <code>text/xml</code>)</td><td class="ok">✓</td><td>vérifiée par relecture du PDF produit</td></tr>
   <tr><td>Validation PDF/A-3b effective (veraPDF)</td><td class="ok">✓</td><td>job CI sur un Factur-X EN 16931 <strong>réel</strong> (akretion, BSD)</td></tr>
-  <tr><td>Préservation PDF/A-3b après réécriture d'un PDF</td><td class="later">roadmap</td><td><strong>mesurée non conforme</strong> (limite pdfcpu) — jamais masquée</td></tr>
+  <tr><td>Préservation PDF/A-3b à l'<code>embed</code></td><td class="ok">✓</td><td><strong>mise à jour incrémentale</strong> : octets du PDF de base préservés (préfixe exact) — conformité <strong>vérifiée par veraPDF</strong> en CI</td></tr>
  </table>
- <p class="intro" style="margin-top:16px"><code>PDFAChecked</code> ne passe à <code>true</code> que si veraPDF confirme.
- Le job CI mesure la sortie d'<code>embed</code> : l'association est correcte, mais la réécriture pdfcpu ne
- préserve pas encore la conformité globale — un constat <strong>prouvé</strong>, jamais un faux verdict (§17.7).</p>
+ <p class="intro" style="margin-top:16px"><code>embed</code> procède par <strong>mise à jour incrémentale</strong> : plutôt que de réécrire
+ tout le PDF (ce qui cassait la conformité), Kanjō <strong>ajoute</strong> seulement les objets Factur-X (fichier embarqué,
+ <code>/AF</code>, <code>/AFRelationship</code>) en fin de fichier — les octets du PDF de base restent <strong>bit-à-bit intacts</strong>
+ (polices, couleurs, XMP, OutputIntent). Le PDF d'origine est le <strong>préfixe exact</strong> du résultat, et le job CI veraPDF
+ confirme que la sortie reste conforme PDF/A-3b — jamais un verdict non calculé (§17.7).</p>
 </section>
 
 <section id="parite">

@@ -2,6 +2,8 @@ package pdfa
 
 import (
 	"bytes"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -85,5 +87,48 @@ func TestEmbedEstablishesFacturXAssociation(t *testing.T) {
 	}
 	if typ := fs.NameEntry("Type"); typ == nil || *typ != "Filespec" {
 		t.Errorf("/Type de la spécification de fichier incorrect : %v", typ)
+	}
+}
+
+// TestEmbedIncrementalPreservesBytes vérifie que l'embed sur un vrai PDF/A (table xref classique)
+// procède par mise à jour incrémentale : les octets du PDF de base sont le préfixe exact du
+// résultat, la pièce jointe est extractible, et aucun doublon de nom n'est introduit.
+func TestEmbedIncrementalPreservesBytes(t *testing.T) {
+	base, err := os.ReadFile(filepath.Join("..", "..", "testdata", "corpus", "pdfa", "facturx_en16931.pdf"))
+	if err != nil {
+		t.Skipf("PDF de référence indisponible: %v", err)
+	}
+	res, err := EmbedXML(base, []byte(`<?xml version="1.0"?><rsm:CrossIndustryInvoice/>`), "factur-x.xml")
+	if err != nil {
+		t.Fatalf("embed: %v", err)
+	}
+	if len(res.PDF) <= len(base) || string(res.PDF[:len(base)]) != string(base) {
+		t.Fatal("les octets du PDF de base doivent être le préfixe exact du résultat")
+	}
+	// La sortie reste relisible et la pièce jointe extractible.
+	atts, err := ExtractAttachments(res.PDF)
+	if err != nil {
+		t.Fatalf("extract: %v", err)
+	}
+	var names []string
+	seen := map[string]int{}
+	for _, a := range atts {
+		names = append(names, a.Name)
+		seen[a.Name]++
+	}
+	for n, c := range seen {
+		if c > 1 {
+			t.Errorf("doublon de pièce jointe %q (%d)", n, c)
+		}
+	}
+	// Le XML embarqué doit être retrouvable (sous factur-x.xml existant ou nom dédupliqué).
+	found := false
+	for _, n := range names {
+		if strings.HasPrefix(n, "factur-x") {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("pièce jointe Factur-X introuvable parmi %v", names)
 	}
 }
