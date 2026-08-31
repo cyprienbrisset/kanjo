@@ -95,6 +95,8 @@ hr{border:none;border-top:1px solid var(--rule-hair);margin:32px 0}
   <a class="sub" href="#tui">Utiliser la TUI</a>
   <div class="h">Studio (bureau)</div>
   <a class="sub" href="#studio">Utiliser Studio</a>
+  <div class="h">Client lourd (desktop)</div>
+  <a class="sub" href="#desktop">Application de bureau native</a>
   <div class="h">Annexes</div>
   <a class="sub" href="#formats">Formats pris en charge</a>
   <a class="sub" href="#conformite">Conformité EN 16931</a>
@@ -474,8 +476,61 @@ terminal. Lancez :</p>
 <div class="note ok">Comme la CLI et la TUI, Studio est <strong>100 % local</strong> : vos factures
 ne quittent jamais votre poste.</div>
 
+<!-- ============================ CLIENT LOURD ============================ -->
+<h2 id="desktop">8. Client lourd (application de bureau native)</h2>
+<p>Le client lourd Kanjō est une <strong>application de bureau native</strong> — une fenêtre
+macOS, Windows ou Linux — qui embarque exactement la même interface que <code>kanjo studio</code>
+et le même cœur Go, <strong>sans aucun onglet de navigateur</strong>. Vous bénéficiez de
+l'intégralité des écrans Studio (inspecteur, validation, conversion, comparaison, bibliothèque,
+audit) dans une fenêtre autonome, sans dépendance réseau.</p>
+
+<div class="note ok"><strong>Une seule base de code, deux façades.</strong> Le client lourd et
+<code>kanjo studio</code> partagent le même frontend et la même API — aucune duplication. Tout
+le traitement reste <strong>100 % local et hors-ligne</strong> : vos factures ne quittent jamais
+votre poste.</div>
+
+<h3>Installation</h3>
+<p>Téléchargez l'artefact <strong>« Desktop »</strong> correspondant à votre système depuis la
+page <a href="https://github.com/cyprienbrisset/kanjo/releases">Releases GitHub</a> ou depuis
+les artefacts du dernier pipeline CI :</p>
+<table>
+<tr><th>Système</th><th>Artefact à télécharger</th></tr>
+<tr><td>macOS (Intel + Apple Silicon)</td><td><code>kanjo-desktop-macos-latest</code> — bundle <code>.app</code></td></tr>
+<tr><td>Windows 64 bits</td><td><code>kanjo-desktop-windows-latest</code> — exécutable <code>.exe</code></td></tr>
+<tr><td>Linux 64 bits</td><td><code>kanjo-desktop-ubuntu-latest</code> — exécutable ELF</td></tr>
+</table>
+<p>Décompressez l'archive, vérifiez l'empreinte SHA-256 puis lancez l'application. Aucune
+installation système requise ; aucun moteur de navigateur externe — la vue WebKit est fournie
+par le SDK natif de votre OS.</p>
+
+<h3>Ce qu'apporte le client lourd par rapport au navigateur</h3>
+<table>
+<tr><th>Fonctionnalité</th><th>Navigateur (<code>kanjo studio</code>)</th><th>Client lourd</th></tr>
+<tr><td>Même interface Studio complète</td><td>✅</td><td>✅</td></tr>
+<tr><td>100 % local, hors-ligne</td><td>✅</td><td>✅</td></tr>
+<tr><td>Dialogue de fichiers <strong>natif</strong></td><td>Dialogue navigateur</td><td>✅ dialogue OS natif</td></tr>
+<tr><td>Glisser-déposer <strong>natif</strong> depuis l'explorateur</td><td>Glisser-déposer HTML</td><td>✅ glisser-déposer OS</td></tr>
+<tr><td>Double-clic sur une facture <code>.xml</code>/<code>.pdf</code>/<code>.json</code></td><td>—</td><td>✅ association de fichiers</td></tr>
+<tr><td>Menu applicatif (Fichier / Édition…)</td><td>—</td><td>✅ menu natif OS</td></tr>
+</table>
+
+<h3>Compilation depuis les sources</h3>
+<p>Le client lourd est isolé dans le module Go <code>gui/wails</code> (ADR-0011). Compilez-le
+avec <a href="https://wails.io/">Wails</a> :</p>
+<pre><code># Installer Wails (une seule fois)
+go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+# Compiler (nécessite le SDK natif de l'OS : Xcode / MSVC / WebKitGTK)
+make desktop
+# ou directement :
+cd gui/wails && go mod tidy && wails build</code></pre>
+<div class="note">Sur Linux, installez les dépendances WebKitGTK :
+<code>sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev</code>.
+Le binaire <code>kanjo</code> principal (CLI/TUI/studio) reste pur Go
+(<code>CGO_ENABLED=0</code>) — le client lourd est le seul artefact qui nécessite cgo.</div>
+
 <!-- ============================ ANNEXES ============================ -->
-<h2 id="formats">8. Formats pris en charge</h2>
+<h2 id="formats">9. Formats pris en charge</h2>
 <table>
 <tr><th>Format</th><th>Lecture</th><th>Écriture</th><th>Validation</th></tr>
 <tr><td>Factur-X (PDF/A-3, tous profils)</td><td>✅</td><td>✅ (embed)</td><td>✅</td></tr>
@@ -490,14 +545,14 @@ ne quittent jamais votre poste.</div>
 <tr><td>JSON pivot · CSV</td><td>✅ / —</td><td>✅ / ✅</td><td>✅</td></tr>
 </table>
 
-<h2 id="conformite">9. Conformité EN 16931</h2>
+<h2 id="conformite">10. Conformité EN 16931</h2>
 <p>Kanjō couvre <strong>100 % des 223 règles</strong> du Schematron officiel du CEN, mesurées à
 chaque commit (aucun stub, chaque règle réellement calculée et éprouvée sur un corpus réel). Le
 détail par famille est publié dans le
 <a href="CONFORMITE-EN16931.md">rapport de conformité</a>. La conformité n'est jamais déclarée sans
 avoir été calculée.</p>
 
-<h2 id="exit">10. Codes de sortie</h2>
+<h2 id="exit">11. Codes de sortie</h2>
 <p>Les commandes renvoient un code de sortie normalisé, pratique en CI :</p>
 <table>
 <tr><th>Code</th><th>Signification</th></tr>
@@ -512,7 +567,7 @@ avoir été calculée.</p>
 <tr><td><code>8</code></td><td>Quota / limite dépassée.</td></tr>
 </table>
 
-<h2 id="rgpd">11. Sécurité &amp; RGPD</h2>
+<h2 id="rgpd">12. Sécurité &amp; RGPD</h2>
 <ul>
 <li><strong>100 % hors-ligne</strong> — aucun appel réseau, aucune télémétrie ; vos factures restent sur votre poste.</li>
 <li><strong>XML durci</strong> — protection contre les attaques XXE et les bombes de décompression.</li>
