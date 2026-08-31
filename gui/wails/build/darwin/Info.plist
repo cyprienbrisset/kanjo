@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleName</key><string>Kanjō</string>
+  <key>CFBundleExecutable</key><string>Kanjo</string>
+  <key>CFBundleIdentifier</key><string>com.wakastellar.kanjo</string>
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeName</key><string>Facture électronique</string>
+      <key>CFBundleTypeRole</key><string>Viewer</string>
+      <key>LSItemContentTypes</key>
+      <array><string>public.xml</string><string>com.adobe.pdf</string><string>public.json</string></array>
+    </dict>
+  </array>
+</dict>
+</plist>

@@ -12,6 +12,13 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Ajouté (client lourd)
+- **Application de bureau native (Wails)** : fenêtre native macOS/Windows/Linux réutilisant
+  le frontend et l'API Studio (aucune duplication, tout en intra-processus, hors-ligne).
+  Intégration OS : dialogue de fichiers natif (`window.kanjoOpenFiles`), glisser-déposer natif,
+  associations de fichiers `.xml`/`.pdf`/`.json`, menu applicatif. Isolée dans un module Go
+  séparé (`gui/wails`) : le cœur reste pur Go `CGO_ENABLED=0` × 6 cibles (ADR-0011).
+
 ## [0.2.0] - 2026-08-31
 
 ### Conformité (PDF/A)
