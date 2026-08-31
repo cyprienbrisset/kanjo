@@ -1,0 +1,14 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "Kanjo",
+  "outputfilename": "Kanjo",
+  "frontend:dir": "",
+  "author": {
+    "name": "Wakastellar"
+  },
+  "info": {
+    "productName": "Kanjō",
+    "productVersion": "0.0.0",
+    "comments": "Facturation électronique — client lourd (réutilise le cœur Kanjō)."
+  }
+}
