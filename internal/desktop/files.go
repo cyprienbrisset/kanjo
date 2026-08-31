@@ -23,14 +23,20 @@ type FileData struct {
 // ReadFiles lit chaque chemin et renvoie son contenu encodé en base64. Échec immédiat
 // si un chemin est inaccessible ou dépasse MaxFileSize.
 func ReadFiles(paths []string) ([]FileData, error) {
+	return readFiles(paths, MaxFileSize)
+}
+
+// readFiles porte la logique de ReadFiles avec une borne de taille paramétrable,
+// afin de tester la branche « fichier trop gros » sans créer un fichier de 64 Mo.
+func readFiles(paths []string, maxSize int64) ([]FileData, error) {
 	out := make([]FileData, 0, len(paths))
 	for _, p := range paths {
 		fi, err := os.Stat(p)
 		if err != nil {
 			return nil, fmt.Errorf("accès à %s: %w", p, err)
 		}
-		if fi.Size() > MaxFileSize {
-			return nil, fmt.Errorf("%s dépasse la taille maximale (%d octets)", p, int64(MaxFileSize))
+		if fi.Size() > maxSize {
+			return nil, fmt.Errorf("%s dépasse la taille maximale (%d octets)", p, maxSize)
 		}
 		b, err := os.ReadFile(p)
 		if err != nil {

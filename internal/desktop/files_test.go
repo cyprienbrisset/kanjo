@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -36,5 +37,20 @@ func TestReadFilesEncodesBase64(t *testing.T) {
 func TestReadFilesMissingPathErrors(t *testing.T) {
 	if _, err := ReadFiles([]string{"/introuvable/xyz.xml"}); err == nil {
 		t.Fatal("un chemin introuvable doit produire une erreur")
+	}
+}
+
+func TestReadFilesSizeExceededErrors(t *testing.T) {
+	dir := t.TempDir()
+	p := filepath.Join(dir, "gros.xml")
+	if err := os.WriteFile(p, []byte("plus de deux octets"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	_, err := readFiles([]string{p}, 2)
+	if err == nil {
+		t.Fatal("un fichier dépassant la limite doit produire une erreur")
+	}
+	if !strings.Contains(err.Error(), "taille maximale") {
+		t.Errorf("l'erreur doit mentionner la taille, obtenu: %v", err)
 	}
 }
