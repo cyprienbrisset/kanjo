@@ -108,7 +108,8 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   <span class="pill"><span class="dot"></span>Sortie JSON versionnée</span>
  </div>
  <div class="btns">
-  <a class="btn primary" href="#demarrer">Démarrer</a>
+  <a class="btn primary" href="https://github.com/cyprienbrisset/kanjo/releases/latest">Télécharger</a>
+  <a class="btn" href="#demarrer">Démarrer</a>
   <a class="btn" href="documentation.html">Documentation utilisateur</a>
   <a class="btn" href="#facades">Voir les interfaces</a>
  </div>
@@ -292,6 +293,22 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
 <section id="demarrer">
  <h2>Démarrer</h2>
  <p class="intro">Un seul binaire, aucune dépendance runtime.</p>
+
+ <h3>Binaires précompilés</h3>
+ <p class="intro">Téléchargez l'archive de votre système depuis la
+  <a href="https://github.com/cyprienbrisset/kanjo/releases/latest"><strong>page des releases GitHub</strong></a>
+  (toujours la dernière version). Chaque archive contient le binaire <code>kanjo</code>, le README, la
+  licence et le CHANGELOG ; vérifiez l'intégrité avec <code>SHA256SUMS.txt</code>.</p>
+ <ul>
+  <li><strong>Linux</strong> — <code>kanjo_&lt;version&gt;_linux_amd64.tar.gz</code> · <code>…_linux_arm64.tar.gz</code></li>
+  <li><strong>macOS</strong> — <code>kanjo_&lt;version&gt;_darwin_amd64.tar.gz</code> (Intel) · <code>…_darwin_arm64.tar.gz</code> (Apple&nbsp;Silicon)</li>
+  <li><strong>Windows</strong> — <code>kanjo_&lt;version&gt;_windows_amd64.zip</code> · <code>…_windows_arm64.zip</code></li>
+ </ul>
+ <div class="btns">
+  <a class="btn primary" href="https://github.com/cyprienbrisset/kanjo/releases/latest">Télécharger la dernière release</a>
+ </div>
+
+ <h3>Ou compiler depuis les sources</h3>
  <pre class="code"># Compilation (pur Go, cross-compilable sur 6 cibles)
 CGO_ENABLED=0 go build -o kanjo ./cmd/kanjo
 
