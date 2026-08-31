@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Kanjō
+Exec=Kanjo %F
+Icon=kanjo
+Categories=Office;Finance;
+MimeType=application/xml;application/pdf;application/json;
