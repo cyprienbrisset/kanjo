@@ -12,6 +12,20 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Conformité (PDF/A)
+- **Préservation PDF/A-3b à l'embarquement (mise à jour incrémentale)** : `embed` n'utilise plus la
+  réécriture pdfcpu (qui cassait la conformité). Il **ajoute** les objets Factur-X (EmbeddedFile,
+  `/AF`, `/AFRelationship`) via une **section incrémentale** en fin de fichier — les octets du PDF
+  de base restent **bit-à-bit intacts** (préfixe exact du résultat) : polices, couleurs, XMP et
+  OutputIntent conservés. Insertion **triée** dans l'arbre de noms EmbeddedFiles (exigence PDF/A) et
+  déduplication des noms de pièces jointes. Le job CI **veraPDF** vérifie que la sortie reste
+  conforme PDF/A-3b. Repli sur la réécriture pdfcpu uniquement pour les PDF à flux xref.
+- **Correctif structure d'objets incrémentaux (règle PDF/A 6.1.9-1)** : les objets ajoutés étaient
+  concaténés sans séparateur (`…endobjN 0 obj…`), violant l'exigence « numéro d'objet et `endobj`
+  précédés d'un EOL, `obj`/`endobj` suivis d'un EOL » — veraPDF rejetait la sortie. Chaque objet de
+  la section incrémentale est désormais bordé par un unique EOL. Non-régression Go-native
+  (`TestEmbedIncrementalObjectEOLBoundaries`) vérifiant les bordures sans dépendre de veraPDF.
+
 ### Ajouté (identité visuelle)
 - **Logo Kanjō intégré partout** : page d'accueil (favicon, OpenGraph/Twitter, nav, hero),
   documentation utilisateur, README (bannière) et Studio (favicon + en-tête). Les **sorties HTML

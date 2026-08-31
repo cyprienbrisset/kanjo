@@ -29,7 +29,25 @@ func EmbedXML(pdf, xml []byte, attachName string) (*EmbedResult, error) {
 	if attachName == "" {
 		attachName = "factur-x.xml"
 	}
+	desc := "Facture électronique (XML) — donnée du document"
 
+	// Voie privilégiée : mise à jour INCRÉMENTALE. Les octets du PDF de base restent intacts
+	// (préfixe exact du résultat), donc sa conformité PDF/A-3b est PRÉSERVÉE — contrairement à une
+	// réécriture complète. On ne se rabat sur pdfcpu que si la structure xref n'est pas classique.
+	if out, err := embedIncremental(pdf, xml, attachName, desc, time.Now()); err == nil {
+		return &EmbedResult{
+			PDF:         out,
+			AttachedAs:  attachName,
+			PDFAChecked: false,
+			Warnings: []string{
+				"W-PDF-001: association Factur-X ajoutée par mise à jour incrémentale (octets du PDF de base préservés) ; conformité PDF/A-3b confirmée par veraPDF uniquement (job CI).",
+			},
+		}, nil
+	} else if err != ErrIncrementalUnsupported {
+		return nil, fmt.Errorf("pdfa: embarquement incrémental de %s: %w", attachName, err)
+	}
+
+	// Repli : réécriture complète via pdfcpu (ne préserve pas la conformité PDF/A globale).
 	conf := config()
 	ctx, err := api.ReadContext(bytes.NewReader(pdf), conf)
 	if err != nil {
@@ -38,23 +56,19 @@ func EmbedXML(pdf, xml []byte, attachName string) (*EmbedResult, error) {
 		}
 		return nil, fmt.Errorf("pdfa: lecture du PDF: %w", err)
 	}
-
-	desc := "Facture électronique (XML) — donnée du document"
 	if err := embedFacturX(ctx.XRefTable, xml, attachName, desc, time.Now()); err != nil {
 		return nil, fmt.Errorf("pdfa: embarquement Factur-X de %s: %w", attachName, err)
 	}
-
 	var buf bytes.Buffer
 	if err := api.WriteContext(ctx, &buf); err != nil {
 		return nil, fmt.Errorf("pdfa: écriture du PDF: %w", err)
 	}
-
 	return &EmbedResult{
 		PDF:         buf.Bytes(),
 		AttachedAs:  attachName,
 		PDFAChecked: false,
 		Warnings: []string{
-			"W-PDF-001: association Factur-X établie (/AF, /AFRelationship) ; conformité PDF/A-3b globale non vérifiée sans veraPDF (voir kanjo doctor / job CI veraPDF)",
+			"W-PDF-002: repli réécriture complète (xref non classique) ; l'association Factur-X est établie mais la conformité PDF/A-3b du PDF de base n'est pas garantie.",
 		},
 	}, nil
 }
