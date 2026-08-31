@@ -19,9 +19,12 @@ func NewApp(launchArgs []string) *App {
 	return &App{pending: filterInvoicePaths(launchArgs)}
 }
 
-// onStartup mémorise le contexte Wails.
+// onStartup mémorise le contexte Wails et enregistre le gestionnaire de glisser-déposer.
+// En Wails v2, la réception des fichiers déposés passe par runtime.OnFileDrop (et non par un
+// champ d'options.App) ; DragAndDrop.EnableFileDrop dans les options active le mécanisme.
 func (a *App) onStartup(ctx context.Context) {
 	a.ctx = ctx
+	wailsruntime.OnFileDrop(ctx, a.onFileDrop)
 }
 
 // onDomReady : le frontend est chargé ; on pousse les éventuels fichiers de lancement.

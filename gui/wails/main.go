@@ -60,9 +60,8 @@ func main() {
 		DragAndDrop: &options.DragAndDrop{
 			EnableFileDrop: true,
 		},
-		OnFileDrop: app.onFileDrop,
-		Bind:       []interface{}{app},
-		Menu:       buildMenu(app),
+		Bind: []interface{}{app},
+		Menu: buildMenu(app),
 	})
 	if err != nil {
 		panic(err)
