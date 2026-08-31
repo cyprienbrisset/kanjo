@@ -2,6 +2,7 @@ package pdfa
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
 	"testing"
 )
@@ -63,10 +64,30 @@ func TestVeraPDFEmbedOutput(t *testing.T) {
 	// l'arbitre : la sortie doit rester conforme.
 	t.Logf("conformité PDF/A-3b après embed incrémental : compliant=%v — %s", val.Compliant, val.Details)
 	if !val.Compliant {
+		t.Logf("RAPPORT veraPDF détaillé :\n%s", veraPDFVerbose(t, res.PDF))
 		t.Errorf("l'embed incrémental doit PRÉSERVER la conformité PDF/A-3b du PDF de base — veraPDF : %s", val.Details)
 	}
 	// Le PDF d'origine doit être le préfixe exact de la sortie (preuve de non-réécriture).
 	if len(res.PDF) < len(base) || string(res.PDF[:len(base)]) != string(base) {
 		t.Error("les octets du PDF de base ne sont pas préservés à l'identique (préfixe)")
 	}
+}
+
+// veraPDFVerbose exécute veraPDF avec un rapport détaillé (règles échouées) pour diagnostic.
+func veraPDFVerbose(t *testing.T, pdf []byte) string {
+	t.Helper()
+	bin, err := exec.LookPath("verapdf")
+	if err != nil {
+		return "(veraPDF absent)"
+	}
+	f, err := os.CreateTemp("", "kanjo-diag-*.pdf")
+	if err != nil {
+		return err.Error()
+	}
+	defer func() { _ = os.Remove(f.Name()) }()
+	_, _ = f.Write(pdf)
+	_ = f.Close()
+	// --format text -v : liste les contrôles échoués avec leur clause/test.
+	out, _ := exec.Command(bin, "--flavour", "3b", "-v", "--format", "text", f.Name()).CombinedOutput()
+	return string(out)
 }
