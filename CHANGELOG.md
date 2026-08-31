@@ -12,6 +12,8 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+## [0.2.0] - 2026-08-31
+
 ### Conformité (PDF/A)
 - **Préservation PDF/A-3b à l'embarquement (mise à jour incrémentale)** : `embed` n'utilise plus la
   réécriture pdfcpu (qui cassait la conformité). Il **ajoute** les objets Factur-X (EmbeddedFile,
