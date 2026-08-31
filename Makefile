@@ -27,6 +27,5 @@ lint: ## Exécuter golangci-lint
 tidy: ## go mod tidy
 	go mod tidy
 
-.PHONY: desktop
 desktop: ## Construire le client lourd (nécessite Wails + SDK natif de l'OS courant)
 	cd gui/wails && go mod tidy && wails build
