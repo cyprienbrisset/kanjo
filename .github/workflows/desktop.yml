@@ -20,10 +20,14 @@ jobs:
         include:
           - os: macos-latest
             platform: darwin/universal
+            buildtags: ""
           - os: windows-latest
             platform: windows/amd64
+            buildtags: ""
           - os: ubuntu-latest
             platform: linux/amd64
+            # Ubuntu 24.04 fournit WebKitGTK 4.1 ; Wails cible 4.0 par défaut → tag requis.
+            buildtags: "webkit2_41"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +44,13 @@ jobs:
         run: go mod tidy
       - name: Build
         working-directory: gui/wails
-        run: wails build -platform ${{ matrix.platform }}
+        shell: bash
+        run: |
+          if [ -n "${{ matrix.buildtags }}" ]; then
+            wails build -platform ${{ matrix.platform }} -tags "${{ matrix.buildtags }}"
+          else
+            wails build -platform ${{ matrix.platform }}
+          fi
       - name: Publier l'artefact (compile-gate + tag)
         uses: actions/upload-artifact@v4
         with:
