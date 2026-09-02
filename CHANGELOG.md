@@ -22,6 +22,13 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   Helper réutilisable `rules.UnknownSets`. Non-régression : `pkg/rules/unknownset_test.go`.
 
 ### Corrigé (audit)
+- **Journal d'audit sûr entre plusieurs processus** (`pkg/audit`, `internal/fslock`). Le `sync.Mutex`
+  ne protégeait que les goroutines d'un même processus ; deux invocations concurrentes de Kanjō
+  pouvaient lire le même dernier numéro de séquence et écrire des entrées au même `seq`/`prevHash`
+  (chaîne fourchée). La section critique « lire la dernière entrée + chaîner + ajouter » est désormais
+  protégée par un **verrou de fichier inter-processus** (`flock` Unix / `LockFileEx` Windows), et la
+  vraie dernière entrée est **relue sous verrou** (lecture de fin de fichier, sans tout charger).
+  Non-régression : `TestConcurrentJournalsKeepChainCoherent` (passe sous `-race`).
 - **Chaînage d'audit : ancrage initial et détection renforcés, garanties documentées honnêtement**
   (`pkg/audit`). `VerifyChain` détecte désormais aussi la **troncature en tête** (la première entrée
   chaînée doit être la genèse, `prevHash` vide) et toute **entrée non chaînée intercalée après le

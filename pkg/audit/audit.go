@@ -8,8 +8,10 @@ package audit
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -18,6 +20,7 @@ import (
 	"time"
 
 	"github.com/cyprienbrisset/kanjo/internal/fsatomic"
+	"github.com/cyprienbrisset/kanjo/internal/fslock"
 	"github.com/cyprienbrisset/kanjo/internal/version"
 )
 
@@ -50,6 +53,7 @@ type Entry struct {
 type Journal struct {
 	mu       sync.Mutex
 	f        *os.File
+	path     string // chemin du fichier (relecture de la dernière entrée sous verrou inter-processus)
 	lastHash string // empreinte de la dernière entrée (pour le chaînage)
 	lastSeq  int64  // numéro de séquence de la dernière entrée
 }
@@ -72,20 +76,75 @@ func Open(path string) (*Journal, error) {
 	if err != nil {
 		return nil, fmt.Errorf("ouverture du journal d'audit %q: %w", path, err)
 	}
-	j := &Journal{f: f}
-	// Reprendre le chaînage à partir de la dernière entrée existante.
-	if existing, err := Read(path); err == nil && len(existing) > 0 {
-		last := existing[len(existing)-1]
+	j := &Journal{f: f, path: path}
+	// Reprendre le chaînage à partir de la dernière entrée existante (relu ensuite sous verrou
+	// à chaque écriture, ce qui couvre les écritures concurrentes d'autres processus).
+	if last, ok := lastEntry(path); ok {
 		j.lastSeq = last.Seq
 		j.lastHash = last.Hash
 	}
 	return j, nil
 }
 
+// lastEntry lit la dernière entrée d'un journal sans charger tout le fichier (fenêtre de fin), pour
+// reprendre le chaînage. Renvoie (Entry, false) si le journal est vide, absent ou illisible.
+func lastEntry(path string) (Entry, bool) {
+	f, err := os.Open(path)
+	if err != nil {
+		return Entry{}, false
+	}
+	defer f.Close()
+	fi, err := f.Stat()
+	if err != nil || fi.Size() == 0 {
+		return Entry{}, false
+	}
+	const window = 64 * 1024 // une entrée d'audit fait < 1 Ko ; la dernière tient dans cette fenêtre
+	start := int64(0)
+	if fi.Size() > window {
+		start = fi.Size() - window
+	}
+	buf := make([]byte, fi.Size()-start)
+	if _, err := f.ReadAt(buf, start); err != nil && err != io.EOF {
+		return Entry{}, false
+	}
+	lines := bytes.Split(buf, []byte{'\n'})
+	for i := len(lines) - 1; i >= 0; i-- {
+		line := bytes.TrimSpace(lines[i])
+		if len(line) == 0 {
+			continue
+		}
+		var e Entry
+		if json.Unmarshal(line, &e) != nil {
+			return Entry{}, false
+		}
+		return e, true
+	}
+	return Entry{}, false
+}
+
 // Log complète l'entrée (horodatage, acteur, versions) et l'écrit.
+//
+// La section critique « lire la dernière entrée + calculer le chaînage + ajouter » est protégée par
+// un mutex intra-processus ET un verrou de fichier inter-processus (§17.5) : deux invocations
+// concurrentes de Kanjō ne peuvent plus attribuer le même numéro de séquence ni le même prevHash.
+// Sous verrou, la vraie dernière entrée est relue depuis le fichier (un autre processus a pu écrire
+// depuis l'ouverture), garantissant un chaînage cohérent et sans fourche.
 func (j *Journal) Log(e Entry) error {
 	j.mu.Lock()
 	defer j.mu.Unlock()
+
+	unlock, err := fslock.Lock(j.f)
+	if err != nil {
+		return fmt.Errorf("verrouillage du journal d'audit: %w", err)
+	}
+	defer func() { _ = unlock() }()
+
+	// Relire la dernière entrée réellement présente (écritures concurrentes d'autres processus).
+	if last, ok := lastEntry(j.path); ok {
+		j.lastSeq = last.Seq
+		j.lastHash = last.Hash
+	}
+
 	if e.Ts == "" {
 		e.Ts = time.Now().UTC().Format(time.RFC3339Nano)
 	}
@@ -105,11 +164,11 @@ func (j *Journal) Log(e Entry) error {
 	if err != nil {
 		return err
 	}
-	j.lastSeq = e.Seq
-	j.lastHash = e.Hash
 	if _, err := j.f.Write(append(data, '\n')); err != nil {
 		return err
 	}
+	j.lastSeq = e.Seq
+	j.lastHash = e.Hash
 	return j.f.Sync()
 }
 
