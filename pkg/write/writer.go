@@ -55,9 +55,14 @@ var (
 var ErrUnsupportedTarget = errors.New("cible d'écriture non prise en charge")
 
 // Register associe un écrivain à un nom de cible ("cii", "ubl", "json", …).
+// Panique en cas de cible déjà enregistrée : c'est un bogue de programmation (deux écrivains pour
+// la même cible), jamais un cas d'exécution — cohérent avec rules.Register (§4.2).
 func Register(target string, w Writer) {
 	mu.Lock()
 	defer mu.Unlock()
+	if _, exists := registry[target]; exists {
+		panic("write: écrivain déjà enregistré pour la cible : " + target)
+	}
 	registry[target] = w
 }
 

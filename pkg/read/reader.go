@@ -50,9 +50,14 @@ var (
 var ErrUnsupportedFormat = errors.New("format non pris en charge")
 
 // Register associe un lecteur à un format. Appelé par chaque sous-paquet dans son init().
+// Panique en cas de format déjà enregistré : c'est un bogue de programmation (deux lecteurs pour
+// le même format), jamais un cas d'exécution — cohérent avec rules.Register (§4.2).
 func Register(f Format, r Reader) {
 	mu.Lock()
 	defer mu.Unlock()
+	if _, exists := registry[f]; exists {
+		panic("read: lecteur déjà enregistré pour le format : " + string(f))
+	}
 	registry[f] = r
 }
 

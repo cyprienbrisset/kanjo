@@ -39,6 +39,17 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   `TestDetectUnchainedInterleaved`.
 
 ### Corrigé (robustesse)
+- **Détection de format : vérification réelle de l'espace de noms UBL** (`pkg/read`). La racine
+  `<Invoice>`/`<CreditNote>` étant partagée hors UBL, `Detect` vérifie désormais l'URI d'espace de
+  noms : un namespace présent mais non-UBL renvoie `unknown` au lieu d'un routage UBL trompeur ; un
+  namespace absent reste toléré (le lecteur confirme). L'URI est résolue depuis les déclarations
+  `xmlns` du jeton brut (`RawToken`) — **sans** basculer sur `Token`, qui expanserait entités/DTD
+  d'une entrée non fiable (anti-XXE). Le contrat routage-puis-confirmation est explicité.
+  Non-régression : `TestDetectUBLNamespaceDiscrimination`.
+- **Registres `read`/`write` : double enregistrement → panique** (`pkg/read`, `pkg/write`). Comme
+  `rules.Register`, enregistrer deux lecteurs/écrivains pour le même format/cible est un bogue de
+  programmation et panique désormais au lieu d'écraser silencieusement le premier. Non-régression :
+  `TestRegisterDuplicatePanics` (read + write).
 - **Montants : dépassement de capacité → erreur, plus jamais de panique** (`pkg/model`). Un document
   hostile portant un nombre suffisamment grand pouvait, lors d'une remise à l'échelle, provoquer une
   panique (`math/big` → int64). Désormais : (1) `ParseDecimal`/`ParseAmount` refusent à la lecture
