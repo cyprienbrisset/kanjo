@@ -128,7 +128,7 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
   <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M4 4h16v6H4zM4 14h16v6H4z"/></svg>Comparer</h3><p>Diff sémantique entre deux factures, quels que soient leurs formats : distingue pertes et divergences.</p></div>
   <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M6 3h12v18l-2.5-1.6L13 21l-2.5-1.6L8 21l-2-1.6z"/></svg>Rendre lisible</h3><p>Facture HTML autonome et rapport de conformité imprimable, dans le design de l'application.</p></div>
   <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>Anonymiser (RGPD)</h3><p>Remplacement déterministe des données personnelles pour constituer un corpus de test sans rien exporter.</p></div>
-  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 9h16M9 9v11"/></svg>Bibliothèque &amp; audit</h3><p>Index SQLite local des documents traités, droit à l'effacement, journal d'audit horodaté sans donnée personnelle.</p></div>
+  <div class="card"><h3><svg class="icon accent" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 9h16M9 9v11"/></svg>Bibliothèque &amp; audit</h3><p>Index SQLite local des documents traités, droit à l'effacement, journal d'audit horodaté sans donnée personnelle — chaîné (tamper-evident) et sûr entre processus.</p></div>
  </div>
 </section>
 
@@ -192,12 +192,12 @@ footer{padding:40px 0;border-top:1px solid var(--rule-firm);color:var(--ink-500)
  <p class="intro">Le socle réglementaire français (Factur-X / UBL 2.1 / CII) est au cœur. La validation
   est réellement calculée — jamais un verdict de complaisance.</p>
  <div class="metrics">
-  <div class="metric"><div class="n">228</div><div class="l">règles de validation (EN 16931 + CIUS FR + Kanjō)</div></div>
+  <div class="metric"><div class="n">223</div><div class="l">règles de validation (EN 16931 + CIUS FR + Kanjō)</div></div>
   <div class="metric"><div class="n">6/6</div><div class="l">cibles cross-compilées (Linux, macOS, Windows)</div></div>
   <div class="metric"><div class="n">0</div><div class="l">appel réseau · 0 télémétrie · traitement local</div></div>
  </div>
  <p class="intro" style="margin-top:32px"><strong>Corpus réel open-source : 7 365 factures</strong> (CEN, Peppol, XRechnung, phive-rules multi-juridictions, ZUGFeRD) lues <strong>sans jamais faire paniquer</strong> un lecteur. Corpus synthétique de contrôle vérifié en continu (38/38 succès, 12/12 erreurs). Exemples CEN complets lus 32/32 ; validation CEN CII 15/15, UBL 16/17 (l'écart, catégorie « B » hors norme, correctement rejeté).
-  XML durci contre XXE et les bombes de décompression ; aucune donnée personnelle dans les journaux.</p>
+  XML durci contre XXE et les bombes de décompression (jusqu'à la détection de format) ; aucune donnée personnelle dans les journaux. Entrée hostile maîtrisée : montant démesuré refusé à la lecture (jamais de panique), jeu de règles inconnu rejeté au lieu d'un faux « conforme ». Journal d'audit chaîné (tamper-evident) et sûr entre processus. Chaîne d'approvisionnement CI épinglée par empreinte (veraPDF en SHA-256, actions figées).</p>
  <p style="text-align:center;margin-top:24px">
   <a class="btn" href="https://github.com/cyprienbrisset/kanjo/blob/main/docs/RAPPORT-QUALITE.md">Lire le rapport de qualité &amp; de conformité →</a>
  </p>

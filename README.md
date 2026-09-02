@@ -13,7 +13,7 @@ Factur-X · UBL 2.1 · CII · XRechnung · Peppol — une seule implémentation,
 [![CGO disabled](https://img.shields.io/badge/CGO-disabled-5E7A4A)](#architecture)
 [![OS](https://img.shields.io/badge/OS-Linux%20·%20macOS%20·%20Windows-24405E)](#démarrer)
 [![Tests](https://img.shields.io/badge/tests-199%20·%20passing-5E7A4A)](docs/RAPPORT-QUALITE.md)
-[![EN 16931](https://img.shields.io/badge/EN%2016931-228%20règles-24405E)](#conformité)
+[![EN 16931](https://img.shields.io/badge/EN%2016931-223%20règles-24405E)](#conformité)
 [![Qualité](https://img.shields.io/badge/rapport-qualité%20%26%20conformité-B8862F)](docs/RAPPORT-QUALITE.md)
 [![RGPD](https://img.shields.io/badge/RGPD-100%25%20hors--ligne-9E2B32)](#sécurité--rgpd)
 [![Façades](https://img.shields.io/badge/interfaces-CLI%20·%20TUI%20·%20Studio-B8862F)](#trois-interfaces-un-seul-cœur)
@@ -56,15 +56,13 @@ jusqu'aux plateformes SaaS.
 
 ## Fonctionnalités
 
-- **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **218 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.** Option `--cross-check` : confrontation aux validateurs externes (Mustangproject/KoSIT).
 - **Lire &amp; inspecter** — Factur-X (PDF/A-3), UBL, CII D16B, FatturaPA, **UN/EDIFACT INVOIC**, **Order-X**, JSON pivot. Détection **par le contenu**, jamais par l'extension.
-- **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **228 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé.**
+- **Valider** — moteur EN 16931 **natif en Go** (pas de Schematron/JVM), **223 règles** : `BR`, `BR-CO`, `BR-CL`, `BR-DEC`, `BR-S/Z/E/AE/K/G/O`, remises/charges niveau document **et ligne** (BG-20/21, BG-27/28), CIUS française (SIREN, mentions CTC), règles maison (IBAN mod-97, dates). **Réellement calculé, jamais simulé** — un jeu de règles inconnu échoue en anomalie fatale, jamais un faux « conforme ». Option `--cross-check` : confrontation aux validateurs externes (Mustangproject/KoSIT).
 - **Convertir** — CII ⇄ UBL, Factur-X, XRechnung (UBL/CII), Peppol BIS 3.0, JSON, CSV — avec **rapport de perte explicite** et politique `--max-loss`.
 - **Traiter en lot** — découverte récursive, pool de workers, **reprise `--resume`**, quarantaine, **surveillance de dossier** (`watch`).
 - **Comparer** — `diff` sémantique entre deux factures quels que soient leurs formats (distingue **pertes** et **divergences**).
 - **Rendre lisible** — facture **HTML autonome** et **rapport de validation** imprimable, dans le design de l'application.
-- **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle, **chaîné (tamper-evident)** : `audit verify` détecte toute modification/suppression, `audit export --from/--to --format html` produit un **rapport consolidé signé de son empreinte**.
-- **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle.
+- **RGPD** — `anonymize` (remplacement déterministe des données personnelles), **bibliothèque SQLite locale** (droit à l'effacement, rétention), **journal d'audit** horodaté sans donnée personnelle, **chaîné (tamper-evident) et sûr entre processus** : `audit verify` détecte toute modification, suppression, réinsertion ou troncature en tête, `audit export --from/--to --format html` produit un **rapport consolidé signé de son empreinte**.
 - **Extraire / embarquer** — `extract` le XML d'une Factur-X ; `embed` un XML dans un PDF en établissant l'**association Factur-X** exigée par PDF/A-3 (`/AF`, `/AFRelationship /Data`, `EmbeddedFile` en `text/xml`). Conformité PDF/A-3b **validée par veraPDF** (`--verify-pdfa`), jamais déclarée sans validation.
 - **Générer** — `generate` un corpus synthétique (scénarios TVA variés, cas volontairement invalides).
 
@@ -141,7 +139,7 @@ Suivie par [`test/parity_test.go`](test/parity_test.go) ; détail par famille da
 
 - **Corpus publiable synthétique** ([`testdata/corpus/published`](testdata/corpus/published)) : **38/38** succès conformes et **12/12** erreurs rejetées — [`test/corpus_test.go`](test/corpus_test.go).
 - **Corpus réel open-source** ([`fetch.sh`](testdata/corpus/fetch.sh)) : **7 365 documents** (CEN, Peppol, XRechnung, phive-rules multi-juridictions, ZUGFeRD) lus **sans panic** ; exemples CEN 32/32.
-- **199 tests automatisés** ; **228 règles** au total (EN 16931 + CIUS FR + Kanjō), chacune avec un test passant et un test échouant.
+- **255 tests automatisés** ; **223 règles** au total (EN 16931 + CIUS FR + Kanjō), chacune avec un test passant et un test échouant.
 - 📊 **[Visualisation graphique par famille →](https://cyprienbrisset.github.io/kanjo/#parite)** &nbsp;·&nbsp; 👉 **[Rapport de qualité complet →](docs/RAPPORT-QUALITE.md)**
 
 ### Conformité PDF/A (Factur-X) — mesurée, jamais déclarée
@@ -180,16 +178,18 @@ Sécurité  │ internal/xmlsafe (anti-XXE)  ·  internal/fsatomic (écriture at
 
 ## Sécurité &amp; RGPD
 
-- XML durci : entités externes désactivées (**XXE**), DOCTYPE refusé, bornes anti-« billion laughs ».
+- XML durci : entités externes désactivées (**XXE**), DOCTYPE refusé, bornes anti-« billion laughs » — y compris à la **détection de format** (aucune expansion d'entité avant le durcissement).
 - **Aucun appel réseau** par défaut, **aucune télémétrie** ; Studio écoute sur `127.0.0.1` avec jeton de session.
-- Journaux et audit **sans donnée personnelle** (chemins, empreintes, identifiants techniques uniquement) — vérifié en test.
+- Journaux et audit **sans donnée personnelle** (chemins, empreintes, identifiants techniques uniquement) — vérifié en test. Journal d'audit **sûr entre plusieurs processus** (verrou de fichier inter-processus).
+- **Robustesse face à une entrée hostile** : un montant démesuré est refusé à la lecture (erreur, jamais de panique) ; un jeu de règles inconnu échoue au lieu de produire un faux « conforme ».
+- **Chaîne d'approvisionnement** : outils externes de CI épinglés par empreinte (validateur veraPDF vérifié en SHA-256, GitHub Actions figées à leur empreinte de commit).
 - `anonymize` pour transmettre un cas client au support sans exporter de données personnelles.
 
 ## Qualité
 
-- **199 tests automatisés** : unitaires, aller-retour **lossless**, propriétés (arrondis exacts), corpus de conformité, attaques XXE/bombes XML, intégration CLI de bout en bout.
+- **255 tests automatisés** : unitaires, aller-retour **lossless**, propriétés (arrondis exacts), corpus de conformité, attaques XXE/bombes XML, écriture concurrente du journal d'audit, intégration CLI de bout en bout.
 - **Corpus publiable** ([`testdata/corpus/published`](testdata/corpus/published), 50 factures synthétiques) validé en continu : 38/38 succès conformes, 12/12 erreurs rejetées.
-- `gofmt` + `go vet` propres ; **aucune `panic`** dans un chemin de traitement (converti en erreur de fichier).
+- CI : `gofmt` + `go vet` + **`staticcheck`** + **`govulncheck`** + **`go test -race`** ; **aucune `panic`** dans un chemin de traitement (converti en erreur de fichier).
 - Tout est reproductible : [`scripts/rapport-qualite.sh`](scripts/rapport-qualite.sh) rejoue compilation, tests, règles, corpus et sécurité.
 - 📄 **[Rapport de qualité et de conformité →](docs/RAPPORT-QUALITE.md)**
 
