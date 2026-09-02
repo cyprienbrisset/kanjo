@@ -31,6 +31,28 @@ func TestDetect(t *testing.T) {
 	}
 }
 
+// TestDetectUBLNamespaceDiscrimination : une racine <Invoice> portant un espace de noms étranger
+// n'est PAS routée vers UBL (évite un faux positif de détection) ; un namespace absent reste toléré.
+func TestDetectUBLNamespaceDiscrimination(t *testing.T) {
+	cases := []struct {
+		name string
+		in   string
+		want Format
+	}{
+		{"Invoice namespace étranger", `<Invoice xmlns="http://example.com/pas-ubl">`, FormatUnknown},
+		{"Invoice sans namespace (toléré)", `<Invoice>`, FormatUBLInvoice},
+		{"CreditNote namespace étranger", `<CreditNote xmlns="http://example.com/pas-ubl">`, FormatUnknown},
+		{"Invoice UBL complet", `<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">`, FormatUBLInvoice},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			if got := Detect([]byte(c.in)); got != c.want {
+				t.Errorf("Detect(%q) = %s, veut %s", c.name, got, c.want)
+			}
+		})
+	}
+}
+
 func TestDetectIgnoresBOMAndWhitespace(t *testing.T) {
 	withBOM := append([]byte{0xEF, 0xBB, 0xBF}, []byte("\n\t  <rsm:CrossIndustryInvoice/>")...)
 	if got := Detect(withBOM); got != FormatCII {

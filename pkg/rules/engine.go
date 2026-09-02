@@ -114,6 +114,29 @@ func Sets() []string {
 	return out
 }
 
+// UnknownSets renvoie, parmi les jeux demandés, ceux qui ne correspondent à aucun jeu enregistré
+// (dédupliqués, triés). Sert au fail-closed : demander un jeu inexistant ne doit jamais aboutir à
+// un verdict « conforme » silencieux (§17.7).
+func UnknownSets(requested ...string) []string {
+	known := map[string]bool{}
+	for _, s := range Sets() {
+		known[s] = true
+	}
+	seen := map[string]bool{}
+	var out []string
+	for _, s := range requested {
+		if !known[s] && !seen[s] {
+			out = append(out, s)
+			seen[s] = true
+		}
+	}
+	sort.Strings(out)
+	return out
+}
+
+// RuleUnknownSet est l'identifiant de l'anomalie émise lorsqu'un jeu de règles inexistant est demandé.
+const RuleUnknownSet = "KANJO-SET-UNKNOWN"
+
 // Report agrège les anomalies d'une validation.
 type Report struct {
 	Findings    []Finding `json:"findings"`
@@ -147,6 +170,18 @@ func Validate(doc *model.Document, sets ...string) Report {
 	ctx := &Context{Currency: doc.CurrencyCode}
 	rep := Report{}
 	setSeen := map[string]bool{}
+
+	// Fail-closed (§17.7) : un jeu de règles explicitement demandé mais inexistant ne doit jamais
+	// aboutir à un verdict « conforme » silencieux. On émet une anomalie FATALE — distincte du cas
+	// « aucun jeu demandé » (sets vide → tous les jeux exécutés), qui reste légitime.
+	for _, s := range UnknownSets(sets...) {
+		rep.Findings = append(rep.Findings, Finding{
+			RuleID:   RuleUnknownSet,
+			Severity: SeverityFatal,
+			Message:  "jeu de règles inconnu : " + s,
+			Actual:   s,
+		})
+	}
 
 	// Sélection consciente du type de document : une commande (Order-X) est validée par le jeu
 	// « orderx » uniquement ; les règles facture EN 16931 (TVA, totaux…) ne s'y appliquent pas et

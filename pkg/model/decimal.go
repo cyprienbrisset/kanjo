@@ -20,6 +20,28 @@ type Decimal struct {
 // ErrDecimalParse est renvoyée lorsqu'une chaîne ne représente pas un décimal valide.
 var ErrDecimalParse = errors.New("décimal invalide")
 
+// ErrOverflow signale un dépassement de capacité int64 lors d'une opération monétaire.
+var ErrOverflow = errors.New("dépassement de capacité")
+
+// maxUnscaledDigits borne le nombre de chiffres significatifs d'un décimal lu depuis un document.
+// int64 culmine à ≈ 9,22×10^18 (19 chiffres) ; en plafonnant la valeur non mise à l'échelle à
+// 10^15 on garde une marge suffisante pour toute remise à l'échelle interne usuelle (×10^k, k≤3)
+// sans dépassement. Au-delà, la valeur est refusée À LA LECTURE (entrée hostile → erreur explicite,
+// jamais panique en aval, §17.7 robustesse).
+const maxUnscaledDigits = 15
+
+// maxUnscaled = 10^maxUnscaledDigits.
+var maxUnscaled = new(big.Int).Exp(big.NewInt(10), big.NewInt(maxUnscaledDigits), nil)
+
+// int64Checked convertit un *big.Int en int64 sans paniquer : (valeur, true) si elle tient, sinon
+// (0, false). Utilisé par l'arithmétique monétaire publique pour renvoyer une erreur au lieu de paniquer.
+func int64Checked(b *big.Int) (int64, bool) {
+	if !b.IsInt64() {
+		return 0, false
+	}
+	return b.Int64(), true
+}
+
 // NewDecimal construit un décimal à partir d'une valeur non mise à l'échelle et d'une échelle.
 func NewDecimal(unscaled int64, scale uint8) Decimal {
 	return Decimal{Unscaled: unscaled, Scale: scale}
@@ -71,8 +93,10 @@ func ParseDecimal(s string) (Decimal, error) {
 	if !ok {
 		return Decimal{}, fmt.Errorf("%w: %q", ErrDecimalParse, s)
 	}
-	if !bi.IsInt64() {
-		return Decimal{}, fmt.Errorf("%w: dépassement de capacité", ErrDecimalParse)
+	// Refus des magnitudes excessives : borne à 10^maxUnscaledDigits pour garantir qu'aucune
+	// remise à l'échelle ultérieure ne dépasse int64 (robustesse face à une entrée hostile).
+	if !bi.IsInt64() || bi.Cmp(maxUnscaled) >= 0 {
+		return Decimal{}, fmt.Errorf("%w: magnitude excessive (%d chiffres significatifs maximum)", ErrDecimalParse, maxUnscaledDigits)
 	}
 	unscaled := bi.Int64()
 	if neg {
@@ -119,9 +143,6 @@ func (d Decimal) String() string {
 
 // IsZero indique si le décimal vaut zéro.
 func (d Decimal) IsZero() bool { return d.Unscaled == 0 }
-
-// bigValue renvoie la valeur non mise à l'échelle comme *big.Int.
-func (d Decimal) bigValue() *big.Int { return big.NewInt(d.Unscaled) }
 
 // Rescale renvoie une copie du décimal exprimée avec l'échelle cible, en arrondissant
 // au plus proche (demi vers l'infini positif/négatif selon le signe, « half away from zero »),

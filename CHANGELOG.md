@@ -12,6 +12,63 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Renforcé (CI / chaîne de livraison)
+- **Analyse statique et sécurité étendues** (`.github/workflows/ci.yml`) : trois jobs ajoutés —
+  `go test -race` (détecteur de course, `CGO_ENABLED=1`), **staticcheck** (`@v0.8.1`) et
+  **govulncheck** (`@v1.7.0`). Le code est rendu staticcheck-propre au passage (suppression de code
+  mort : `nowRFC3339`, `Decimal.bigValue`, `(*node).empty` ; correction d'un store inutile dans le
+  test de parité).
+- **Pinning cryptographique des outils externes** : le validateur **veraPDF** téléchargé en CI est
+  désormais vérifié par empreinte SHA-256 (`.github/verapdf-installer.sha256`) — toute modification
+  amont/altération fait échouer la CI. Toutes les **GitHub Actions** (`checkout`, `setup-go`,
+  `setup-java`, `upload-artifact`, `action-gh-release`) sont épinglées à leur **empreinte de commit**
+  (et non à un tag mutable) dans les trois workflows.
+
+### Corrigé (intégrité du verdict)
+- **Un jeu de règles inexistant ne peut plus produire un faux « conforme »** (§17.7). `kanjo validate
+  --rules toto` sélectionnait un ensemble vide de règles : `RulesRun = 0`, aucune anomalie, verdict
+  `OK`. Désormais : (1) `rules.Validate` émet une anomalie **fatale** `KANJO-SET-UNKNOWN` pour tout
+  jeu demandé mais inconnu (fail-closed au niveau bibliothèque, bénéficie à tous les appelants) ;
+  (2) la CLI `validate` refuse d'emblée un `--rules` inconnu avec un message clair et le code de
+  sortie *usage*. Le cas légitime « aucun jeu demandé » (→ tous les jeux) est préservé.
+  Helper réutilisable `rules.UnknownSets`. Non-régression : `pkg/rules/unknownset_test.go`.
+
+### Corrigé (audit)
+- **Journal d'audit sûr entre plusieurs processus** (`pkg/audit`, `internal/fslock`). Le `sync.Mutex`
+  ne protégeait que les goroutines d'un même processus ; deux invocations concurrentes de Kanjō
+  pouvaient lire le même dernier numéro de séquence et écrire des entrées au même `seq`/`prevHash`
+  (chaîne fourchée). La section critique « lire la dernière entrée + chaîner + ajouter » est désormais
+  protégée par un **verrou de fichier inter-processus** (`flock` Unix / `LockFileEx` Windows), et la
+  vraie dernière entrée est **relue sous verrou** (lecture de fin de fichier, sans tout charger).
+  Non-régression : `TestConcurrentJournalsKeepChainCoherent` (passe sous `-race`).
+- **Chaînage d'audit : ancrage initial et détection renforcés, garanties documentées honnêtement**
+  (`pkg/audit`). `VerifyChain` détecte désormais aussi la **troncature en tête** (la première entrée
+  chaînée doit être la genèse, `prevHash` vide) et toute **entrée non chaînée intercalée après le
+  début du chaînage** (insertion probable). La documentation précise ce qui est garanti
+  (modification, suppression, réinsertion, troncature en tête) **et sa limite** : le mécanisme est
+  *tamper-evident*, non *notarié* — sans ancrage externe, la suppression de la totalité de la portion
+  chaînée n'est pas détectable localement. Non-régression : `TestDetectHeadTruncation`,
+  `TestDetectUnchainedInterleaved`.
+
+### Corrigé (robustesse)
+- **Détection de format : vérification réelle de l'espace de noms UBL** (`pkg/read`). La racine
+  `<Invoice>`/`<CreditNote>` étant partagée hors UBL, `Detect` vérifie désormais l'URI d'espace de
+  noms : un namespace présent mais non-UBL renvoie `unknown` au lieu d'un routage UBL trompeur ; un
+  namespace absent reste toléré (le lecteur confirme). L'URI est résolue depuis les déclarations
+  `xmlns` du jeton brut (`RawToken`) — **sans** basculer sur `Token`, qui expanserait entités/DTD
+  d'une entrée non fiable (anti-XXE). Le contrat routage-puis-confirmation est explicité.
+  Non-régression : `TestDetectUBLNamespaceDiscrimination`.
+- **Registres `read`/`write` : double enregistrement → panique** (`pkg/read`, `pkg/write`). Comme
+  `rules.Register`, enregistrer deux lecteurs/écrivains pour le même format/cible est un bogue de
+  programmation et panique désormais au lieu d'écraser silencieusement le premier. Non-régression :
+  `TestRegisterDuplicatePanics` (read + write).
+- **Montants : dépassement de capacité → erreur, plus jamais de panique** (`pkg/model`). Un document
+  hostile portant un nombre suffisamment grand pouvait, lors d'une remise à l'échelle, provoquer une
+  panique (`math/big` → int64). Désormais : (1) `ParseDecimal`/`ParseAmount` refusent à la lecture
+  toute magnitude excédant 15 chiffres significatifs (`ErrDecimalParse`), avec une marge garantissant
+  qu'aucune remise à l'échelle usuelle ne déborde ; (2) `Amount.Add`/`Sub` renvoient la nouvelle
+  erreur sentinelle `ErrOverflow` au lieu de paniquer. Non-régression : `overflow_test.go`.
+
 ### Ajouté (client lourd)
 - **Application de bureau native (Wails)** : fenêtre native macOS/Windows/Linux réutilisant
   le frontend et l'API Studio (aucune duplication, tout en intra-processus, hors-ligne).
