@@ -12,7 +12,8 @@ func TestNativeBridgeEmbedded(t *testing.T) {
 		t.Fatalf("native-bridge.js doit être embarqué: %v", err)
 	}
 	s := string(b)
-	for _, want := range []string{"window.kanjoOpenFiles", "window.go.main.App.OpenFiles", "kanjo:open-files"} {
+	// PendingFiles : modèle « pull » des fichiers de lancement (évite la course d'émission).
+	for _, want := range []string{"window.kanjoOpenFiles", "window.go.main.App.OpenFiles", "kanjo:open-files", "PendingFiles"} {
 		if !strings.Contains(s, want) {
 			t.Errorf("native-bridge.js doit référencer %q", want)
 		}

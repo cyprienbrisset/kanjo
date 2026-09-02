@@ -19,6 +19,16 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   associations de fichiers `.xml`/`.pdf`/`.json`, menu applicatif. Isolée dans un module Go
   séparé (`gui/wails`) : le cœur reste pur Go `CGO_ENABLED=0` × 6 cibles (ADR-0011).
 
+### Corrigé (client lourd)
+- **Affichage vide au chargement de plusieurs documents de lancement** : à l'ouverture par
+  association/double-clic, le Go émettait `kanjo:open-files` depuis `OnDomReady`, **avant** que le
+  frontend n'ait enregistré son écouteur (fait sur l'évènement `load`). Wails met ces évènements
+  « pré-prêts » en tampon, mais ce tampon est borné : les petits lots (1–3 fichiers) passaient, les
+  lots plus volumineux (≥ 5 fichiers) étaient **silencieusement perdus** — l'app restait sur l'accueil,
+  aucun document affiché. Le passage à un **modèle « pull »** (le frontend réclame les fichiers de
+  lancement via le binding `PendingFiles()` une fois son écouteur prêt) supprime la course : tout le
+  lot se charge, quel que soit son nombre. Non-régression : `TestPendingFilesReadsAndClears`.
+
 ## [0.2.0] - 2026-08-31
 
 ### Conformité (PDF/A)

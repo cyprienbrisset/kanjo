@@ -55,7 +55,6 @@ func main() {
 			Middleware: bridgeMiddleware,
 		},
 		OnStartup:                app.onStartup,
-		OnDomReady:               app.onDomReady,
 		EnableDefaultContextMenu: false,
 		DragAndDrop: &options.DragAndDrop{
 			EnableFileDrop: true,
