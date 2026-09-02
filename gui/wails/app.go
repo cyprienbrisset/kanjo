@@ -10,8 +10,8 @@ import (
 // App porte le contexte Wails et expose les méthodes bindées au frontend.
 type App struct {
 	ctx context.Context
-	// pending : fichiers passés au lancement (association/double-clic) avant que le DOM
-	// ne soit prêt à recevoir l'événement.
+	// pending : fichiers passés au lancement (association/double-clic). Le frontend les
+	// réclame via PendingFiles() une fois son écouteur prêt (modèle « pull »).
 	pending []string
 }
 
@@ -27,13 +27,21 @@ func (a *App) onStartup(ctx context.Context) {
 	wailsruntime.OnFileDrop(ctx, a.onFileDrop)
 }
 
-// onDomReady : le frontend est chargé ; on pousse les éventuels fichiers de lancement.
-func (a *App) onDomReady(_ context.Context) {
+// PendingFiles renvoie les fichiers passés au lancement (association/double-clic) puis vide
+// la file d'attente. Le frontend l'appelle une fois son écouteur enregistré (modèle « pull »).
+//
+// Pourquoi un pull plutôt qu'un push depuis OnDomReady : en Wails v2, OnDomReady se déclenche
+// avant que le frontend n'ait enregistré son écouteur EventsOn (fait sur l'évènement `load`).
+// Un EventsEmit émis à ce moment est mis en tampon par Wails, mais ce tampon a une limite :
+// les petits lots passaient, les lots volumineux étaient silencieusement perdus — d'où
+// l'affichage vide au chargement de plusieurs documents. Le pull supprime la course.
+func (a *App) PendingFiles() ([]desktop.FileData, error) {
 	if len(a.pending) == 0 {
-		return
+		return nil, nil
 	}
-	a.emitFiles(a.pending)
+	files, err := desktop.ReadFiles(a.pending)
 	a.pending = nil
+	return files, err
 }
 
 // OpenFiles ouvre le dialogue natif et renvoie les fichiers choisis en base64.
