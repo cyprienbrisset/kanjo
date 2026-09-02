@@ -12,6 +12,14 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Corrigé (robustesse)
+- **Montants : dépassement de capacité → erreur, plus jamais de panique** (`pkg/model`). Un document
+  hostile portant un nombre suffisamment grand pouvait, lors d'une remise à l'échelle, provoquer une
+  panique (`math/big` → int64). Désormais : (1) `ParseDecimal`/`ParseAmount` refusent à la lecture
+  toute magnitude excédant 15 chiffres significatifs (`ErrDecimalParse`), avec une marge garantissant
+  qu'aucune remise à l'échelle usuelle ne déborde ; (2) `Amount.Add`/`Sub` renvoient la nouvelle
+  erreur sentinelle `ErrOverflow` au lieu de paniquer. Non-régression : `overflow_test.go`.
+
 ### Ajouté (client lourd)
 - **Application de bureau native (Wails)** : fenêtre native macOS/Windows/Linux réutilisant
   le frontend et l'API Studio (aucune duplication, tout en intra-processus, hors-ligne).

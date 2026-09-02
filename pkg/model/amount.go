@@ -87,7 +87,11 @@ func (a Amount) Add(b Amount) (Amount, error) {
 	x := a.Rescale(scale)
 	y := b.Rescale(scale)
 	sum := new(big.Int).Add(big.NewInt(x.Value), big.NewInt(y.Value))
-	return Amount{Value: int64OrPanic(sum), Scale: scale, Currency: chooseCurrency(a, b)}, nil
+	v, ok := int64Checked(sum)
+	if !ok {
+		return Amount{}, fmt.Errorf("%w: %s + %s", ErrOverflow, a, b)
+	}
+	return Amount{Value: v, Scale: scale, Currency: chooseCurrency(a, b)}, nil
 }
 
 // Sub soustrait b de a (même devise).
@@ -99,7 +103,11 @@ func (a Amount) Sub(b Amount) (Amount, error) {
 	x := a.Rescale(scale)
 	y := b.Rescale(scale)
 	diff := new(big.Int).Sub(big.NewInt(x.Value), big.NewInt(y.Value))
-	return Amount{Value: int64OrPanic(diff), Scale: scale, Currency: chooseCurrency(a, b)}, nil
+	v, ok := int64Checked(diff)
+	if !ok {
+		return Amount{}, fmt.Errorf("%w: %s - %s", ErrOverflow, a, b)
+	}
+	return Amount{Value: v, Scale: scale, Currency: chooseCurrency(a, b)}, nil
 }
 
 // Neg renvoie l'opposé du montant.
