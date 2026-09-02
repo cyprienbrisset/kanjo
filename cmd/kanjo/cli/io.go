@@ -6,11 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"time"
 )
-
-// nowRFC3339 renvoie l'horodatage courant au format RFC3339 (UTC).
-func nowRFC3339() string { return time.Now().UTC().Format(time.RFC3339) }
 
 // isTTY indique si le descripteur est un terminal interactif (sans dépendance externe).
 func isTTY(f *os.File) bool {

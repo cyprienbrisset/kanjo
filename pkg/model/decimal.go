@@ -144,9 +144,6 @@ func (d Decimal) String() string {
 // IsZero indique si le décimal vaut zéro.
 func (d Decimal) IsZero() bool { return d.Unscaled == 0 }
 
-// bigValue renvoie la valeur non mise à l'échelle comme *big.Int.
-func (d Decimal) bigValue() *big.Int { return big.NewInt(d.Unscaled) }
-
 // Rescale renvoie une copie du décimal exprimée avec l'échelle cible, en arrondissant
 // au plus proche (demi vers l'infini positif/négatif selon le signe, « half away from zero »),
 // conformément à l'arrondi normatif d'EN 16931.

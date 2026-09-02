@@ -12,6 +12,18 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Renforcé (CI / chaîne de livraison)
+- **Analyse statique et sécurité étendues** (`.github/workflows/ci.yml`) : trois jobs ajoutés —
+  `go test -race` (détecteur de course, `CGO_ENABLED=1`), **staticcheck** (`@v0.8.1`) et
+  **govulncheck** (`@v1.7.0`). Le code est rendu staticcheck-propre au passage (suppression de code
+  mort : `nowRFC3339`, `Decimal.bigValue`, `(*node).empty` ; correction d'un store inutile dans le
+  test de parité).
+- **Pinning cryptographique des outils externes** : le validateur **veraPDF** téléchargé en CI est
+  désormais vérifié par empreinte SHA-256 (`.github/verapdf-installer.sha256`) — toute modification
+  amont/altération fait échouer la CI. Toutes les **GitHub Actions** (`checkout`, `setup-go`,
+  `setup-java`, `upload-artifact`, `action-gh-release`) sont épinglées à leur **empreinte de commit**
+  (et non à un tag mutable) dans les trois workflows.
+
 ### Corrigé (intégrité du verdict)
 - **Un jeu de règles inexistant ne peut plus produire un faux « conforme »** (§17.7). `kanjo validate
   --rules toto` sélectionnait un ensemble vide de règles : `RulesRun = 0`, aucune anomalie, verdict

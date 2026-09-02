@@ -268,7 +268,6 @@ func buildParityReport(t *testing.T) string {
 	// Règles au-delà du référentiel.
 	if len(beyond) > 0 {
 		fmt.Fprintf(&b, "## %d. Règles au-delà du référentiel CEN\n\n", sec)
-		sec++
 		b.WriteString("Règles utiles implémentées par Kanjō mais absentes du Schematron CEN de référence :\n\n")
 		famBeyond := map[string][]string{}
 		var ob []string

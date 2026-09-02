@@ -52,11 +52,6 @@ func (n *node) with(children ...*node) *node {
 	return n
 }
 
-// empty indique un conteneur sans enfant ni texte (à élaguer).
-func (n *node) empty() bool {
-	return n == nil || (len(n.children) == 0 && n.text == "" && len(n.attrs) == 0)
-}
-
 // render sérialise l'arbre avec indentation de deux espaces.
 func render(root *node) string {
 	var b strings.Builder
