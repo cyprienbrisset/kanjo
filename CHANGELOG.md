@@ -21,6 +21,16 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
   sortie *usage*. Le cas légitime « aucun jeu demandé » (→ tous les jeux) est préservé.
   Helper réutilisable `rules.UnknownSets`. Non-régression : `pkg/rules/unknownset_test.go`.
 
+### Corrigé (audit)
+- **Chaînage d'audit : ancrage initial et détection renforcés, garanties documentées honnêtement**
+  (`pkg/audit`). `VerifyChain` détecte désormais aussi la **troncature en tête** (la première entrée
+  chaînée doit être la genèse, `prevHash` vide) et toute **entrée non chaînée intercalée après le
+  début du chaînage** (insertion probable). La documentation précise ce qui est garanti
+  (modification, suppression, réinsertion, troncature en tête) **et sa limite** : le mécanisme est
+  *tamper-evident*, non *notarié* — sans ancrage externe, la suppression de la totalité de la portion
+  chaînée n'est pas détectable localement. Non-régression : `TestDetectHeadTruncation`,
+  `TestDetectUnchainedInterleaved`.
+
 ### Corrigé (robustesse)
 - **Montants : dépassement de capacité → erreur, plus jamais de panique** (`pkg/model`). Un document
   hostile portant un nombre suffisamment grand pouvait, lors d'une remise à l'échelle, provoquer une

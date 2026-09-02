@@ -36,8 +36,18 @@ type ChainReport struct {
 }
 
 // VerifyChain recalcule et vérifie la chaîne d'intégrité d'une liste d'entrées ordonnée.
-// Les entrées héritées sans empreinte (Hash vide) sont comptées à part, jamais considérées comme
-// des ruptures : Kanjō ne prétend pas ce qu'il n'a pas calculé (§17.7).
+//
+// Garanties (ce qui EST détecté) : toute modification d'une entrée chaînée (empreinte recalculée),
+// toute suppression ou réinsertion au milieu (rupture de prevHash / de contiguïté de seq), et toute
+// troncature en TÊTE de la portion chaînée — car la première entrée chaînée doit être la genèse
+// (prevHash vide) ; un prevHash non vide en tête trahit des entrées antérieures disparues. Une entrée
+// non chaînée intercalée APRÈS le début du chaînage est également signalée (un journal chaîné ne
+// régresse pas). Les entrées héritées sans empreinte situées AVANT tout chaînage sont comptées à part.
+//
+// Limite (ce qui n'est PAS détecté, §17.7 — ne pas survendre) : le chaînage est *tamper-evident*, non
+// *notarié*. Sans ancrage externe (horodatage signé, journal distant, WORM), la suppression de la
+// TOTALITÉ de la portion chaînée — ou le remplacement du fichier par une chaîne cohérente plus courte
+// forgée par un attaquant disposant du binaire — ne laisse pas de trace vérifiable localement.
 func VerifyChain(entries []Entry) ChainReport {
 	rep := ChainReport{Total: len(entries), OK: true}
 	var prevHash string
@@ -46,6 +56,12 @@ func VerifyChain(entries []Entry) ChainReport {
 	for i, e := range entries {
 		if e.Hash == "" {
 			rep.Unchained++
+			// Une entrée non chaînée après le début du chaînage est anormale (les entrées héritées
+			// ne peuvent apparaître qu'en tête, avant la première entrée chaînée).
+			if started {
+				rep.Issues = append(rep.Issues, ChainIssue{Index: i, Seq: e.Seq, Problem: "entrée non chaînée intercalée après le début du chaînage (insertion probable)"})
+				rep.OK = false
+			}
 			continue
 		}
 		rep.Chained++
@@ -53,7 +69,14 @@ func VerifyChain(entries []Entry) ChainReport {
 			rep.Issues = append(rep.Issues, ChainIssue{Index: i, Seq: e.Seq, Problem: "empreinte invalide (entrée modifiée)"})
 			rep.OK = false
 		}
-		if started {
+		if !started {
+			// Ancrage initial : la première entrée chaînée est la genèse et porte un prevHash vide.
+			// Un prevHash non vide révèle une troncature du début du journal.
+			if e.PrevHash != "" {
+				rep.Issues = append(rep.Issues, ChainIssue{Index: i, Seq: e.Seq, Problem: "ancrage initial manquant : la première entrée chaînée référence une entrée absente (troncature en tête)"})
+				rep.OK = false
+			}
+		} else {
 			if e.PrevHash != prevHash {
 				rep.Issues = append(rep.Issues, ChainIssue{Index: i, Seq: e.Seq, Problem: "prevHash ne correspond pas à l'entrée précédente (suppression ou réinsertion)"})
 				rep.OK = false

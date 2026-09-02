@@ -80,6 +80,46 @@ func TestDetectDeletion(t *testing.T) {
 	}
 }
 
+// TestDetectHeadTruncation détecte une troncature du début : la nouvelle première entrée chaînée
+// porte un prevHash non vide (ancrage initial manquant).
+func TestDetectHeadTruncation(t *testing.T) {
+	_, entries := writeJournal(t)
+	tampered := entries[1:] // on retire l'entrée de genèse
+	rep := VerifyChain(tampered)
+	if rep.OK {
+		t.Fatal("une troncature en tête aurait dû être détectée")
+	}
+	found := false
+	for _, is := range rep.Issues {
+		if strings.Contains(is.Problem, "ancrage initial") || strings.Contains(is.Problem, "troncature en tête") {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("troncature en tête non signalée : %+v", rep.Issues)
+	}
+}
+
+// TestDetectUnchainedInterleaved détecte une entrée sans empreinte intercalée après le début du
+// chaînage (un journal chaîné ne régresse pas vers des entrées non chaînées).
+func TestDetectUnchainedInterleaved(t *testing.T) {
+	_, entries := writeJournal(t)
+	tampered := []Entry{entries[0], {Action: "intrus"}, entries[1], entries[2]}
+	rep := VerifyChain(tampered)
+	if rep.OK {
+		t.Fatal("une entrée non chaînée intercalée aurait dû être détectée")
+	}
+	found := false
+	for _, is := range rep.Issues {
+		if strings.Contains(is.Problem, "intercalée") {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("entrée intercalée non signalée : %+v", rep.Issues)
+	}
+}
+
 // TestFilterByPeriod restreint aux bornes de dates.
 func TestFilterByPeriod(t *testing.T) {
 	entries := []Entry{
