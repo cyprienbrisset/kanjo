@@ -12,6 +12,15 @@ dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
 ## [Non publié]
 
+### Corrigé (intégrité du verdict)
+- **Un jeu de règles inexistant ne peut plus produire un faux « conforme »** (§17.7). `kanjo validate
+  --rules toto` sélectionnait un ensemble vide de règles : `RulesRun = 0`, aucune anomalie, verdict
+  `OK`. Désormais : (1) `rules.Validate` émet une anomalie **fatale** `KANJO-SET-UNKNOWN` pour tout
+  jeu demandé mais inconnu (fail-closed au niveau bibliothèque, bénéficie à tous les appelants) ;
+  (2) la CLI `validate` refuse d'emblée un `--rules` inconnu avec un message clair et le code de
+  sortie *usage*. Le cas légitime « aucun jeu demandé » (→ tous les jeux) est préservé.
+  Helper réutilisable `rules.UnknownSets`. Non-régression : `pkg/rules/unknownset_test.go`.
+
 ### Corrigé (robustesse)
 - **Montants : dépassement de capacité → erreur, plus jamais de panique** (`pkg/model`). Un document
   hostile portant un nombre suffisamment grand pouvait, lors d'une remise à l'échelle, provoquer une

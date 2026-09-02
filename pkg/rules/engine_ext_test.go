@@ -65,7 +65,18 @@ func TestValidateUnknownSet(t *testing.T) {
 	if rep.RulesRun != 0 {
 		t.Errorf("un jeu inconnu ne devrait exécuter aucune règle, got %d", rep.RulesRun)
 	}
-	if rep.HasErrors() {
-		t.Error("aucune règle exécutée → aucune erreur")
+	// Fail-closed (§17.7) : un jeu inconnu ne doit PAS aboutir à un verdict conforme silencieux.
+	// Le moteur émet désormais une anomalie fatale plutôt que de rester sans erreur.
+	if !rep.HasErrors() {
+		t.Error("un jeu de règles inconnu doit produire une anomalie bloquante (fail-closed)")
+	}
+	found := false
+	for _, f := range rep.Findings {
+		if f.RuleID == rules.RuleUnknownSet {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("anomalie %q attendue pour un jeu inconnu", rules.RuleUnknownSet)
 	}
 }

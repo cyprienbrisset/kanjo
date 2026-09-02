@@ -51,6 +51,13 @@ func runValidate(args []string) int {
 			}
 		}
 	}
+	// Fail-closed : refuser d'emblée un jeu de règles inexistant plutôt que de valider avec un jeu
+	// vide (qui donnerait un faux « conforme »). Message clair avant tout traitement (§17.7).
+	if unknown := rules.UnknownSets(sets...); len(unknown) > 0 {
+		errf("validate : jeu(x) de règles inconnu(s) : %s (disponibles : %s)",
+			strings.Join(unknown, ", "), strings.Join(rules.Sets(), ", "))
+		return ExitUsage
+	}
 	threshold := rules.SeverityError
 	if *severity == "warning" {
 		threshold = rules.SeverityWarning
