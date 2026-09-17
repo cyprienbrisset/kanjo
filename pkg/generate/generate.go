@@ -8,6 +8,7 @@ import (
 	"math/rand"
 
 	"github.com/cyprienbrisset/kanjo/pkg/model"
+	fr "github.com/cyprienbrisset/kanjo/pkg/rules/cius/fr"
 )
 
 // Scenario décrit un cas de facturation à générer.
@@ -157,20 +158,7 @@ func applyExemptionNote(doc *model.Document, s Scenario) {
 // retard (PMD) et escompte ou son absence (AAB). Leur omission fait rejeter la facture par
 // Chorus Pro / les PDP.
 func applyMandatoryPaymentNotes(doc *model.Document) {
-	doc.Notes = append(doc.Notes,
-		model.Note{
-			Content:     "En cas de retard de paiement, une indemnité forfaitaire pour frais de recouvrement de 40 € sera exigible (art. L441-10 et D441-5 du code de commerce).",
-			SubjectCode: "PMT",
-		},
-		model.Note{
-			Content:     "Pénalités de retard : taux d'intérêt légal en vigueur majoré de 10 points, exigibles à compter du jour suivant la date de règlement figurant sur la facture, sans qu'un rappel soit nécessaire.",
-			SubjectCode: "PMD",
-		},
-		model.Note{
-			Content:     "Pas d'escompte pour paiement anticipé.",
-			SubjectCode: "AAB",
-		},
-	)
+	doc.Notes = append(doc.Notes, fr.MandatoryPaymentNotes()...)
 }
 
 // computeTotals calcule une ventilation de TVA groupée et des totaux cohérents.

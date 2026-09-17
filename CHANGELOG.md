@@ -10,6 +10,21 @@ version de l'outil · version du jeu de règles · version du schéma de sortie.
 Une modification de règle de validation qui change un verdict apparaît dans une section
 dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
+## [0.3.1] - 2026-09-17
+
+### Ajouté (repair)
+- **Nouvelle correction `kanjo repair --fixes fr-mandatory-notes`** (`pkg/repair`) : ajoute
+  automatiquement, à un document existant dont le vendeur est français, les mentions BG-1
+  manquantes détectées par `FR-BR-05` (frais de recouvrement PMT, pénalités de retard PMD,
+  escompte AAB), dans leur libellé légal standard. N'ajoute que les mentions absentes, ne touche
+  jamais aux notes déjà présentes, et ne s'applique qu'aux vendeurs français. Incluse dans les
+  corrections sûres par défaut (`AllFixes`). Permet de corriger directement une facture déjà
+  produite (et rejetée par Chorus Pro / un PDP) sans repasser par les données source. Le texte des
+  3 mentions est désormais centralisé dans `fr.MandatoryPaymentNotes()`, réutilisé par
+  `pkg/generate` (fin de la duplication introduite en 0.3.0). Non-régression :
+  `TestRepairAddsFRMandatoryNotes`, `TestRepairFRMandatoryNotesOnlyAddsMissing`,
+  `TestRepairFRMandatoryNotesSkipsNonFR`.
+
 ## [0.3.0] - 2026-09-17
 
 ### Conformité (mentions obligatoires FR — version des règles 2026.4)

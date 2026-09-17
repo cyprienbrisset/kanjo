@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/cyprienbrisset/kanjo/pkg/model"
+	fr "github.com/cyprienbrisset/kanjo/pkg/rules/cius/fr"
 )
 
 // Change décrit une correction appliquée (journalisée pour l'audit, §8.5).
@@ -21,12 +22,13 @@ type Change struct {
 type Fix string
 
 const (
-	FixTrimIdentifiers Fix = "trim-identifiers" // espaces parasites dans SIREN/TVA/IBAN
-	FixRecomputeTotals Fix = "recompute-totals" // recalcul des totaux si les lignes sont cohérentes
+	FixTrimIdentifiers  Fix = "trim-identifiers"   // espaces parasites dans SIREN/TVA/IBAN
+	FixRecomputeTotals  Fix = "recompute-totals"   // recalcul des totaux si les lignes sont cohérentes
+	FixFRMandatoryNotes Fix = "fr-mandatory-notes" // mentions BR-FR-05 manquantes (PMT/PMD/AAB)
 )
 
 // AllFixes est l'ensemble des corrections sûres appliquées par défaut.
-var AllFixes = []Fix{FixTrimIdentifiers, FixRecomputeTotals}
+var AllFixes = []Fix{FixTrimIdentifiers, FixRecomputeTotals, FixFRMandatoryNotes}
 
 // Options paramètre la réparation.
 type Options struct {
@@ -54,7 +56,35 @@ func Repair(doc *model.Document, opts Options) []Change {
 	if opts.enabled(FixRecomputeTotals) {
 		changes = append(changes, recomputeTotals(doc)...)
 	}
+	if opts.enabled(FixFRMandatoryNotes) {
+		changes = append(changes, addFRMandatoryNotes(doc)...)
+	}
 	return changes
+}
+
+// addFRMandatoryNotes ajoute, pour un vendeur français, les mentions obligatoires (BR-FR-05/BT-22)
+// absentes des notes d'en-tête (BG-1) : frais de recouvrement (PMT), pénalités de retard (PMD) et
+// escompte ou son absence (AAB). N'ajoute que les mentions manquantes, dans leur libellé légal
+// standard ; ne touche jamais aux notes déjà présentes.
+func addFRMandatoryNotes(doc *model.Document) []Change {
+	if !strings.EqualFold(doc.Seller.Address.CountryCode, "FR") {
+		return nil
+	}
+	present := map[string]bool{}
+	for _, n := range doc.Notes {
+		present[n.SubjectCode] = true
+	}
+	var ch []Change
+	for _, n := range fr.MandatoryPaymentNotes() {
+		if present[n.SubjectCode] {
+			continue
+		}
+		doc.Notes = append(doc.Notes, n)
+		ch = append(ch, Change{
+			Path: "notes[]", Before: "", After: n.Content, Fix: string(FixFRMandatoryNotes),
+		})
+	}
+	return ch
 }
 
 func trimIdentifiers(doc *model.Document) []Change {

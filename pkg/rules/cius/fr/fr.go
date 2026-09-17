@@ -50,6 +50,27 @@ var frMandatoryNoteSubjects = []struct {
 	{"AAB", "mention relative à l'escompte (ou à son absence)"},
 }
 
+// MandatoryPaymentNotes renvoie les 3 notes d'en-tête obligatoires (BR-FR-05/BT-22) dans leur
+// libellé standard : frais de recouvrement (PMT), pénalités de retard (PMD) et absence
+// d'escompte (AAB). Exporté pour être réutilisé par pkg/generate (corpus de test) et pkg/repair
+// (correction d'un document existant) sans dupliquer le texte légal.
+func MandatoryPaymentNotes() []model.Note {
+	return []model.Note{
+		{
+			Content:     "En cas de retard de paiement, une indemnité forfaitaire pour frais de recouvrement de 40 € sera exigible (art. L441-10 et D441-5 du code de commerce).",
+			SubjectCode: "PMT",
+		},
+		{
+			Content:     "Pénalités de retard : taux d'intérêt légal en vigueur majoré de 10 points, exigibles à compter du jour suivant la date de règlement figurant sur la facture, sans qu'un rappel soit nécessaire.",
+			SubjectCode: "PMD",
+		},
+		{
+			Content:     "Pas d'escompte pour paiement anticipé.",
+			SubjectCode: "AAB",
+		},
+	}
+}
+
 // frMandatoryPaymentNotes : une facture doit porter, parmi ses notes d'en-tête (BG-1/BT-22), une
 // mention pour chacun des codes sujet PMT (frais de recouvrement), PMD (pénalités de retard) et
 // AAB (escompte ou absence d'escompte) — sans quoi Chorus Pro / les PDP rejettent le document
@@ -71,8 +92,8 @@ func frMandatoryPaymentNotes() rules.Rule {
 				}
 				findings = append(findings, rules.Finding{
 					RuleID: "FR-BR-05", Severity: rules.SeverityError, Term: "BT-22",
-					Message: "Mention obligatoire absente des notes (BG-1) : " + m.label + " (code " + m.code + ").",
-					Expected: m.code,
+					Message:  "Mention obligatoire absente des notes (BG-1) : " + m.label + " (code " + m.code + ").",
+					Expected: m.code, Fixable: true,
 				})
 			}
 			return findings
