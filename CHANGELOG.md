@@ -10,7 +10,17 @@ version de l'outil · version du jeu de règles · version du schéma de sortie.
 Une modification de règle de validation qui change un verdict apparaît dans une section
 dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
-## [Non publié]
+## [0.3.0] - 2026-09-17
+
+### Conformité (mentions obligatoires FR — version des règles 2026.4)
+- **Nouvelle règle `FR-BR-05`** (`pkg/rules/cius/fr`) : une facture doit porter, parmi ses notes
+  d'en-tête (BG-1/BT-22), une mention pour chacun des codes sujet **PMT** (frais de recouvrement en
+  cas de retard), **PMD** (pénalités de retard) et **AAB** (escompte, ou son absence) — leur absence
+  fait rejeter le document par Chorus Pro / les PDP (`BR-FR-05/BT-22`). Kanjō pouvait jusqu'ici
+  valider comme conforme une facture dépourvue de ces mentions. `pkg/generate` ajoute désormais ces
+  trois notes par défaut aux factures synthétiques FR. Non-régression :
+  `TestFRMandatoryPaymentNotesValid`, `TestFRMandatoryPaymentNotesMissing`,
+  `TestFRMandatoryPaymentNotesPartial`.
 
 ### Renforcé (CI / chaîne de livraison)
 - **Analyse statique et sécurité étendues** (`.github/workflows/ci.yml`) : trois jobs ajoutés —

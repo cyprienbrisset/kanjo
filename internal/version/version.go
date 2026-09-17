@@ -14,7 +14,7 @@ var (
 
 const (
 	// Rules est la version du jeu de règles de validation, alignée sur la réglementation.
-	Rules = "2026.3"
+	Rules = "2026.4"
 	// Schema est la version du schéma des sorties JSON (ADR-007).
 	Schema = "github.com/cyprienbrisset/kanjo/1"
 )

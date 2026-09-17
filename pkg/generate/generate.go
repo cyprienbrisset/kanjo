@@ -113,6 +113,7 @@ func Generate(index int, opts Options) (*model.Document, error) {
 
 	doc.PaymentTerms = "Paiement à 30 jours à réception de facture."
 	applyExemptionNote(doc, opts.Scenario)
+	applyMandatoryPaymentNotes(doc)
 	computeTotals(doc)
 
 	if opts.Scenario == ScenarioAcompte {
@@ -149,6 +150,27 @@ func applyExemptionNote(doc *model.Document, s Scenario) {
 	case ScenarioIntracommunautaire:
 		doc.Notes = append(doc.Notes, model.Note{Content: "Exonération TVA, art. 262 ter I du CGI (livraison intracommunautaire)."})
 	}
+}
+
+// applyMandatoryPaymentNotes ajoute les mentions obligatoires (BR-FR-05/BT-22) que la CIUS
+// française exige dans les notes d'en-tête (BG-1) : frais de recouvrement (PMT), pénalités de
+// retard (PMD) et escompte ou son absence (AAB). Leur omission fait rejeter la facture par
+// Chorus Pro / les PDP.
+func applyMandatoryPaymentNotes(doc *model.Document) {
+	doc.Notes = append(doc.Notes,
+		model.Note{
+			Content:     "En cas de retard de paiement, une indemnité forfaitaire pour frais de recouvrement de 40 € sera exigible (art. L441-10 et D441-5 du code de commerce).",
+			SubjectCode: "PMT",
+		},
+		model.Note{
+			Content:     "Pénalités de retard : taux d'intérêt légal en vigueur majoré de 10 points, exigibles à compter du jour suivant la date de règlement figurant sur la facture, sans qu'un rappel soit nécessaire.",
+			SubjectCode: "PMD",
+		},
+		model.Note{
+			Content:     "Pas d'escompte pour paiement anticipé.",
+			SubjectCode: "AAB",
+		},
+	)
 }
 
 // computeTotals calcule une ventilation de TVA groupée et des totaux cohérents.

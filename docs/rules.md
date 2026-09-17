@@ -3,7 +3,7 @@
 > Fichier **généré** depuis le registre des règles (`pkg/rules`).
 > Ne pas éditer à la main. Régénérer avec `KANJO_REGEN=1 go test ./pkg/rules/...`.
 
-Version du jeu de règles : **2026.3**
+Version du jeu de règles : **2026.4**
 
 ## en16931 (224 règles)
 
@@ -234,10 +234,11 @@ Version du jeu de règles : **2026.3**
 | BR-Z-09 | error | BT-117 | Le montant de TVA d'une ventilation à taux zéro doit être nul. |
 | BR-Z-10 | error | BT-120, BT-121 | Une ventilation à taux zéro ne doit pas porter de motif d'exonération. |
 
-## cius.fr (2 règles)
+## cius.fr (3 règles)
 
 | ID | Gravité | Termes | Message |
 |----|---------|--------|---------|
+| FR-BR-05 | error | BT-22, BT-21 | Les mentions obligatoires frais de recouvrement (PMT), pénalités de retard (PMD) et escompte (AAB) doivent figurer dans les notes (BG-1). |
 | FR-CTC-01 | error | BT-31, BT-30 | Un vendeur français doit être identifié par un n° de TVA ou un SIREN/SIRET. |
 | FR-SIREN-01 | error | BT-30 | Un SIREN doit comporter exactement 9 chiffres. |
 

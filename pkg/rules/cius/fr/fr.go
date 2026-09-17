@@ -14,6 +14,7 @@ const setFR = "cius.fr"
 func init() {
 	rules.Register(frSellerIdentified())
 	rules.Register(frSirenFormat())
+	rules.Register(frMandatoryPaymentNotes())
 }
 
 // frSellerIdentified : un vendeur établi en France doit être identifié par un n° de TVA
@@ -34,6 +35,47 @@ func frSellerIdentified() rules.Rule {
 				RuleID: "FR-CTC-01", Severity: rules.SeverityError, Term: "BT-30",
 				Message: "Vendeur français sans identification (ni n° de TVA, ni SIREN/SIRET).",
 			}}
+		},
+	}
+}
+
+// frMandatoryNoteSubjects associe chaque code sujet BT-21 obligatoire (BR-FR-05) au libellé de
+// la mention correspondante, pour construire un message d'anomalie explicite par mention manquante.
+var frMandatoryNoteSubjects = []struct {
+	code  string
+	label string
+}{
+	{"PMT", "mention relative aux frais de recouvrement en cas de retard de paiement"},
+	{"PMD", "mention relative aux pénalités de retard de paiement"},
+	{"AAB", "mention relative à l'escompte (ou à son absence)"},
+}
+
+// frMandatoryPaymentNotes : une facture doit porter, parmi ses notes d'en-tête (BG-1/BT-22), une
+// mention pour chacun des codes sujet PMT (frais de recouvrement), PMD (pénalités de retard) et
+// AAB (escompte ou absence d'escompte) — sans quoi Chorus Pro / les PDP rejettent le document
+// (BR-FR-05/BT-22).
+func frMandatoryPaymentNotes() rules.Rule {
+	return rules.Rule{
+		ID: "FR-BR-05", Set: setFR, Severity: rules.SeverityError,
+		Terms:   []string{"BT-22", "BT-21"},
+		Message: map[string]string{"fr": "Les mentions obligatoires frais de recouvrement (PMT), pénalités de retard (PMD) et escompte (AAB) doivent figurer dans les notes (BG-1)."},
+		Check: func(d *model.Document, _ *rules.Context) []rules.Finding {
+			present := map[string]bool{}
+			for _, n := range d.Notes {
+				present[n.SubjectCode] = true
+			}
+			var findings []rules.Finding
+			for _, m := range frMandatoryNoteSubjects {
+				if present[m.code] {
+					continue
+				}
+				findings = append(findings, rules.Finding{
+					RuleID: "FR-BR-05", Severity: rules.SeverityError, Term: "BT-22",
+					Message: "Mention obligatoire absente des notes (BG-1) : " + m.label + " (code " + m.code + ").",
+					Expected: m.code,
+				})
+			}
+			return findings
 		},
 	}
 }
