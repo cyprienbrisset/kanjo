@@ -10,6 +10,21 @@ version de l'outil · version du jeu de règles · version du schéma de sortie.
 Une modification de règle de validation qui change un verdict apparaît dans une section
 dédiée **« Conformité »** et incrémente la version du jeu de règles.
 
+## [0.3.2] - 2026-09-17
+
+### Corrigé (repair — critique)
+- **`recompute-totals` faisait disparaître les charges/remises de niveau document (BG-20/21)
+  du calcul du HT/TVA/TTC.** La ventilation TVA et le HT n'étaient recalculés qu'à partir des
+  lignes, en ignorant `doc.AllowanceCharges` (ex. éco-contribution REP) — un `kanjo repair` sur
+  une facture réelle comportant une charge document taxée **sous-évaluait silencieusement le HT
+  et la TVA** du montant de la charge (cas réel, facture 834514 : HT recalculé à 6225,05 € au
+  lieu de 6268,67 €, écart exactement égal à l'éco-contribution de 43,62 €). `recompute-totals`
+  intègre désormais chaque charge/remise document taxée à la base de son taux et au HT
+  (BR-CO-13), et recalcule `chargeTotal`/`allowanceTotal` à partir des montants déclarés.
+  `recompute-totals` fait partie des corrections sûres par défaut : ce bug affectait `kanjo
+  repair` sans option sur tout document EN 16931 avec charge/remise document taxée. Non-régression :
+  `TestRepairRecomputeIncludesDocumentCharges` (reproduit le cas 834514 bit pour bit).
+
 ## [0.3.1] - 2026-09-17
 
 ### Ajouté (repair)

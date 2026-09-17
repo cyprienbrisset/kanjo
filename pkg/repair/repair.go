@@ -109,8 +109,22 @@ func trimIdentifiers(doc *model.Document) []Change {
 }
 
 // recomputeTotals recalcule la ventilation de TVA et les totaux d'en-tête à partir des lignes
-// (source de vérité, §8.5). Ne recalcule pas les montants de ligne eux-mêmes : repair ne
-// fabrique pas de donnée métier de ligne.
+// et des remises/charges de niveau document (BG-20/21 — source de vérité au même titre que les
+// lignes, §8.5). Ne recalcule pas les montants de ligne eux-mêmes, ni le détail d'une remise/
+// charge : repair ne fabrique pas de donnée métier.
+//
+// BR-CO-13 : HT (BT-109) = somme des lignes (BT-106) − remises document (BT-107) + charges
+// document (BT-108). Une charge/remise document taxée (BG-20/21 avec catégorie/taux TVA) doit
+// aussi entrer dans la base taxable de son taux, sans quoi le total TVA (BT-110) et le HT
+// divergent du TTC déclaré dès qu'une charge document existe (ex. éco-contribution REP) — c'est
+// ce qui faisait *perdre* le montant de l'éco-contribution lors d'un repair (facture 834514).
+func zeroOr(a *model.Amount) string {
+	if a == nil {
+		return "0"
+	}
+	return a.String()
+}
+
 func recomputeTotals(doc *model.Document) []Change {
 	if len(doc.Lines) == 0 {
 		return nil
@@ -130,37 +144,87 @@ func recomputeTotals(doc *model.Document) []Change {
 	var order []key
 	bases := map[key]model.Amount{}
 	rates := map[key]model.Decimal{}
-	for _, l := range doc.Lines {
-		r := model.MustParseDecimal("0")
-		if l.TaxRate != nil {
-			r = *l.TaxRate
-		}
-		k := key{l.TaxCategory, r.String()}
+	ensure := func(cat model.TaxCategoryCode, r model.Decimal) key {
+		k := key{cat, r.String()}
 		if _, ok := bases[k]; !ok {
 			order = append(order, k)
 			bases[k] = model.ZeroAmount(doc.CurrencyCode)
 			rates[k] = r
 		}
-		bases[k], _ = bases[k].Add(l.NetAmount)
+		return k
 	}
 
 	lineTotal := model.ZeroAmount(doc.CurrencyCode)
+	for _, l := range doc.Lines {
+		r := model.MustParseDecimal("0")
+		if l.TaxRate != nil {
+			r = *l.TaxRate
+		}
+		k := ensure(l.TaxCategory, r)
+		bases[k], _ = bases[k].Add(l.NetAmount)
+		lineTotal, _ = lineTotal.Add(l.NetAmount)
+	}
+	lineTotal = lineTotal.Rescale(2)
+
+	allowanceTotal := model.ZeroAmount(doc.CurrencyCode)
+	chargeTotal := model.ZeroAmount(doc.CurrencyCode)
+	for i := range doc.AllowanceCharges {
+		ac := &doc.AllowanceCharges[i]
+		if ac.IsCharge {
+			chargeTotal, _ = chargeTotal.Add(ac.Amount)
+		} else {
+			allowanceTotal, _ = allowanceTotal.Add(ac.Amount)
+		}
+		if ac.TaxCategory != "" {
+			r := model.MustParseDecimal("0")
+			if ac.TaxRate != nil {
+				r = *ac.TaxRate
+			}
+			k := ensure(ac.TaxCategory, r)
+			bases[k], _ = bases[k].Add(ac.Signed())
+		}
+	}
+	allowanceTotal = allowanceTotal.Rescale(2)
+	chargeTotal = chargeTotal.Rescale(2)
+
 	taxTotal := model.ZeroAmount(doc.CurrencyCode)
 	var breakdown []model.TaxSubtotal
 	for _, k := range order {
 		ts := model.TaxSubtotal{Category: k.cat, Rate: rates[k], TaxableAmount: bases[k].Rescale(2)}
 		ts.TaxAmount = ts.ComputeTaxAmount()
 		breakdown = append(breakdown, ts)
-		lineTotal, _ = lineTotal.Add(ts.TaxableAmount)
 		taxTotal, _ = taxTotal.Add(ts.TaxAmount)
 	}
-	lineTotal = lineTotal.Rescale(2)
 	taxTotal = taxTotal.Rescale(2)
-	ttc, _ := lineTotal.Add(taxTotal)
-	ttc = ttc.Rescale(2)
+
+	recordPtr := func(path string, before *model.Amount, after model.Amount) {
+		if before == nil || !before.Equal(after) {
+			ch = append(ch, Change{Path: path, Before: zeroOr(before), After: after.String(), Fix: string(FixRecomputeTotals)})
+		}
+	}
+
+	newTotals := doc.Totals
+	newTotals.LineExtensionAmount = lineTotal
+	if !allowanceTotal.IsZero() {
+		recordPtr("totals.allowanceTotal", doc.Totals.AllowanceTotal, allowanceTotal)
+		newTotals.AllowanceTotal = &allowanceTotal
+	} else {
+		newTotals.AllowanceTotal = nil
+	}
+	if !chargeTotal.IsZero() {
+		recordPtr("totals.chargeTotal", doc.Totals.ChargeTotal, chargeTotal)
+		newTotals.ChargeTotal = &chargeTotal
+	} else {
+		newTotals.ChargeTotal = nil
+	}
+	taxExclusive, _ := newTotals.ComputeTaxExclusive(doc.CurrencyCode)
+	newTotals.TaxExclusiveAmount = taxExclusive
+	newTotals.TaxAmount = taxTotal
+	ttc, _ := newTotals.ComputeTaxInclusive()
+	newTotals.TaxInclusiveAmount = ttc
 
 	record("totals.lineExtensionAmount", doc.Totals.LineExtensionAmount, lineTotal)
-	record("totals.taxExclusiveAmount", doc.Totals.TaxExclusiveAmount, lineTotal)
+	record("totals.taxExclusiveAmount", doc.Totals.TaxExclusiveAmount, taxExclusive)
 	record("totals.taxAmount", doc.Totals.TaxAmount, taxTotal)
 	record("totals.taxInclusiveAmount", doc.Totals.TaxInclusiveAmount, ttc)
 
@@ -177,11 +241,8 @@ func recomputeTotals(doc *model.Document) []Change {
 
 	if len(ch) > 0 {
 		doc.TaxBreakdown = breakdown
-		doc.Totals.LineExtensionAmount = lineTotal
-		doc.Totals.TaxExclusiveAmount = lineTotal
-		doc.Totals.TaxAmount = taxTotal
-		doc.Totals.TaxInclusiveAmount = ttc
-		doc.Totals.DuePayableAmount = due
+		newTotals.DuePayableAmount = due
+		doc.Totals = newTotals
 	}
 	return ch
 }

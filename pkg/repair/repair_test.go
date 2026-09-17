@@ -49,6 +49,48 @@ func TestRepairNeverInventsData(t *testing.T) {
 	}
 }
 
+// TestRepairRecomputeIncludesDocumentCharges reproduit le cas réel (facture 834514) : une
+// charge document taxée (éco-contribution) doit être intégrée à la base taxable de son taux et
+// au HT (BR-CO-13). Avant correctif, recompute-totals l'ignorait et faisait perdre son montant
+// (HT/TVA/TTC recalculés en dessous du TTC réellement dû par le client).
+func TestRepairRecomputeIncludesDocumentCharges(t *testing.T) {
+	rate := model.MustParseDecimal("20")
+	d := model.NewDocument(model.KindInvoice)
+	d.CurrencyCode = "EUR"
+	d.Lines = []model.Line{
+		{
+			ID: "1", Name: "Article", Quantity: model.DecimalFromInt(1), UnitCode: model.UnitPiece,
+			NetPrice: model.MustParseAmount("6225.05", "EUR"), TaxCategory: model.TaxStandard, TaxRate: &rate,
+			NetAmount: model.MustParseAmount("6225.05", "EUR"),
+		},
+	}
+	charge := model.MustParseAmount("43.62", "EUR")
+	d.AllowanceCharges = []model.AllowanceCharge{
+		{IsCharge: true, Amount: charge, Reason: "Éco-contribution", TaxCategory: model.TaxStandard, TaxRate: &rate},
+	}
+	// Totaux volontairement faux pour vérifier que repair les corrige correctement.
+	d.Totals.LineExtensionAmount = model.MustParseAmount("0", "EUR")
+	d.Totals.TaxExclusiveAmount = model.MustParseAmount("0", "EUR")
+	d.Totals.TaxAmount = model.MustParseAmount("0", "EUR")
+	d.Totals.TaxInclusiveAmount = model.MustParseAmount("0", "EUR")
+	d.Totals.DuePayableAmount = model.MustParseAmount("0", "EUR")
+
+	repair.Repair(d, repair.Options{Fixes: []repair.Fix{repair.FixRecomputeTotals}})
+
+	if got := d.Totals.TaxExclusiveAmount.String(); got != "6268.67" {
+		t.Errorf("HT attendu 6268.67 (ligne + charge), obtenu %s", got)
+	}
+	if got := d.Totals.TaxAmount.String(); got != "1253.73" {
+		t.Errorf("TVA attendue 1253.73 (base ligne + charge à 20%%), obtenue %s", got)
+	}
+	if got := d.Totals.TaxInclusiveAmount.String(); got != "7522.40" {
+		t.Errorf("TTC attendu 7522.40, obtenu %s", got)
+	}
+	if d.Totals.ChargeTotal == nil || d.Totals.ChargeTotal.String() != "43.62" {
+		t.Errorf("chargeTotal attendu 43.62, obtenu %v", d.Totals.ChargeTotal)
+	}
+}
+
 func TestRepairAddsFRMandatoryNotes(t *testing.T) {
 	d := model.NewDocument(model.KindInvoice)
 	d.CurrencyCode = "EUR"
